@@ -1,0 +1,105 @@
+.logo-container {
+    text-align: center;
+    height: 100px;
+    background: #46164f;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    img {
+        width: 80px;
+        border-radius: 100%;
+    }
+}
+
+
+.form-container {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+
+    .error-message {
+        margin-top: 8px;
+    }
+
+    ion-button.submit {
+        margin-top: 10px;
+        --background: #46164f;
+        --color: #ffffff;
+    }
+}
+
+.forget-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px 0px;
+
+    div a {
+        color: #46164f
+    }
+
+    .social {
+        display: flex;
+        flex-direction: column;
+        padding-top: 20px;
+
+        span {
+            font-size: 16px;
+            font-weight: 600;
+            text-align: center;
+            padding-bottom: 20px;
+        }
+
+        div {
+            display: flex;
+            gap: 10px;
+
+            ion-button.google {
+                --background: #f10000;
+                /* Custom color */
+                --color: #ffffff;
+                /* Text color */
+            }
+
+            ion-button.facebook {
+                --background: #0070f1;
+                /* Custom color */
+                --color: #ffffff;
+                /* Text color */
+            }
+
+            ion-button.google {
+                --background: #f10000;
+                /* Custom color */
+                --color: #ffffff;
+                /* Text color */
+            }
+        }
+    }
+}
+
+
+
+/* Social media authentication buttons container */
+
+
+/* Social media authentication button styling */
+.social-button {
+    margin-top: 10px;
+    border-radius: 10px;
+}
+
+/* Optional: Change color of social media buttons */
+.social-button ion-icon {
+    color: #ffffff;
+    /* Icon color */
+}
+
+/* Optional: Add hover effect to social media buttons */
+.social-button:hover {
+    background-color: #c4c4c4;
+    /* Button background color on hover */
+}

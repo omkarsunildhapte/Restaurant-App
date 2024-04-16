@@ -1,0 +1,25 @@
+<ion-content [fullscreen]="true" class="ion-padding">
+  <div class="logo-container">
+    <img src="../../assets/imgaes/logo.png" alt="Logo" />
+  </div>
+  <ion-toolbar>
+    <ion-title>Login</ion-title>
+  </ion-toolbar>
+  <form class="form-container">
+    <ion-item>
+      <ion-label position="floating">Email</ion-label>
+      <ion-input type="email"[formControl]="forget"></ion-input>
+    </ion-item>
+    <div *ngIf="forget.invalid && (forget.dirty || forget.touched)" class="error-message">
+      <ion-label color="danger" stacked>Email is required and must be a valid email.</ion-label>
+    </div>
+    <ion-button expand="block" type="button" (click)="resetPassword()" class="submit">Forget Password</ion-button>
+  </form>
+  <div class="forget-container">
+    <div>
+      <a routerLink="/login" class="forgot-password-link"
+        >Login</a
+      >
+    </div>
+  </div>
+</ion-content>
