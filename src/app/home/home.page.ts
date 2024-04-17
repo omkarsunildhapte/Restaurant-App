@@ -1,7 +1,5 @@
+import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
-import { AngularFireAuth } from '@angular/fire/compat/auth';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -9,5 +7,23 @@ import { Router } from '@angular/router';
   styleUrls: ['home.page.scss'],
 })
 export class HomePage {
-  
+  products: any[] = [];
+
+  constructor(private http: HttpClient) { }
+
+  ngOnInit() {
+    this.fetchProducts();
+  }
+
+  fetchProducts() {
+    this.http.get<any>('https://dummyjson.com/products')
+      .subscribe(
+        data => {
+          this.products = data.products;
+        },
+        error => {
+          console.error('Error fetching data:', error);
+        }
+      );
+  }
 }

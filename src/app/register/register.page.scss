@@ -45,7 +45,6 @@
         display: flex;
         flex-direction: column;
         padding-top: 20px;
-
         span {
             font-size: 16px;
             font-weight: 600;
@@ -56,50 +55,22 @@
         div {
             display: flex;
             gap: 10px;
-
+            padding: 10px 0px;
+            justify-content: center;
             ion-button.google {
                 --background: #f10000;
-                /* Custom color */
                 --color: #ffffff;
-                /* Text color */
             }
 
             ion-button.facebook {
                 --background: #0070f1;
-                /* Custom color */
                 --color: #ffffff;
-                /* Text color */
             }
 
             ion-button.google {
                 --background: #f10000;
-                /* Custom color */
                 --color: #ffffff;
-                /* Text color */
             }
         }
     }
-}
-
-
-
-/* Social media authentication buttons container */
-
-
-/* Social media authentication button styling */
-.social-button {
-    margin-top: 10px;
-    border-radius: 10px;
-}
-
-/* Optional: Change color of social media buttons */
-.social-button ion-icon {
-    color: #ffffff;
-    /* Icon color */
-}
-
-/* Optional: Add hover effect to social media buttons */
-.social-button:hover {
-    background-color: #c4c4c4;
-    /* Button background color on hover */
 }

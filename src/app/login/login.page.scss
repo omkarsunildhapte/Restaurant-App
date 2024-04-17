@@ -1,0 +1,76 @@
+.logo-container {
+    text-align: center;
+    height: 100px;
+    background: #46164f;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    img {
+        width: 80px;
+        border-radius: 100%;
+    }
+}
+
+
+.form-container {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+
+    .error-message {
+        margin-top: 8px;
+    }
+
+    ion-button.submit {
+        margin-top: 10px;
+        --background: #46164f;
+        --color: #ffffff;
+    }
+}
+
+.forget-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px 0px;
+
+    div a {
+        color: #46164f
+    }
+
+    .social {
+        display: flex;
+        flex-direction: column;
+        padding-top: 20px;
+        span {
+            font-size: 16px;
+            font-weight: 600;
+            text-align: center;
+            padding-bottom: 20px;
+        }
+
+        div {
+            display: flex;
+            gap: 10px;
+            padding: 10px 0px;
+            justify-content: center;
+            ion-button.google {
+                --background: #f10000;
+                --color: #ffffff;
+            }
+
+            ion-button.facebook {
+                --background: #0070f1;
+                --color: #ffffff;
+            }
+
+            ion-button.google {
+                --background: #f10000;
+                --color: #ffffff;
+            }
+        }
+    }
+}
