@@ -14,7 +14,7 @@ export class RegisterPage implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private afAuth: AngularFireAuth,
-    private router: Router
+    private router: Router,
   ) {}
 
   ngOnInit() {
@@ -23,6 +23,7 @@ export class RegisterPage implements OnInit {
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]]
     });
+
   }
 
   get f() {
