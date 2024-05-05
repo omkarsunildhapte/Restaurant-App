@@ -1,0 +1,100 @@
+ion-content {
+    margin: 20px 20px;
+    background-color: #f0f0f2;
+
+    .top {
+        background-color: #f9f9f9;
+        box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+        height: auto;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 10px 10px 10px 10px;
+    }
+
+    ion-segment {
+        margin-top: 10px;
+        border: 1px solid #f15b3a;
+    }
+
+    .menu {
+        display: block;
+        text-align: center;
+    }
+
+    p {
+        margin: 0px;
+    }
+
+    .date {
+        margin: 20px;
+        color: #f15b3a;
+        font-weight: 600;
+    }
+
+    .transId {
+        margin-top: 10px;
+        color: #a1a1a1;
+    }
+
+    .amount {
+        margin-top: 5px;
+        color: #f15b3a;
+    }
+
+    .time {
+        margin-top: 5px;
+        color: #a1a1a1;
+    }
+
+    .upperbox {
+        background-color: #fff;
+        margin-top: 10px;
+        box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+        height: auto;
+        display: grid;
+        grid-template-columns: 40% 35% 20% 10%;
+        grid-template-rows: 15% 35% 35% 15%;
+        gap: 5px 5px;
+        margin: 20px;
+        border-radius: 5px;
+    }
+
+    .img {
+        img {
+            padding: 10px;
+            border-radius: 5px;
+            height: auto;
+            width: 100%;
+        }
+    }
+
+    .title {
+        color: purple;
+
+        h3 {
+            font-size: 16px;
+            margin-top: 10px;
+            font-weight: 700;
+        }
+    }
+
+    .edit {
+        grid-area: edit;
+        margin-top: 80px;
+        padding: 5px;
+        color: #f9f9f9;
+        font-size: 18px;
+        background-color: #f15b3a;
+        border-radius: 5px;
+    }
+
+    .new {
+        position: relative;
+        top: 64px;
+        padding: 10px;
+        background-color: white;
+        box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+        font-size: 16px;
+    }
+}

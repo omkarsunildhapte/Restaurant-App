@@ -10,20 +10,18 @@ export class HomePage {
   products: any[] = [];
 
   constructor(private http: HttpClient) { }
-
-  ngOnInit() {
-    this.fetchProducts();
+  
+  filters = {
+    "meal_type":"lunch",
+    "cuisine":"indian",
+    "distance":"5",
+    "popular":"true",
+    "priceByOrder":"hightoLow",
+    "price":{
+      "lowerproce":"5",
+    }
   }
 
-  fetchProducts() {
-    this.http.get<any>('https://dummyjson.com/products')
-      .subscribe(
-        data => {
-          this.products = data.products;
-        },
-        error => {
-          console.error('Error fetching data:', error);
-        }
-      );
-  }
+
+ 
 }

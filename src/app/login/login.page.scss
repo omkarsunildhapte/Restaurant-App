@@ -1,120 +1,118 @@
-.main-container {
-    background-color: white !important;
+ion-content{
+    --ion-background-color:#ffffff;
+    font-family: Arial, Helvetica, sans-serif;
 
-    .img-container {
-        padding: 40px 30px 0px 30px;
+}
 
-        img {
-            width: 100%;
-            height: 200px;
-        }
+.background-pic{
+    height: 100vh;
+    width: 100%;
+    background-position: 30%;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
 
-        ion-item {
-            background-color: white !important;
-        }
+.background-filter{
+    height: 100%;
+    width: 100%;
+    background:#ffffff;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+}
 
+.shape{
+    position: fixed;
+    top:0;
+    right: 0;
+
+    img{
+        opacity: 0.9;
     }
 }
 
-.second-container {
-    padding: 0 30px;
-    margin-top: 20px;
-    display: flex;
-    align-items: center;
-}
-
-ion-input {
-    border: 1px solid purple;
-    border-radius: 25px;
-    margin-left: 15px;
-    overflow: hidden;
-}
-
-::ng-deep item-inner {
-    border: none !important;
-}
-
-::ng-deep --inner-border-width {
-    border: none;
-}
-
-.main {
+ion-card{
+    margin-top: 130px;
+    background: transparent;
+    box-shadow: none;
     text-align: center;
 
-    h1 {
-        font-size: 35px;
-        font-weight: 800;
-        margin-top: 20px;
+    ion-card-title{
+        color:#251029;
+        font-size: 30px;
     }
 
-    p {
-        font-weight: 500;
-        font-size: 19px;
-        margin-top: 5px;
+    ion-card-subtitle{
+        color:#251029;
+        font-size: 14px;
+        font-weight: 400; 
+
+        a{
+            text-decoration: none;
+            font-weight: bold;
+            color: #251029;
+            font-size: 15;
+        }
     }
+
+    ion-card-content{
+        margin-top: 30px;
+
+        ion-item{
+            --ion-item-background:transparent;
+            --border-width:0;
+            --inner-border-width:0;
+            --highlight-color-focused:none;
+            margin-bottom: 15px;
+
+            ion-input{
+                width:257px;
+                height: 42px;
+                border-radius: 15px;
+                border:  1px solid #251029;
+                font-size: 14px;
+                font-weight: 300;
+                color:#251029;
+                --padding-start:30px;
+            }
+
+        }
+
+        a{
+            text-decoration: none;
+            color:#251029;
+            font-weight: 300;
+            font-size: 13px;
+        }
+    }
+  
+    .bottom-section{
+    margin-top: 50px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    ion-button{
+    height: 53px;
+    width: 247px;
+    font-size: 14px;
+    text-transform: none;
+    --background:#251029;
+      font-weight: 400;
+    --border-radius: 15px !important;
+      color:#fff;
+    }
+
+    span{
+        margin-top: 10px;
+        font-weight: 330;
+        a{
+            font-weight: 400;
+        }
+    }
+    }
+
 }
 
-ion-icon {
-    width: 40px;
-    height: 40px;
-    background-color: #251029;
-    color: white;
-    border-radius: 50%;
-}
-
-.no-scroll {
-    overflow: hidden;
-}
-
-.container {
-    position: relative;
-    width: 200px;
-    height: 100px;
-}
-
-.container {
-    width: 380px;
-    height: 150px;
-}
-
-
-.circle,
-.circle2 {
-    position: absolute;
-    bottom: 0;
-    width: 150px;
-    height: 150px;
-    background-color: #251029;
-}
-
-.circle {
-    left: 0;
-    clip-path: circle(60% at 0% 100%);
-}
-
-.circle2 {
-    right: 0;
-    clip-path: circle(60% at 100% 100%);
-}
-
-::ng-deep .sc-ion-input-ios{
-    padding: 10px 20px;
-    color: #251029;
-}
-
-::ng-deep item-inner {
-    border: none !important;
-}
-
-::ng-deep --inner-border-width {
-    border: none;
-}
- 
- ::ng-deep ion-button{
-    --background: #251029 !important;
-    --color:white;
-    margin-top: 30px;
-    width: 40%;
-    height: 40%;
-    border-radius: 50px;
+::ng-deep ion-content {
+    --keyboard-offset: 0px !important
 }

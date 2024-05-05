@@ -1,0 +1,35 @@
+<ion-content [fullscreen]="true" class="container">
+  <div class="top">
+    <ion-segment value="UpComing" (ionChange)="segmentChange($event)">
+      <ion-segment-button>
+        <ion-label>UpComing </ion-label>
+      </ion-segment-button>
+      <ion-segment-button>
+        <ion-label>Past Orders</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+  </div>
+
+  <div *ngFor="let item of orders">
+    <p class="date">{{item.data}}</p>
+    <div class='upperbox' *ngFor="let n of item.order">
+      <div class="img">
+        <img src="../../assets/imgaes/logo.png" alt="">
+      </div>
+      <div class="title">
+        <h3>{{n.title}}</h3>
+        <p class="transId">Order Id : {{n.transId}}</p>
+        <p class="amount">Amount : {{n.amount}}</p>
+        <p class="time">E.Time : {{n.time}}</p>
+      </div>
+      <div class="menu">
+        <ion-icon name="ellipsis-vertical-outline" (click)="presentPopover($event)"></ion-icon>
+        <p [ngStyle]="{'color':(n.status === 'confirm') ? 'green' : 'red'}" class="new">
+          {{n.status}}</p>
+        <div class="edit">
+          <button class="btn" type="submit">Reorder</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</ion-content>
