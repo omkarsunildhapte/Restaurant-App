@@ -28,3 +28,6 @@
 @tailwind components;
 @tailwind utilities;
 
+.alert-model{
+    --background:transparent !important;
+}

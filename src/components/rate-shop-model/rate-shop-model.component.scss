@@ -1,0 +1,121 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap');
+
+.main-container{
+    width: 100%;
+    height: 100%;
+    margin: 14% 0px 0px 0px;
+}
+
+.container {
+    background-color: #ffffff;
+    width: 100%;
+    border-radius: 40px 40px 0px 0px;
+    display: flex;
+    align-items: start;
+    justify-content: flex-start;
+    flex-direction: column;
+    padding: 20px 20px;
+    font-family: "DM Sans", sans-serif;
+
+    .top-driver {
+        margin: 10px auto;
+
+        .driver {
+            p {
+                font-family: "DM Sans", sans-serif;
+                font-size: 20px;
+                font-weight: 600;
+                color: #2b3d5c;
+            }
+        }
+    }
+}
+
+.container-1{
+    background-color: #ffffff;
+    width: 100%;
+    margin: 0% 0% 0% 0%;
+    display: flex;
+    align-items: start;
+    justify-content: flex-start;
+    flex-direction: column;
+    padding: 25px 20px;
+    font-family: "DM Sans", sans-serif;
+    position: relative;
+    top: 0px;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+
+    .img-container {
+        margin: 0 auto;
+
+        img {
+            margin: 20px auto;
+        }
+
+        span {
+            margin: 0 auto;
+            color: #2b3d5c;
+        }
+    }
+
+    .star-conatiner {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .execellent{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .white-button {
+        padding: 10px 10px;
+        background-color: #f4f5f7;
+        border-radius: 10px;
+        font-family: "DM Sans", sans-serif;
+        font-size: 20px;
+        margin: 0 5px;
+        color: #68748b;
+    }
+    
+    .yellow-button {
+        padding: 10px 10px;
+        border-radius: 10px;
+        background: #f2b252;
+        color: #fff;
+        margin: 0 5px;
+        font-family: "DM Sans", sans-serif;
+        font-size: 20px;
+    }
+
+    .para {
+        padding: 25px;
+        background: #f4f5f7;
+        margin: 5px auto;
+        border-radius: 10px;
+        color: #9ba3b2;
+    }
+
+    .last-button {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #f2b252;
+        padding: 14px;
+        border-radius: 15px;
+        color: #fff;
+    }
+}
+
+
+
+
+
+::ng-deep ion-modal>.ion-page{
+    height: 0px !important;
+}
