@@ -1,0 +1,115 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Bucket</ion-title>
+    <ion-icon name="chevron-back-outline" aria-hidden="true" slot="start"></ion-icon>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <ion-card>  
+    <ion-card-content>
+        <div class="h-36">
+            <img src="../../assets/icon/burger.svg" class="w-full h-full" alt="" srcset="">
+        </div>
+        <div class="flex flex-col">
+            <div class="text-sm justify-between flex">
+              <span class="flex gap-3">
+                <span>
+                  Burger King
+                </span>
+                <div>
+                  <ion-icon name="star"></ion-icon>
+                  <span>4.5</span>  
+                </div>
+              </span>
+              <ion-icon name="heart" slot="end"></ion-icon>
+            </div>
+            <span class="text-sm">
+                1453 W Manchester Ave Los Angeles CA 90047
+            </span>
+        </div>
+    </ion-card-content>  
+  </ion-card>
+  <ion-card class="mains">
+    <ion-card-content>
+        <ion-segment [(ngModel)]="segment" value="delivery">
+            <ion-segment-button value="delivery">
+              <ion-label>Delivery</ion-label>
+            </ion-segment-button>
+            <ion-segment-button value="review">
+              <ion-label>Review</ion-label>
+            </ion-segment-button>
+          </ion-segment>
+          <div [ngSwitch]="segment">
+            <ion-list *ngSwitchCase="'review'">
+              <ion-item>
+                <div class="flex flex-col">
+                  <div class="flex w-full pt-4">
+                    <div class="w-2/12 mx-3">
+                      <img src="../../assets/icon/profile.svg" alt="">
+                    </div>
+                    <div class="w-full">
+                      <p class="m-0 text-sm font-semibold">Victoria Champain</p>
+                      <span class="pt-3">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path fill-rule="evenodd" clip-rule="evenodd" d="M8.55406 3.79199L9.7234 6.25866L12.1181 6.51266C12.366 6.53671 12.5747 6.70849 12.646 6.94717C12.7172 7.18586 12.6369 7.44393 12.4427 7.59999L10.5334 9.16999L11.1241 11.8093C11.178 12.0491 11.0834 12.298 10.8838 12.4414C10.6841 12.5848 10.4181 12.595 10.2081 12.4673L8.00006 11.124L5.79006 12.4667C5.57993 12.5941 5.314 12.5838 5.11435 12.4405C4.9147 12.2972 4.81987 12.0485 4.8734 11.8087L5.46673 9.16999L3.5574 7.59999C3.36463 7.44353 3.28535 7.1862 3.35664 6.94839C3.42792 6.71057 3.63568 6.53929 3.88273 6.51466L6.27673 6.26066L7.44606 3.79199C7.54766 3.57812 7.76329 3.44183 8.00006 3.44183C8.23684 3.44183 8.45246 3.57812 8.55406 3.79199Z" fill="#EF9F27"/>
+                          </svg>                    
+                      </span>
+                    </div>
+                    <div class="w-4/12">
+                      <span class="text-xs text-nowrap">Today, 09:12</span>
+                    </div>
+                  </div>
+                  <div class="w-full text-xs">
+                    Food, as always, is good both upstairs and downstairs is always clean (download the bk app for deals etc.) sit upstairs every time, more relaxed feel.
+                  </div>
+                  <div class="flex justify-between pt-3 w-full">
+                    <div class="w-4/12 text-xs">
+                      <ion-icon name="heart" slot="start"></ion-icon>
+                      132 likes
+                    </div>
+                    <div class="w=2/12">
+                      <ion-icon name="flag" slot="end"></ion-icon>
+                    </div>
+                  </div>
+                </div>
+              </ion-item>
+            </ion-list>
+            <div *ngSwitchCase="'delivery'">
+              <ion-list>
+                <ion-item>
+                  <div class="w-full flex justify-between py-2">
+                    <p class="itemheader">Prime Breef-Pizza Beautiful</p>
+                    <div class="flex items-center">
+                      <span class="action">
+                        <ion-icon class="minus" slot="start" name="remove-outline"></ion-icon>
+                        2
+                        <ion-icon class="plus" name="add-outline" slot="end"></ion-icon>
+                      </span>
+                    </div>
+                  </div>
+                </ion-item>
+                <ion-item>
+                  <div class="py-2 flex justify-between">
+                    <span>Total Price</span>
+                    <span class="text-center  px-5 text-sm text-amber-300">
+                      $ 200
+                    </span>
+                  </div>
+                </ion-item>
+              </ion-list>
+              <div class="flex gap-4 pt-4">
+                <ion-button style="min-height: 43px;" class="w-6/12" shape="round">Add Cart</ion-button>
+                <ion-button [routerLink]="['/confirm-order']" style="min-height: 43px;" class="w-6/12" shape="round">Confirm</ion-button>
+              </div>
+            </div>
+          </div>
+    </ion-card-content>
+  </ion-card>
+  <ion-card class="general">
+    <ion-card-header class="rounded-sm">
+      <ion-card-title>
+        Similar Foods
+      </ion-card-title>
+    </ion-card-header>
+  </ion-card>
+</ion-content>

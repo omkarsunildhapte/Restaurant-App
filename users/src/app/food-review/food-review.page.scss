@@ -1,0 +1,30 @@
+ion-header {
+    ion-toolbar {
+        padding-top: 10px;
+        height: 60px;
+        --background: white;
+        font-size: 17px;
+        font-weight: 500;
+        --border-color: blue;
+
+        ion-icon {
+            padding: 10px;
+        }
+    }
+}
+
+ion-content {
+    .general {
+        ion-card-header {
+            border-bottom: 0.1px solid;
+
+            ion-card-title {
+                font-size: 14px;
+            }
+        }
+
+        ion-card-content {
+            padding-top: 10px !important;
+        }
+    }
+}
