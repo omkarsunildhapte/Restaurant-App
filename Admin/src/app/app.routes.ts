@@ -6,13 +6,14 @@ import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 
 export const routes: Routes = [
-    {path:'',pathMatch:'full',redirectTo: 'login',},
+    {path:'',pathMatch:'full',redirectTo: 'login'},
     {path:'login',component:LoginComponent},
     {path:'register',component:RegisterComponent},
     {
         path:'mains',
         component:CommanLayoutComponent,
         children:[
+            {path:'',pathMatch:'full',redirectTo: 'dashboard',},
             { path :'dashboard',component:DashboardComponent},
             { path:'foods',component:FoodsComponent},
             // { path :''}

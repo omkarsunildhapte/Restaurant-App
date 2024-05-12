@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-
 @Component({
   selector: 'app-foods',
   standalone: true,
@@ -8,5 +7,10 @@ import { Component } from '@angular/core';
   styleUrl: './foods.component.css'
 })
 export class FoodsComponent {
+  visible: boolean = false;
+
+  showDialog() {
+      this.visible = true;
+  }
 
 }

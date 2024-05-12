@@ -14,26 +14,31 @@
           </ion-card-subtitle>
         </ion-card-header>
         <ion-card-content>
-          <ion-item>
-            <ion-icon name="person"></ion-icon>
-            <ion-input placeholder="Full Names"></ion-input>
-          </ion-item>
-          <ion-item>
-            <ion-icon name="mail"></ion-icon>
-            <ion-input placeholder="Email"></ion-input>
-          </ion-item>
-          <ion-item>
-            <ion-icon name="lock-closed"></ion-icon>
-            <ion-input placeholder="Password"></ion-input>
-          </ion-item>
-          <ion-item>
-            <ion-icon name="lock-closed"></ion-icon>
-            <ion-input placeholder="Confirm Password"></ion-input>
-          </ion-item>
-          <div class="bottom-section">
-            <ion-button [routerLink]="['/home']">Sign Up</ion-button>
-          </div>
+          <form [formGroup]="registrationForm" (ngSubmit)="onSubmit()">
+            <ion-item>
+              <ion-icon name="person"></ion-icon>
+              <ion-input placeholder="Full Names" formControlName="name"></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-icon name="mail"></ion-icon>
+              <ion-input placeholder="Email" formControlName="email"></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-icon name="lock-closed"></ion-icon>
+              <ion-input placeholder="Password" formControlName="password"></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-icon name="lock-closed"></ion-icon>
+              <ion-input placeholder="Confirm Password" formControlName="confirmPassword"></ion-input>
+            </ion-item>
+            <div class="bottom-section">
+              <ion-button type="submit">Sign Up</ion-button>
+            </div>
+          </form>
         </ion-card-content>
       </ion-card>
+      <div class="loader" [style.display]="isLoading ? 'block' : 'none'">
+        <ion-spinner name="lines-sharp"></ion-spinner>
+      </div>
     </ion-content>
 </div>

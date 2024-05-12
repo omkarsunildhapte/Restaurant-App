@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { NavController } from '@ionic/angular';
+import { Router } from '@angular/router';
+import { AuthService } from '../servies/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -9,13 +9,12 @@ import { NavController } from '@ionic/angular';
   styleUrls: ['./login.page.scss'],
 })
 export class LoginPage implements OnInit {
-
+  isLoading:boolean = false;
   loginForm!: FormGroup;
-
   constructor(
     private formBuilder: FormBuilder,
-    private afAuth: AngularFireAuth,
-    private navCtrl: NavController
+    private authServies :AuthService,
+    private router: Router
   ) { }
 
   ngOnInit() {
@@ -28,18 +27,16 @@ export class LoginPage implements OnInit {
     return this.loginForm.controls;
   }
   async login() {
-    const { email, password } = this.loginForm.value;
-    try {
-      const userCredential = await this.afAuth.signInWithEmailAndPassword(email, password);
-      console.log('Login successful!', userCredential);
-    } catch (error) {
-      console.error('Login error:', error);
-    }
+    const rawValue =  this.loginForm.getRawValue()
+    this.authServies.login(
+      rawValue.email,
+      rawValue.password
+    ).subscribe(()=>{
+      this.isLoading =false;
+      this.router.navigateByUrl('/home');
+    },
+    (error)=>{
+      this.isLoading =false;
+    })
   }
-  signInWithFacebook() {
-    throw new Error('Method not implemented.');
-    }
-    signInWithGoogle() {
-    throw new Error('Method not implemented.');
-    }
 }

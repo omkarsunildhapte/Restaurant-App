@@ -120,3 +120,11 @@ ion-card {
 ::ng-deep ion-content {
     --keyboard-offset: 0px !important
 }
+.loader{
+    position: absolute;
+    z-index: 999;
+    height: 100vh;
+    width: 100vw;
+    background: white;
+    top: 0%;
+}

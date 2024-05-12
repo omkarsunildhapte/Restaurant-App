@@ -14,18 +14,20 @@
             </ion-card-subtitle>
           </ion-card-header>
           <ion-card-content>
-            <ion-item>
-              <ion-icon name="mail"></ion-icon>
-              <ion-input placeholder="Enter Your Email"></ion-input>
-            </ion-item>
-            <ion-item>
-              <ion-icon name="lock-closed"></ion-icon>
-              <ion-input placeholder="Enter Your Password"></ion-input>
-            </ion-item>
-            <div class="bottom-section">
-              <ion-button>Login</ion-button>
-              <span><a routerLink="/forget"> Forget Password ?</a></span>
-            </div>
+            <form [formGroup]="loginForm" (ngSubmit)="login()">
+              <ion-item>
+                <ion-icon name="mail"></ion-icon>
+                <ion-input placeholder="Enter Your Email" formControlName="email"></ion-input>
+              </ion-item>
+              <ion-item>
+                <ion-icon name="lock-closed"></ion-icon>
+                <ion-input placeholder="Enter Your Password" formControlName="password"></ion-input>
+              </ion-item>
+              <div class="bottom-section">
+                <ion-button type="submit">Login</ion-button>
+                <span><a routerLink="/forget"> Forget Password ?</a></span>
+              </div>
+            </form>
           </ion-card-content>
         </ion-card>
       </ion-content>
