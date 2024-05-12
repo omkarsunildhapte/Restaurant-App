@@ -1,0 +1,215 @@
+<ion-header>
+    <ion-toolbar>
+        <div class="flex">
+            <div class="w-2/12 first">
+                <img src="../../assets/icon/icon.jpg" alt="" />
+            </div>
+            <div class="w-full pt-4">
+                <ion-searchbar animated="true" placeholder="Search,Order,Enjoy,Repeat"
+                    show-clear-button="always"></ion-searchbar>
+            </div>
+            <div class="w-2/12 flex justify-end second">
+                <ion-icon name="grid" class="text-sm"></ion-icon>
+            </div>
+        </div>
+    </ion-toolbar>
+</ion-header>
+<ion-content>
+    <ion-card>
+        <div class="flex px-3 py-6">
+            <div class="w-2/12">
+                <ion-icon name="navigate" class="text-lg pt-3"></ion-icon>
+            </div>
+            <div class="w-full flex flex-col">
+                <span class="text-sm"> Delivery to </span>
+                <span class="text-sm"> 1014 Prospect Vall </span>
+            </div>
+            <div class="w-4/12">
+                <ion-button shape="round" class="filterButton">
+                    <ion-icon slot="start" name="options"></ion-icon>
+                    Filter
+                </ion-button>
+            </div>
+        </div>
+    </ion-card>
+    <ion-card class="mt-8 general">
+        <ion-card-header class="rounded-sm flex">
+            <div class="flex justify-between">
+                <div class="w-4/12 mains">
+                    General
+                </div>
+                <div class="w-2/12 font-semibold text-black">
+                    See all
+                </div>
+            </div>
+        </ion-card-header>
+        <ion-card-content>
+            <div class="flex gap-3 pt-4">
+                <div class="flex flex-col" [routerLink]="['/food-review']">
+                    <div class="list-menu">
+                        <img src="../../assets/icon/sanwtich.svg" alt="" srcset="">
+                    </div>
+                    <span class="text-xs text-center">Sandwich</span>
+                </div>
+                <div class="flex flex-col">
+                    <div class="list-menu">
+                        <img src="../../assets/icon/sanwtich.svg" alt="" srcset="">
+                    </div>
+                    <span class="text-xs text-center">Sandwich</span>
+                </div>
+                <div class="flex flex-col">
+                    <div class="list-menu">
+                        <img src="../../assets/icon/sanwtich.svg" alt="" srcset="">
+                    </div>
+                    <span class="text-xs text-center">Sandwich</span>
+                </div>
+                <div class="flex flex-col">
+                    <div class="list-menu">
+                        <img src="../../assets/icon/sanwtich.svg" alt="" srcset="">
+                    </div>
+                    <span class="text-xs text-center">Sandwich</span>
+                </div>
+            </div>
+        </ion-card-content>
+    </ion-card>
+    <ion-card class="mt-8 general">
+        <ion-card-header class="rounded-sm flex">
+            <div class="flex justify-between">
+                <div class="w-4/12 mains">
+                    Best Partners
+                </div>
+                <div class="w-2/12 font-semibold text-black">
+                    See all
+                </div>
+            </div>
+        </ion-card-header>
+        <ion-card-content>
+            <div class="flex pt-4 gap-4">
+                <div class="w-6/12 flex-col flex">
+                    <img src="../../assets/icon/bannerImges.svg" alt="">
+                    <span class="text-sm font-bold">
+                        Extreme cheese whopper JR
+                    </span>
+                    <div class="flex justify-between">
+                        <span class="text-xs">
+                            $ 5.99
+                        </span>
+                        <span class="text-xs">
+                            Burger
+                        </span>
+                    </div>
+                </div>
+                <div class="w-6/12 flex-col flex">
+                    <img src="../../assets/icon/bannerImges.svg" alt="">
+                    <span class="text-sm font-bold">
+                        Extreme cheese whopper JR
+                    </span>
+                    <div class="flex justify-between">
+                        <span class="text-xs">
+                            $ 5.99
+                        </span>
+                        <span class="text-xs">
+                            Burger
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="flex pt-4 gap-4">
+                <div class="w-6/12 flex-col flex">
+                    <img src="../../assets/icon/bannerImges.svg" alt="">
+                    <span class="text-sm font-bold">
+                        Extreme cheese whopper JR
+                    </span>
+                    <div class="flex justify-between">
+                        <span class="text-xs">
+                            $ 5.99
+                        </span>
+                        <span class="text-xs">
+                            Burger
+                        </span>
+                    </div>
+                </div>
+                <div class="w-6/12 flex-col flex">
+                    <img src="../../assets/icon/bannerImges.svg" alt="">
+                    <span class="text-sm font-bold">
+                        Extreme cheese whopper JR
+                    </span>
+                    <div class="flex justify-between">
+                        <span class="text-xs">
+                            $ 5.99
+                        </span>
+                        <span class="text-xs">
+                            Burger
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </ion-card-content>
+    </ion-card>
+    <ion-card class="mt-8 general">
+        <ion-card-header class="rounded-sm flex">
+            <div class="flex justify-between">
+                <div class="w-4/12 mains">
+                    <span class="text-nowrap">
+                        Hot Burger Combo
+                    </span>
+                </div>
+                <div class="w-2/12 font-semibold text-black">
+                    See all
+                </div>
+            </div>
+        </ion-card-header>
+        <ion-card-content>
+            <ion-list>
+                <ion-item class="w-100 flex w-100">
+                    <div class="w-4/12">
+                        <div class="items">
+                            <img src="../../assets/icon/sanwtich.svg" alt="" srcset="">
+                        </div>
+                    </div>
+                    <div class="w-6/12">
+                        <span>
+                            Combo spicy tender
+                        </span>
+                        <div class="flex gap-2 items-center">
+                            <span class="text-xs text-nowrap">
+                                $ 10.15
+                            </span>
+                            <div>.</div>
+                            <span class="text-xs text-nowrap">
+                                Burger combo
+                            </span>
+                        </div>
+                    </div>
+                    <div class="w-2/12 flex justify-end" style="padding: 0px 18px;">
+                        <ion-icon name="star" slot="end"></ion-icon>
+                    </div>
+                </ion-item>
+                <ion-item class="w-100 flex w-100">
+                    <div class="w-4/12">
+                        <div class="items">
+                            <img src="../../assets/icon/sanwtich.svg" alt="" srcset="">
+                        </div>
+                    </div>
+                    <div class="w-6/12">
+                        <span>
+                            Combo spicy tender
+                        </span>
+                        <div class="flex gap-2 items-center">
+                            <span class="text-xs text-nowrap">
+                                $ 10.15
+                            </span>
+                            <div>.</div>
+                            <span class="text-xs text-nowrap">
+                                Burger combo
+                            </span>
+                        </div>
+                    </div>
+                    <div class="w-2/12 flex justify-end" style="padding: 0px 18px;">
+                        <ion-icon name="star" slot="end"></ion-icon>
+                    </div>
+                </ion-item>
+            </ion-list>
+        </ion-card-content>
+    </ion-card>
+</ion-content>

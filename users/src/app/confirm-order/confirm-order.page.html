@@ -1,0 +1,152 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Confirm Order</ion-title>
+    <ion-icon name="chevron-back-outline" aria-hidden="true" slot="start"></ion-icon>
+  </ion-toolbar>
+</ion-header>
+<ion-content class="ion-padding">
+  <ion-card class="mt-8 general">
+    <ion-card-header class="rounded-sm">
+      <ion-card-title>
+        Delivery to
+      </ion-card-title>
+    </ion-card-header>
+    <ion-card-content class="flex gap-3">
+      <div class="w-18 px-5">
+        <img src="../../assets/icon/map.svg" alt="" class="w-full h-full" srcset="">
+      </div>
+      <div class="w-full">
+        <p>(323) 238-0678</p>
+        <p>909-1/2 E 49th St Los Angeles, California(CA), 90011</p>
+        <p class="pt-2 text-slate-400">
+          <ion-icon name="location" aria-hidden="true" slot="start"></ion-icon>
+          1.5 km
+        </p>
+      </div>
+    </ion-card-content>
+  </ion-card>
+  <ion-card class="mt-8 general">
+    <ion-card-header class="rounded-sm">
+      <ion-card-title>
+        Delivery to
+      </ion-card-title>
+    </ion-card-header>
+    <ion-card-content class="flex gap-3 mains">
+      <ion-list>
+        <ion-item class="order-list">
+          <div class="flex w-full py-3">
+            <div class="w-18 px-5">
+              <img src="../../assets/icon/burger.svg" alt="" srcset="" class="w-full h-full">
+            </div>
+            <div class="w-full">
+              <p class="itemheader">Prime Breef-Pizza Beautiful</p>
+              <div class="flex items-center">
+                <span class="action">
+                  <ion-icon class="minus" slot="start" name="remove-outline"></ion-icon>
+                  2
+                  <ion-icon class="plus" name="add-outline" slot="end"></ion-icon>
+                </span>
+                <span class="text-center pt-3 px-5 text-sm text-amber-300">
+                  $ 200
+                </span>
+              </div>
+            </div>
+          </div>
+        </ion-item>
+        <ion-item>
+          <div class="w-10/12">
+            <span class="text-sm">
+              Subtotal (2 items)
+            </span>
+          </div>
+          <div class="w-2/12">
+            <span class="text-sm">$ 36.98</span>
+          </div>
+        </ion-item>
+        <ion-item>
+          <div class="w-10/12">
+            <span class="text-sm">
+              Delivery
+            </span>
+          </div>
+          <div class="w-2/12">
+            <span class="text-sm">$ 36.98</span>
+          </div>
+        </ion-item>
+        <ion-item>
+          <div class="w-10/12">
+            <span class="text-sm">
+              Voucher
+            </span>
+          </div>
+          <div class="w-2/12">
+            <span class="text-sm">-</span>
+          </div>
+        </ion-item>
+        <ion-item>
+          <div class="w-10/12">
+            <span class="text-base">
+              Total
+            </span>
+          </div>
+          <div class="w-2/12">
+            <span class="text-base text-amber-300 text-nowrap">$ 36.98</span>
+          </div>
+        </ion-item>
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
+  <ion-card class="mt-8 general">
+    <ion-card-content class="flex gap-3">
+      <div class="w-2/12 px-5">
+        <img src="../../assets/icon/percentage.svg" alt="" class="w-full h-full" srcset="">
+      </div>
+      <div class="w-8/12">
+        <span>
+          Add Voucher
+        </span>
+      </div>
+      <div class="2/12">
+        <span class="text-sm text-amber-300">
+          Add
+        </span>
+      </div>
+    </ion-card-content>
+  </ion-card>
+  <ion-card class="mt-8 general">
+    <ion-card-content>
+      <div class="p-2 flex gap-3">
+        <div class="w-6/12 flex gap-3 bg-amber-100 p-3 rounded-lg">
+          <div class="w-3/12">
+            <img src="../../assets/icon/paypal.svg" alt="" srcset="">
+          </div>
+          <div class="w-full flex flex-col">
+            <span class="text-amber-500">$ 36.98</span>
+            <span class="text-sm text-amber-300">Paypal</span>
+          </div>
+        </div>
+        <div class="w-6/12 flex gap-3 bg-slate-100 p-3 rounded-lg">
+          <div class="w-3/12">
+            <img src="../../assets/icon/cash.svg" alt="" srcset="">
+          </div>
+          <div class="w-full flex flex-col">
+            <span class="text-slate-500">$ 36.98</span>
+            <span class="text-sm text-slate-300">Cash</span>
+          </div>
+        </div>
+      </div>
+      <div class="p-2 flex gap-3 items-center justify-center">
+        <div class="w-6/12 flex gap-3 bg-blue-100 p-3 rounded-lg">
+          <div class="w-3/12">
+            <ion-icon name="card" class="text-xl text-black"></ion-icon>
+          </div>
+          <div class="w-full flex flex-col">
+            <span class="text-blue-500">$ 36.98</span>
+            <span class="text-sm text-blue-300">Card</span>
+          </div>
+        </div>
+      </div>
+    </ion-card-content>
+  </ion-card>
+  <ion-button expand="block" shape="round">Confirm</ion-button>
+</ion-content>

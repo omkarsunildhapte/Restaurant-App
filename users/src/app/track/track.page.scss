@@ -1,0 +1,13 @@
+.show{
+    background-image: url('../../assets/icon/maps.svg');
+    width: 100vw;
+    height: 100vh;
+    position: absolute;
+    z-index: 0;
+    top: 0;
+}
+.showmap{
+position: relative;
+z-index: 1;
+top: 23%;
+}
