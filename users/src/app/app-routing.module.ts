@@ -20,12 +20,8 @@ const routes: Routes = [
     loadChildren: () => import('./login/login.module').then(m => m.LoginPageModule)
   },
   {
-    path:'home',
-    loadChildren:()=> import ('./home/home.module').then(m => m.HomePageModule)
-  },
-  {
-    path:'account',
-    loadChildren:()=> import ('./account/account.module').then(m => m.AccountPageModule)
+    path:'main',
+    loadChildren:()=> import ('./tabs/tabs.module').then(m => m.TabsPageModule)
   },
   {
     path: 'account-information',
@@ -40,26 +36,9 @@ const routes: Routes = [
     loadChildren: () => import('./payment-methods/payment-methods.module').then( m => m.PaymentMethodsPageModule)
   },
   {
-    path: 'confirm-order',
-    loadChildren: () => import('./confirm-order/confirm-order.module').then( m => m.ConfirmOrderPageModule)
-  },
-  {
-    path: 'food-review',
-    loadChildren: () => import('./food-review/food-review.module').then( m => m.FoodReviewPageModule)
-  },
-  {
-    path: 'track',
-    loadChildren: () => import('./track/track.module').then( m => m.TrackPageModule)
-  },
-  {
     path: 'table-detials',
     loadChildren: () => import('./table-details/table-details.module').then( m => m.TableDetailsPageModule)
-  },
-  {
-    path: 'table',
-    loadChildren: () => import('./table/table.module').then( m => m.TablePageModule)
   }
-
 ];
 
 @NgModule({

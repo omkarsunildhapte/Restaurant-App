@@ -10,13 +10,12 @@ export class AuthService {
   login(email: string, password: string):Observable<void> {
     const promise =  this.afAuth.signInWithEmailAndPassword(email, password)
       .then((userCredential:any) => {
-        debugger
         localStorage.setItem('email',userCredential.user._delegate.email)
         localStorage.setItem('displayName',userCredential.user._delegate.displayName)
       })
       .catch(error => {
       });
-    return from(promise)
+    return from(promise);
   }
 
   register(name:string,email:string,password:string):Observable<void> {
@@ -29,18 +28,25 @@ export class AuthService {
     .then(() => {
     })
     .catch(error => {
-      console.error('Registration error:', error);
     });
-    return from(promise)
+    return from(promise);
   }
   
-  logout() {
-    this.afAuth.signOut()
+  logout():Observable<void> {
+    const promise = this.afAuth.signOut()
       .then(() => {
-        console.log('Logout successful');
       })
       .catch(error => {
-        console.error('Logout error:', error);
       });
+      return from(promise);
+  }
+
+  resetPassword(email:string):Observable<void> {
+    const promise =  this.afAuth.sendPasswordResetEmail(email)
+      .then(() => {
+      })
+      .catch(error => {
+      });
+      return from(promise)
   }  
 }

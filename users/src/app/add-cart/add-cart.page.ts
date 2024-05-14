@@ -2,14 +2,16 @@ import { Component, OnInit } from '@angular/core';
 import { RoutingService } from '../servies/routing.service';
 
 @Component({
-  selector: 'app-confirm-order',
-  templateUrl: './confirm-order.page.html',
-  styleUrls: ['./confirm-order.page.scss'],
+  selector: 'app-add-cart',
+  templateUrl: './add-cart.page.html',
+  styleUrls: ['./add-cart.page.scss'],
 })
-export class ConfirmOrderPage implements OnInit {
+export class AddCartPage implements OnInit {
+
   constructor(
     public routing:RoutingService
   ){}
+  
   ngOnInit() {
   }
 

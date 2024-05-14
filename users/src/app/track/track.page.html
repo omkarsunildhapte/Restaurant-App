@@ -1,7 +1,16 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-icon name="chevron-back-outline" aria-hidden="true" slot="start" (click)="routing.goBack()"></ion-icon>
+    <ion-title>Track Order</ion-title>
+    <ion-button slot="end" class="view-button" (click)="showValue=!showValue">
+      {{ showValue?'View Map':'Details'}}
+    </ion-button>
+  </ion-toolbar>
+</ion-header>
 <ion-content [fullscreen]="true">
   <div class="show">
   </div>
-  <div class="showmap">
+  <div class="showmap" *ngIf="showValue">
     <ion-card slot="end">
       <ion-card-header class="rounded-sm flex">
         <div class="flex">

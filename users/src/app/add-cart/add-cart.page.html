@@ -1,0 +1,52 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-icon name="chevron-back-outline" aria-hidden="true" slot="start" (click)="routing.goBack()"></ion-icon>
+    <ion-title>View Cart</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content class="ion-padding">
+  <ion-card class="mt-8 general">
+    <ion-card-header class="rounded-sm">
+      <ion-card-title>
+        Cart
+      </ion-card-title>
+    </ion-card-header>
+    <ion-card-content class="flex gap-3 mains">
+      <ion-list>
+        <ion-item class="order-list">
+          <div class="flex w-full py-3">
+            <div class="w-18 px-5">
+              <img src="../../assets/icon/burger.svg" alt="" srcset="" class="w-full h-full">
+            </div>
+            <div class="w-full">
+              <p class="itemheader">Prime Breef-Pizza Beautiful</p>
+              <div class="flex items-center">
+                <span class="action">
+                  <ion-icon class="minus" slot="start" name="remove-outline"></ion-icon>
+                  2
+                  <ion-icon class="plus" name="add-outline" slot="end"></ion-icon>
+                </span>
+                <span class="text-center pt-3 px-5 text-sm text-amber-300">
+                  $ 200
+                </span>
+              </div>
+            </div>
+          </div>
+        </ion-item>
+        <ion-item>
+          <div class="w-10/12">
+            <span class="text-base">
+              Total
+            </span>
+          </div>
+          <div class="w-2/12">
+            <span class="text-base text-amber-300 text-nowrap">$ 36.98</span>
+          </div>
+        </ion-item>
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
+  <div class="bottom-button w-full">
+    <ion-button expand="block" shape="round" (click)="routing.navigateUrl('/main/confirm-order',undefined)">Confirm</ion-button>
+  </div>
+</ion-content>

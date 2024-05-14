@@ -14,35 +14,39 @@ const routes: Routes = [
         pathMatch: 'full'
       },
       {
-        path:'home',
-        loadChildren:()=> import ('../home/home.module').then(m => m.HomePageModule)
+        path: 'home',
+        loadChildren: () => import('../home/home.module').then(m => m.HomePageModule)
       },
       {
-        path:'account',
-        loadChildren:()=> import ('../account/account.module').then(m => m.AccountPageModule)
+        path: 'account',
+        loadChildren: () => import('../account/account.module').then(m => m.AccountPageModule)
       },
       {
-        path: 'account-information',
-        loadChildren: () => import('../account-information/account-information.module').then( m => m.AccountInformationPageModule)
+        path: 'table',
+        loadChildren: () => import('../table/table.module').then(m => m.TablePageModule)
       },
       {
-        path: 'change-password',
-        loadChildren: () => import('../change-password/change-password.module').then( m => m.ChangePasswordPageModule)
-      },
-      {
-        path: 'payment-method',
-        loadChildren: () => import('../payment-methods/payment-methods.module').then( m => m.PaymentMethodsPageModule)
-      },
-      {
-        path: 'confirm-order',
-        loadChildren: () => import('../confirm-order/confirm-order.module').then( m => m.ConfirmOrderPageModule)
+        path: 'foods',
+        loadChildren: () => import('../foods/foods.module').then(m => m.FoodsPageModule)
       },
       {
         path: 'food-review',
-        loadChildren: () => import('../food-review/food-review.module').then( m => m.FoodReviewPageModule)
+        loadChildren: () => import('../food-review/food-review.module').then(m => m.FoodReviewPageModule)
+      },
+      {
+        path: 'confirm-order',
+        loadChildren: () => import('../confirm-order/confirm-order.module').then(m => m.ConfirmOrderPageModule)
+      },
+      {
+        path: 'track',
+        loadChildren: () => import('../track/track.module').then(m => m.TrackPageModule)
+      },
+      {
+        path: 'add-cart',
+        loadChildren: () => import('../add-cart/add-cart.module').then(m => m.AddCartPageModule)
       }
     ]
-  }, 
+  },
 ];
 
 @NgModule({

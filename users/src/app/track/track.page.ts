@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { RoutingService } from '../servies/routing.service';
 
 @Component({
   selector: 'app-track',
@@ -6,9 +7,11 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./track.page.scss'],
 })
 export class TrackPage implements OnInit {
+showValue: boolean=false;
 
-  constructor() { }
-
+  constructor(
+    public routing:RoutingService
+  ){}
   ngOnInit() {
   }
 

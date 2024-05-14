@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../servies/auth.service';
+import { RoutingService } from '../servies/routing.service';
 
 @Component({
   selector: 'app-login',
@@ -14,7 +15,7 @@ export class LoginPage implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private authServies :AuthService,
-    private router: Router
+    public routerLink:RoutingService
   ) { }
 
   ngOnInit() {
@@ -33,7 +34,7 @@ export class LoginPage implements OnInit {
       rawValue.password
     ).subscribe(()=>{
       this.isLoading =false;
-      this.router.navigateByUrl('/home');
+      this.routerLink.navigateUrl('/main',undefined);
     },
     (error)=>{
       this.isLoading =false;

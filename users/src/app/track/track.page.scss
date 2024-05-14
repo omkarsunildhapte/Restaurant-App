@@ -1,4 +1,26 @@
-.show{
+ion-header {
+    ion-toolbar {
+        padding-top: 10px;
+        height: 60px;
+        --background: white;
+        font-size: 17px;
+        font-weight: 500;
+        --border-color: blue;
+
+        ion-icon {
+            padding: 10px;
+        }
+    }
+    .view-button{
+        margin: 0px;
+        max-height: 5px;
+        min-height: 32px;
+        text-align: center;
+        margin-bottom: 12px;
+    }
+}
+
+.show {
     background-image: url('../../assets/icon/maps.svg');
     width: 100vw;
     height: 100vh;
@@ -6,8 +28,9 @@
     z-index: 0;
     top: 0;
 }
-.showmap{
-position: relative;
-z-index: 1;
-top: 23%;
+
+.showmap {
+    position: relative;
+    z-index: 1;
+    top: 20%;
 }

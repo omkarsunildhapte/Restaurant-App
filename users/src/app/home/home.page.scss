@@ -3,24 +3,27 @@ ion-header {
     height: 74px;
     border-bottom-left-radius: 47px;
     border-bottom-right-radius: 47px;
-    --background: #e1e1e2b3;
-
+    --background: #783387;
     div {
       .first {
         padding: 12px 10px;
-
         img {
           height: 36px;
           border-radius: 50%;
         }
       }
-
+      ::ng-deep .searchbar-search-icon.sc-ion-searchbar-ios{
+        color: #fff;
+      }
+      ::ng-deep .searchbar-clear-icon.sc-ion-searchbar-ios{
+        color: #fff;
+      }
       .second {
         align-items: center;
-
         ion-icon {
           font-size: 36px;
           padding: 12px 10px;
+          color: #fff;
         }
       }
     }   
@@ -36,7 +39,7 @@ ion-content {
     margin: 0px;
     --padding-start: 2px !important;
     --padding-end: 4px !important;
-    --background: #e0e0e2;
+    --background: #241029;
 
     ion-icon {
       font-size: 16px;

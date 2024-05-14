@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../servies/auth.service';
+import { RoutingService } from '../servies/routing.service';
 
 @Component({
   selector: 'app-register',
@@ -13,7 +14,7 @@ export class RegisterPage implements OnInit {
   isLoading:boolean = false;
   constructor(
     private formBuilder: FormBuilder,
-    private router: Router,
+    public routerlink:RoutingService,
     private authServies: AuthService
   ) { }
 
@@ -41,7 +42,7 @@ export class RegisterPage implements OnInit {
         rawValue.password
       ).subscribe((res: any) => {
         this.isLoading =false;
-        this.router.navigateByUrl('/login');
+        this.routerlink.navigateUrl('/login',undefined)
       },
       (error)=>{
         this.isLoading =false;
