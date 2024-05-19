@@ -5,30 +5,20 @@
                 <img src="../../assets/icon/icon.jpg" alt="" />
             </div>
             <div class="w-full pt-4">
-                <ion-searchbar animated="true" placeholder="Search The Order" class="text-white" 
+                <ion-searchbar animated="true" placeholder="Search The Order" class="text-white"
                     show-clear-button="always"></ion-searchbar>
-            </div>
-            <div class="w-2/12 flex justify-end second">
-                <ion-icon name="grid" class="text-sm"></ion-icon>
             </div>
         </div>
     </ion-toolbar>
 </ion-header>
 <ion-content class="ion-padding" [fullscreen]="true">
     <ion-card>
-        <div class="flex px-3 py-6">
+        <div class="flex p-3">
             <div class="w-2/12">
-                <ion-icon name="navigate" class="text-lg pt-3"></ion-icon>
+                <ion-icon name="navigate" class="text-lg"></ion-icon>
             </div>
             <div class="w-full flex flex-col">
-                <span class="text-sm"> Delivery to </span>
-                <span class="text-sm"> 1014 Prospect Vall </span>
-            </div>
-            <div class="w-4/12">
-                <ion-button shape="round" class="filterButton">
-                    <ion-icon slot="start" name="options"></ion-icon>
-                    Filter
-                </ion-button>
+                <span class="text-sm"> <span class="font-bold">Delivery to</span> 1014 Prospect Vall </span>
             </div>
         </div>
     </ion-card>
@@ -45,11 +35,11 @@
         </ion-card-header>
         <ion-card-content>
             <div class="flex gap-3 pt-4">
-                <div class="flex flex-col" *ngFor="let product of products" (click)="navigateUrl(product)">
+                <div class="flex flex-col w-3/12" *ngFor="let product of products" (click)="navigateUrl(product)">
                     <div class="list-menu">
-                        <ion-img [src]="product.img" alt=""></ion-img>
+                        <ion-img [src]="product.logoUrl" alt="" style="width:2.5rem"></ion-img>
                     </div>
-                    <span class="text-xs text-center">{{ product.name }}</span>
+                    <span class="text-xs text-center">{{ product.itemName }}</span>
                 </div>
             </div>
         </ion-card-content>
@@ -58,7 +48,7 @@
         <ion-card-header class="rounded-sm flex">
             <div class="flex justify-between">
                 <div class="w-4/12 mains">
-                    Best Foods
+                    Combo
                 </div>
                 <div class="w-2/12 font-semibold text-black">
                     See all
@@ -67,13 +57,13 @@
         </ion-card-header>
         <ion-card-content>
             <div class="flex pt-4 gap-4">
-                <ng-container *ngFor="let product of bestProduct" >
-                <div class="w-6/12 flex-col flex">
-                        <ion-img [src]="product.img" alt=""></ion-img>
-                        <span class="text-sm font-bold">{{ product.name }}</span>
+                <ng-container >
+                    <div class="w-1/6 flex-1" *ngFor="let product of comboProducts">
+                        <ion-img [src]="product.logoUrl" alt="" style="width:2.5rem"></ion-img>
+                        <span class="text-sm font-bold">{{ product.itemName }}</span>
                         <div class="flex justify-between">
                             <span class="text-xs">{{ '$ ' + product.price }}</span>
-                            <span class="text-xs">{{ product.category }}</span>
+                            <span class="text-xs">{{ product.type }}</span>
                         </div>
                     </div>
                 </ng-container>
@@ -95,25 +85,25 @@
         </ion-card-header>
         <ion-card-content>
             <ion-list>
-              <ion-item *ngFor="let product of comboProducts" class="w-100 flex">
-                <div class="w-4/12">
-                  <div class="items">
-                    <ion-img src="../../assets/icon/sanwtich.svg" alt=""></ion-img>
-                  </div>
-                </div>
-                <div class="w-6/12">
-                  <span>{{ product.name }}</span>
-                  <div class="flex gap-2 items-center">
-                    <span class="text-xs text-nowrap">{{ '$ ' + product.price }}</span>
-                    <div>.</div>
-                    <span class="text-xs text-nowrap">{{ product.category }}</span>
-                  </div>
-                </div>
-                <div class="w-2/12 flex justify-end" style="padding: 0px 18px;">
-                  <ion-icon name="star" slot="end"></ion-icon>
-                </div>
-              </ion-item>
+                <ion-item *ngFor="let product of comboProducts" class="w-100 flex">
+                    <div class="w-4/12">
+                        <div class="items">
+                            <ion-img [src]="product.logoUrl" alt="" style="width:2.5rem"></ion-img>
+                        </div>
+                    </div>
+                    <div class="w-6/12">
+                        <span>{{ product.itemName }}</span>
+                        <div class="flex gap-2 items-center">
+                            <span class="text-xs text-nowrap">{{ '$ ' + product.price }}</span>
+                            <div>.</div>
+                            <span class="text-xs text-nowrap">{{ product.category }}</span>
+                        </div>
+                    </div>
+                    <div class="w-2/12 flex justify-end" style="padding: 0px 18px;">
+                        <ion-icon name="star" slot="end"></ion-icon>
+                    </div>
+                </ion-item>
             </ion-list>
-          </ion-card-content>
+        </ion-card-content>
     </ion-card>
 </ion-content>

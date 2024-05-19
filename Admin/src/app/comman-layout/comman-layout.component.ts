@@ -1,14 +1,21 @@
+import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
-import { SidebarComponent } from './sidebar/sidebar.component';
-import { NavbarComponent } from './navbar/navbar.component';
+import { RouterLink, RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-comman-layout',
   standalone: true,
-  imports: [RouterOutlet,SidebarComponent,NavbarComponent],
+  imports: [RouterOutlet,CommonModule,RouterLink],
   templateUrl: './comman-layout.component.html',
 })
 export class CommanLayoutComponent {
-
+  menu: boolean = true;
+  navItems = [
+    { name: 'Dashboard', link: './dashboard', isActive: true },
+    { name: 'Foods', link: './foods', isActive: false },
+    { name: 'Combo', link: './combo-maker', isActive: false },
+    { name: 'Order', link: './order', isActive: false },
+    { name: 'Table', link: './table', isActive: false },
+    { name: 'Chat', link: './chats', isActive: false },
+  ];
 }

@@ -33,6 +33,7 @@ export class AuthService {
       email,
       password
     ).then((res:any) =>{
+      debugger
       localStorage.setItem('email',res.user._delegate.email)
       localStorage.setItem('displayName',res.user._delegate.displayName)
     });

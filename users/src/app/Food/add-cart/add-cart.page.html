@@ -1,0 +1,52 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-icon name="chevron-back-outline" aria-hidden="true" slot="start" (click)="routing.goBack()"></ion-icon>
+    <ion-title>View Cart</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content class="ion-padding">
+  <ion-card class="mt-8 general">
+    <ion-card-header class="rounded-sm">
+      <ion-card-title>
+        Cart
+      </ion-card-title>
+    </ion-card-header>
+    <ion-card-content class="flex gap-3 mains">
+      <ion-list>
+        <ion-item class="order-list" *ngFor="let product of cartList;let i=index">
+          <div class="flex w-full py-3">
+            <div class="w-18 px-5">
+              <ion-img [src]="product.image" alt="" style="width:2.5rem"></ion-img>
+            </div>
+            <div class="w-full">
+              <p class="itemheader">{{product.name}}</p>
+              <div class="flex items-center">
+                <span class="action">
+                  <ion-icon class="minus" slot="start" name="remove-outline"></ion-icon>
+                 {{product.totalNumber}}
+                  <ion-icon class="plus" name="add-outline" slot="end"></ion-icon>
+                </span>
+                <span class="text-center pt-3 px-5 text-sm text-amber-300">
+                  $ {{getPrice(product.price,product.totalNumber,i)}}
+                </span>
+              </div>
+            </div>
+          </div>
+        </ion-item>
+        <ion-item>
+          <div class="w-10/12">
+            <span class="text-base">
+              Total
+            </span>
+          </div>
+          <div class="w-2/12">
+            <span class="text-base text-amber-300 text-nowrap">$ {{getTotalAmount()}}</span>
+          </div>
+        </ion-item>
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
+  <div class="bottom-button w-full">
+    <ion-button expand="block" shape="round" (click)="routing.navigateUrl('/main/confirm-order',undefined)">Confirm</ion-button>
+  </div>
+</ion-content>

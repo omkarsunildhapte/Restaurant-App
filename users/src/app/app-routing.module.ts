@@ -9,36 +9,30 @@ const routes: Routes = [
   },
   {
     path: 'register',
-    loadChildren: () => import('./register/register.module').then(m => m.RegisterPageModule)
+    loadChildren: () => import('./auth/register/register.module').then(m => m.RegisterPageModule)
   },
   {
     path: 'forget',
-    loadChildren: () => import('./forget/forget.module').then(m => m.ForgetPageModule)
+    loadChildren: () => import('./auth/forget/forget.module').then(m => m.ForgetPageModule)
   },
   {
     path: 'login',
-    loadChildren: () => import('./login/login.module').then(m => m.LoginPageModule)
+    loadChildren: () => import('./auth/login/login.module').then(m => m.LoginPageModule)
   },
   {
     path:'main',
     loadChildren:()=> import ('./tabs/tabs.module').then(m => m.TabsPageModule)
   },
   {
-    path: 'account-information',
-    loadChildren: () => import('./account-information/account-information.module').then( m => m.AccountInformationPageModule)
+    path: 'phonenumber',
+    loadChildren: () => import('./auth/phone-number/phone-number.module').then( m => m.PhoneNumberPageModule)
   },
   {
-    path: 'change-password',
-    loadChildren: () => import('./change-password/change-password.module').then( m => m.ChangePasswordPageModule)
-  },
-  {
-    path: 'payment-method',
-    loadChildren: () => import('./payment-methods/payment-methods.module').then( m => m.PaymentMethodsPageModule)
-  },
-  {
-    path: 'table-detials',
-    loadChildren: () => import('./table-details/table-details.module').then( m => m.TableDetailsPageModule)
+    path: 'location',
+    loadChildren: () => import('./Account_model/location/location.module').then( m => m.LocationPageModule)
   }
+
+
 ];
 
 @NgModule({

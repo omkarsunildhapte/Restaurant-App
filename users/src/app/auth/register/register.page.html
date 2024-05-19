@@ -1,0 +1,71 @@
+<div class="background-pic">
+<ion-content>
+      <ion-card>
+        <ion-card-header>
+          <div class="flex justify-center"> 
+            <img src="../../assets/icon/icon.jpg" style="width: 40%;" />
+          </div>
+          <ion-card-title>
+            Create New Account 
+          </ion-card-title>
+          <ion-card-subtitle>
+            Already resgistered ? 
+            <strong (click)="routerlink.navigateUrl('/login',undefined)">Login</strong>
+          </ion-card-subtitle>
+        </ion-card-header>
+        <ion-card-content>
+          <form [formGroup]="registrationForm" (ngSubmit)="onSubmit()">
+            <ion-item>
+              <ion-icon name="person"></ion-icon>
+              <ion-input placeholder="Full Names" formControlName="name"></ion-input>
+            </ion-item>
+            <div *ngIf="isSubmit && registrationForm.controls['name'].touched && registrationForm.controls['name'].errors?.['required']" class="error-message">
+              Name is required.
+            </div>
+            <ion-item>
+              <ion-icon name="mail"></ion-icon>
+              <ion-input placeholder="Email" formControlName="email"></ion-input>
+            </ion-item>
+            <div *ngIf=" isSubmit && registrationForm.controls['email'].touched">
+              <div *ngIf="registrationForm.controls['email'].errors?.['required']" class="error-message">
+                Email is required.
+              </div>
+              <div *ngIf="registrationForm.controls['email'].errors?.['email']" class="error-message">
+                Enter a valid email.
+              </div>
+            </div>
+            <ion-item>
+              <ion-icon name="lock-closed"></ion-icon>
+              <ion-input type="password" placeholder="Password" formControlName="password"></ion-input>
+            </ion-item>
+            <div *ngIf="isSubmit && registrationForm.controls['password'].touched">
+              <div *ngIf="registrationForm.controls['password'].errors?.['required']" class="error-message">
+                Password is required.
+              </div>
+              <div *ngIf="registrationForm.controls['password'].errors?.['minlength']" class="error-message">
+                Password must be at least 6 characters long.
+              </div>
+            </div>
+            <ion-item>
+              <ion-icon name="lock-closed"></ion-icon>
+              <ion-input type="password" placeholder="Confirm Password" formControlName="confirmPassword"></ion-input>
+            </ion-item>
+            <div *ngIf="isSubmit && registrationForm.controls['confirmPassword'].touched">
+              <div *ngIf="registrationForm.controls['confirmPassword'].errors?.['required']" class="error-message">
+                Confirm Password is required.
+              </div>
+              <div *ngIf="registrationForm.errors?.['mismatch']" class="error-message">
+                Passwords must match.
+              </div>
+            </div>
+            <div class="bottom-section">
+              <ion-button type="submit">{{'Add Location'}}</ion-button>
+            </div>
+          </form>
+        </ion-card-content>        
+      </ion-card>
+      <div class="loader" [style.display]="isLoading ? 'block' : 'none'">
+        <ion-spinner name="lines-sharp"></ion-spinner>
+      </div>
+    </ion-content>
+</div>

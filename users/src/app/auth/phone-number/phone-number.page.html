@@ -1,0 +1,31 @@
+<div class="background-pic">
+  <ion-content>
+        <ion-card>
+          <ion-card-header>
+            <div class="flex justify-center"> 
+              <img src="../../assets/icon/icon.jpg" style="width: 40%;" />
+            </div>
+            <ion-card-title>
+              Add Phone Number
+            </ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <form [formGroup]="phoneNumberForm" (ngSubmit)="onSubmit()">
+              <ion-item>
+                <ion-icon name="call-outline"></ion-icon>
+                <ion-input placeholder="Enter Your Phone Number" formControlName="phoneNumber"></ion-input>
+              </ion-item>
+              <div *ngIf="isSubmit && phoneNumberForm.controls['phoneNumber'].touched && phoneNumberForm.controls['phoneNumber'].errors?.['required']" class="error-message">
+                Phone Number is required.
+              </div>
+              <div class="bottom-section">
+                <ion-button type="submit">Add Number</ion-button>
+              </div>
+            </form>
+          </ion-card-content>        
+        </ion-card>
+        <div class="loader" [style.display]="isLoading ? 'block' : 'none'">
+          <ion-spinner name="lines-sharp"></ion-spinner>
+        </div>
+      </ion-content>
+  </div>

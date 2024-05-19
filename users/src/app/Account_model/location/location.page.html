@@ -1,0 +1,30 @@
+<div class="background-pic">
+  <ion-content>
+        <ion-card>
+          <ion-card-header>
+            <div class="flex justify-center"> 
+              <img src="../../assets/icon/locationMap.svg" style="width: 40%;" />
+            </div>
+            <ion-card-title>
+              Get Location {{currentLocation |json}}
+            </ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <ion-item>
+              <div class="showValues" (click)="getLocation()">
+                <ion-icon slot="start" name="location"></ion-icon>
+                <span>
+                  Use current location
+                </span>
+              </div>
+            </ion-item>
+            <ion-item>
+              <ion-input placeholder="Enter Your location"></ion-input>
+            </ion-item>
+            <div class="bottom-section">
+              <ion-button type="submit" (click)="routerLink.navigateUrl('/main',undefined)">{{userData?.location ? 'Update Location': 'Add Location'}}</ion-button>
+            </div>
+          </ion-card-content>
+        </ion-card>
+      </ion-content>
+  </div>

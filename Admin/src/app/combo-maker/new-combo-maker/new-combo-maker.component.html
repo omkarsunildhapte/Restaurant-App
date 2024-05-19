@@ -1,0 +1,60 @@
+<p-dialog header="New Item" [modal]="true" [(visible)]="visible" [style]="{ width: '40rem' }">
+    <form [formGroup]="newItemForm" (ngSubmit)="onSave()">
+        <div class="flex align-items-center gap-3 mb-3 flex-col">
+            <label for="itemName" class="font-semibold w-6rem">Item Name</label>
+            <input pInputText id="itemName" class="flex-auto" formControlName="itemName" autocomplete="off" />
+            @if (isSubmit && newItemForm.controls['itemName'].invalid && newItemForm.controls['itemName'].touched) {
+                <div  class="text-red-600 ">Item Name is required</div>
+            } 
+        </div>
+        <div class="flex align-items-center gap-3 mb-3 flex-col">
+            <label for="itemList" class="font-semibold w-6rem">Item List</label>
+            <p-multiSelect [options]="itemOptions" optionLabel="itemName" formControlName="itemList" placeholder="Select Cities" ></p-multiSelect>
+            @if (isSubmit && newItemForm.controls['itemList'].invalid && newItemForm.controls['itemList'].touched) {
+                <div class="text-red-600 ">At least one item is required</div>
+            }
+        </div>
+        <div class="flex align-items-center gap-3 mb-3 flex-col">
+            <label for="description" class="font-semibold w-6rem">Description</label>
+            <textarea rows="5" cols="30" pInputTextarea formControlName="description"></textarea>
+            @if (isSubmit && newItemForm.controls['description'].invalid && newItemForm.controls['description'].touched) {
+                <div class="text-red-600 ">Item Description is required</div>
+            }
+        </div>
+        <div class="flex align-items-center gap-3 mb-3 flex-col">
+            <label for="price" class="font-semibold w-6rem">Price</label>
+            <p-inputNumber inputId="price"  formControlName="price" class="w-full"></p-inputNumber>
+            @if (isSubmit && newItemForm.controls['price'].invalid && newItemForm.controls['price'].touched){
+                <div  class="text-red-600 ">Price is required</div>
+            }
+        </div>
+        <div class="flex align-items-center gap-3 mb-3 flex-col">
+            <label for="discount" class="font-semibold w-6rem">Discount</label>
+            <p-inputNumber inputId="discount"maxlength="3"  formControlName="discount" class="w-full"></p-inputNumber>
+        </div>
+        <div class="flex align-items-center gap-3 mb-3 flex-col">
+            <label for="discount" class="font-semibold w-6rem">Food Logo</label>
+            <input type="file" id="logo" (change)="onFileSelected($event,'logoUrl')" accept="image/*"/>
+            @if (newItemForm.get('logoUrl')?.value) {
+                <img [src]="newItemForm.get('logoUrl')?.value" alt="Selected Logo" style="width: 30px;"/>
+            }
+            @if (isSubmit && newItemForm.controls['logoUrl'].invalid && newItemForm.controls['logoUrl'].touched) {
+                <div class="text-red-600 ">Logo Image is required</div>
+            }
+        </div>
+        <div class="flex align-items-center gap-3 mb-3 flex-col">
+            <label for="discount" class="font-semibold w-6rem">Food Logo</label>
+            <input type="file" id="logo" (change)="onFileSelected($event,'bannerImage')" accept="image/*"/>
+            @if (newItemForm.get('bannerImage')?.value) {
+                <img [src]="newItemForm.get('bannerImage')?.value" alt="Selected Logo" style="width: 30px;"/>
+            }
+            @if (isSubmit && newItemForm.controls['bannerImage'].invalid && newItemForm.controls['bannerImage'].touched) {
+                <div class="text-red-600 ">Banner Image is required</div>
+            }
+        </div>
+        <div class="flex justify-content-end gap-2">
+            <p-button label="Cancel" severity="secondary" (click)="onCancel()" />
+            <p-button label="Save" type="submit" />
+        </div>
+    </form>
+</p-dialog>
