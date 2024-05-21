@@ -12,7 +12,7 @@
       </ion-card-title>
     </ion-card-header>
     <ion-card-content class="flex gap-3 mains">
-      <ion-list>
+      <ion-list *ngIf="cartList.length>0">
         <ion-item class="order-list" *ngFor="let product of cartList;let i=index">
           <div class="flex w-full py-3">
             <div class="w-18 px-5">
@@ -22,9 +22,9 @@
               <p class="itemheader">{{product.name}}</p>
               <div class="flex items-center">
                 <span class="action">
-                  <ion-icon class="minus" slot="start" name="remove-outline"></ion-icon>
+                  <ion-icon class="minus" slot="start" name="remove-outline" (click)="getMinus(i)"></ion-icon>
                  {{product.totalNumber}}
-                  <ion-icon class="plus" name="add-outline" slot="end"></ion-icon>
+                  <ion-icon class="plus" name="add-outline" slot="end" (click)="getPlus(i)"></ion-icon>
                 </span>
                 <span class="text-center pt-3 px-5 text-sm text-amber-300">
                   $ {{getPrice(product.price,product.totalNumber,i)}}

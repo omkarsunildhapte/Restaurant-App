@@ -1,12 +1,13 @@
 import { Injectable } from "@angular/core";
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { Observable, catchError, from, switchMap } from "rxjs";
-import { FirebaseService } from "./firebase.service";
+import { UserService } from "./user.service";
+
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  constructor(private afAuth: AngularFireAuth,private userService: FirebaseService) {}
+  constructor(private afAuth: AngularFireAuth,private userService: UserService) {}
 
   login(email: string, password: string): Observable<any> {
     return from(this.afAuth.signInWithEmailAndPassword(email, password))

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { RoutingService } from '../../servies/routing.service';
+import { RoutingService } from 'src/app/service/routing.service';
 
 @Component({
   selector: 'app-track',

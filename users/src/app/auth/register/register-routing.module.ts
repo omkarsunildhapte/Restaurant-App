@@ -3,7 +3,6 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { RegisterPage } from './register.page';
 import { HttpClientModule } from '@angular/common/http';
-import { AuthService } from '../../servies/auth.service';
 
 const routes: Routes = [
   {
@@ -15,6 +14,5 @@ const routes: Routes = [
 @NgModule({
   imports: [RouterModule.forChild(routes),HttpClientModule],
   exports: [RouterModule],
-  providers:[AuthService]
 })
 export class RegisterPageRoutingModule {}

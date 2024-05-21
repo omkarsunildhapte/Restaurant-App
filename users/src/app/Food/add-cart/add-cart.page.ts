@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { RoutingService } from '../../servies/routing.service';
-import { FirebaseService } from 'src/app/servies/firebase.service';
+import { FoodService } from 'src/app/service/food.service';
+import { RoutingService } from 'src/app/service/routing.service';
 
 @Component({
   selector: 'app-add-cart',
@@ -9,28 +9,39 @@ import { FirebaseService } from 'src/app/servies/firebase.service';
 })
 export class AddCartPage implements OnInit {
   cartList: any[]=[];
-
   constructor(
     public routing:RoutingService,
-    private firebaerService:FirebaseService
+    private foodService:FoodService
   ){}
   
   ngOnInit() {
     const uid = localStorage.getItem('uid');
     if (uid){
-      this.firebaerService.getCartItems(uid).subscribe((res:any)=>{
+      this.foodService.getCartItems(uid).subscribe((res:any)=>{
         this.cartList = res
       })
     }
   }
   
-  getPrice(price:number,NoofItem:number,index:number):number {
-   return this.cartList[index].totolAmount = price * NoofItem;
+  getPrice(price: number, noOfItems: number, index: number): number {
+    this.cartList[index].totalAmount = price * noOfItems;
+    return this.cartList[index].totalAmount;
   }
+  
   getTotalAmount(): number {
-    return this.cartList.reduce((total, item) => {
-      return (total + item.totalAmount)}, 0);
+    return this.cartList.reduce((total, item) => total + item.totalAmount, 0);
+  }
+  
+  getMinus(index:number){
+    if(this.cartList[index].totalNumber>0){
+      this.cartList[index].totalNumber -=this.cartList[index].totalNumber
+    }
   }
 
+  getPlus(index:number){
+    if(this.cartList[index].totalNumber>0){
+      this.cartList[index].totalNumber +=this.cartList[index].totalNumber
+    }
+  }
 
 }

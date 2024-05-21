@@ -32,7 +32,7 @@
   <ion-card>  
     <ion-card-content>
       <ion-list>
-        <ion-item *ngFor="let product of itemList" class="w-100 flex">
+        <ion-item *ngFor="let product of itemList" class="w-100 flex" (click)="navigateUrl(product)">
           <div class="w-4/12">
             <div class="items">
               <ion-img [src]="product.logoUrl" alt="" style="width:2.5rem"></ion-img>

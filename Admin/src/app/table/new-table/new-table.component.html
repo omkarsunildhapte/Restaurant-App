@@ -1,0 +1,51 @@
+<p-dialog header="New Table" [modal]="true" [(visible)]="visible" [style]="{ width: '40rem' }">
+    <form [formGroup]="newItemForm" (ngSubmit)="onSave()">
+        <div class="flex align-items-center gap-3 mb-3 flex-col">
+            <label for="itemName" class="font-semibold w-6rem">Table Name</label>
+            <input pInputText id="itemName" class="flex-auto" formControlName="itemName" autocomplete="off" />
+            @if(isSubmit && newItemForm.controls['itemName'].invalid && newItemForm.controls['itemName'].touched){
+                <div class="text-red-600">
+                    Table Name is required
+                </div>
+            }
+        </div>
+        <div class="flex align-items-center gap-3 mb-3 flex-col">
+            <label for="description" class="font-semibold w-6rem">Description</label>
+            <textarea rows="5" cols="30" pInputTextarea formControlName="description"></textarea>
+            @if(isSubmit && newItemForm.controls['description'].invalid && newItemForm.controls['description'].touched){
+                <div class="text-red-600">
+                    Table Description is required
+                </div>
+            }
+        </div>
+        <div class="flex align-items-center gap-3 mb-3 flex-col">
+            <label for="price" class="font-semibold w-6rem">Price</label>
+            <p-inputNumber inputId="price" formControlName="price" class="w-full"></p-inputNumber>
+            @if(isSubmit && newItemForm.controls['price'].invalid && newItemForm.controls['price'].touched){
+                <div class="text-red-600">
+                    Table Price is required
+                </div>
+            }
+        </div>
+        <div class="flex align-items-center gap-3 mb-3 flex-col">
+            <label for="discount" class="font-semibold w-6rem">Discount</label>
+            <p-inputNumber inputId="discount" maxlength="3" formControlName="discount" class="w-full"></p-inputNumber>
+        </div>
+        <div class="flex align-items-center gap-3 mb-3 flex-col">
+            <label for="logo" class="font-semibold w-6rem">Images</label>
+            <input type="file" id="logo" (change)="onFileSelected($event)" accept="image/*" multiple />
+            @if(bannerImages.controls.length){
+                @for (control of bannerImages.controls; track bannerImages.controls;let idx = $index) {
+                <div class="flex align-items-center gap-2">
+                    <img [src]="control.value.url" alt="Selected Logo" style="width: 30px;" />
+                    <button type="button" (click)="removeImage(idx)">Remove</button>
+                </div>
+                }
+            }
+        </div>
+        <div class="flex justify-content-end gap-2">
+            <p-button label="Cancel" severity="secondary" (click)="onCancel()" />
+            <p-button label="Save" type="submit" />
+        </div>
+    </form>
+</p-dialog>

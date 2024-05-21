@@ -1,10 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
-import { AuthService } from '../../servies/auth.service';
-import { RoutingService } from '../../servies/routing.service';
-import { FirebaseService } from '../../servies/firebase.service';
-
+import { AuthService } from 'src/app/service/auth.service';
+import { RoutingService } from 'src/app/service/routing.service';
+import { UserService } from 'src/app/service/user.service';
 @Component({
   selector: 'app-login',
   templateUrl: './login.page.html',
@@ -17,7 +15,7 @@ export class LoginPage implements OnInit {
     private formBuilder: FormBuilder,
     private authServies :AuthService,
     public routerLink:RoutingService,
-    private userService: FirebaseService
+    private userService: UserService
   ) { }
 
   ngOnInit() {
@@ -39,7 +37,7 @@ export class LoginPage implements OnInit {
       const uid = localStorage.getItem('uid'); 
       if (uid) {
       this.userService.getUserByUID(uid).subscribe(
-        (data) => {
+        (data:any) => {
           if(data.phoneNumber){
             this.routerLink.navigateUrl('/main',undefined);
           } else{
@@ -47,7 +45,7 @@ export class LoginPage implements OnInit {
           }
           this.isLoading = false;
         },
-        (error) => {
+        (error:any) => {
           this.isLoading = false;
         }
       );

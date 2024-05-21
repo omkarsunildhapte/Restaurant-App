@@ -32,35 +32,51 @@
       </ion-card-title>
     </ion-card-header>
     <ion-card-content class="flex gap-3 mains">
-      <ion-list>
+      <ion-list style="min-width: 95%;">
         <ion-item class="order-list">
-          <div class="flex w-full py-3">
-            <div class="w-18 px-5">
-              <img src="../../assets/icon/burger.svg" alt="" srcset="" class="w-full h-full">
-            </div>
-            <div class="w-full">
-              <p class="itemheader">Prime Breef-Pizza Beautiful</p>
-              <div class="flex items-center">
-                <span class="action">
-                  <ion-icon class="minus" slot="start" name="remove-outline"></ion-icon>
-                  2
-                  <ion-icon class="plus" name="add-outline" slot="end"></ion-icon>
-                </span>
-                <span class="text-center pt-3 px-5 text-sm text-amber-300">
-                  $ 200
-                </span>
+          <div class="flex flex-col" *ngIf="cartList.length>0">
+            <ng-container *ngFor="let product of cartList;let i = index">
+              <div class="flex w-full py-3">
+                <div class="w-6/12 px-5">
+                  <ion-img [src]="product.image" alt="" class="w-full h-full"></ion-img>
+                </div>
+                <div class="w-full">
+                  <p class="itemheader">{{product.name}}</p>
+                  <div class="flex items-center">
+                    <span class="text-center pt-3 px-5 text-sm text-amber-300">
+                      $ {{getPrice(product.price,product.totalNumber,i)}}
+                    </span>
+                  </div>
+                </div>
               </div>
-            </div>
+            </ng-container>
           </div>
         </ion-item>
         <ion-item>
           <div class="w-10/12">
             <span class="text-sm">
-              Subtotal (2 items)
+              Subtotal ({{subItem.length}} items)
             </span>
           </div>
           <div class="w-2/12">
-            <span class="text-sm">$ 36.98</span>
+            <span class="text-sm">$ {{subitemTotal}}</span>
+          </div>
+          <div class="flex flex-col" *ngIf="subItem.length>0">
+            <ng-container *ngFor="let product of subItem;let i = index">
+              <div class="flex w-full py-3">
+                <div class="w-6/12 px-5">
+                  <ion-img [src]="product.image" alt="" class="w-full h-full"></ion-img>
+                </div>
+                <div class="w-full">
+                  <p class="itemheader">{{product.name}}</p>
+                  <div class="flex items-center">
+                    <span class="text-center pt-3 px-5 text-sm text-amber-300">
+                      $ {{getPrice(product.price,product.totalNumber,i)}}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </ng-container>
           </div>
         </ion-item>
         <ion-item>
@@ -70,7 +86,7 @@
             </span>
           </div>
           <div class="w-2/12">
-            <span class="text-sm">$ 36.98</span>
+            <span class="text-sm">$ {{deliveryCharge}}</span>
           </div>
         </ion-item>
         <ion-item>
@@ -80,7 +96,7 @@
             </span>
           </div>
           <div class="w-2/12">
-            <span class="text-sm">-</span>
+            <span class="text-sm">{{voucherValue}}</span>
           </div>
         </ion-item>
         <ion-item>
@@ -90,7 +106,7 @@
             </span>
           </div>
           <div class="w-2/12">
-            <span class="text-base text-amber-300 text-nowrap">$ 36.98</span>
+            <span class="text-base text-amber-300 text-nowrap">$ {{totalValue}}</span>
           </div>
         </ion-item>
       </ion-list>
@@ -98,10 +114,10 @@
   </ion-card>
   <ion-card class="mt-8 general">
     <ion-card-content class="flex gap-3">
-      <div class="w-2/12 px-5">
+      <div class="w-3/12 px-5">
         <img src="../../assets/icon/percentage.svg" alt="" class="w-full h-full" srcset="">
       </div>
-      <div class="w-8/12">
+      <div class="w-7/12">
         <span>
           Add Voucher
         </span>
@@ -148,5 +164,5 @@
       </div>
     </ion-card-content>
   </ion-card>
-  <ion-button expand="block" shape="round" (click)="routing.navigateUrl('/main/track',undefined)">Confirm</ion-button>
+  <ion-button expand="block" shape="round" (click)="getOrderBooking()">Confirm</ion-button>
 </ion-content>

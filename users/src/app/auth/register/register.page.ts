@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, Validators } from '@angular/forms';
-import { AlertService } from '../../servies/alert.service';
-import { AuthService } from '../../servies/auth.service';
-import { RoutingService } from '../../servies/routing.service';
+
 import { catchError, finalize, of } from 'rxjs';
+import { AlertService } from 'src/app/service/alert.service';
+import { AuthService } from 'src/app/service/auth.service';
+import { RoutingService } from 'src/app/service/routing.service';
 
 @Component({
   selector: 'app-register',
@@ -11,7 +12,7 @@ import { catchError, finalize, of } from 'rxjs';
   styleUrls: ['./register.page.scss'],
 })
 export class RegisterPage implements OnInit {
-  registrationForm!: FormGroup;
+  registrationForm: FormGroup;
   isLoading:boolean = false;
   isSubmit:boolean = false;
   constructor(
@@ -19,22 +20,20 @@ export class RegisterPage implements OnInit {
     public routerlink:RoutingService,
     private alertService: AlertService,
     private authService: AuthService
-  ) { }
-
-  ngOnInit() {
+  ) { 
     this.registrationForm = this.formBuilder.group({
       name: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]],
       confirmPassword: ['', [Validators.required, Validators.minLength(6)]]
     }, { validator: this.passwordMatchValidator });
-
   }
 
-  passwordMatchValidator(formGroup: AbstractControl | null): ValidationErrors | null {
-    const password = this.registrationForm.get('password')?.value;
-    const confirmPassword = this.registrationForm.get('confirmPassword')?.value;
+  ngOnInit() {}
 
+  passwordMatchValidator(formGroup:any): ValidationErrors | null {
+    const password = formGroup.get('password').value;
+    const confirmPassword = formGroup.get('confirmPassword').value;
     return password === confirmPassword ? null : { mismatch: true };
   }
 

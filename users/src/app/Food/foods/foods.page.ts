@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { FirebaseService } from 'src/app/servies/firebase.service';
+import { FoodService } from 'src/app/service/food.service';
+import { RoutingService } from 'src/app/service/routing.service';
 
 @Component({
   selector: 'app-foods',
@@ -9,13 +10,20 @@ import { FirebaseService } from 'src/app/servies/firebase.service';
 export class FoodsPage implements OnInit {
  itemList:any[]=[];
   constructor(
-    public fireBaseService :FirebaseService
+    private foodService :FoodService,
+    public routerLink : RoutingService
+
   ) { }
 
   ngOnInit() {
-    this.fireBaseService.getFood().subscribe((res:any)=>{
+    this.foodService.getFood().subscribe((res:any)=>{
       this.itemList = res;
     })  
   }
-
+  navigateUrl(value:any){
+    const selected= {
+      id:value.id
+    }
+    this.routerLink.navigateUrl('/main/food-review',selected);
+  }
 }

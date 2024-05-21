@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { FirebaseService } from '../../servies/firebase.service';
-import { RoutingService } from '../../servies/routing.service';
+import { RoutingService } from 'src/app/service/routing.service';
+import { UserService } from 'src/app/service/user.service';
 
 @Component({
   selector: 'app-phone-number',
@@ -14,7 +14,7 @@ export class PhoneNumberPage implements OnInit {
   isSubmit:boolean = false;
   constructor(
     private formBuilder: FormBuilder,
-    private userService: FirebaseService,
+    private userService: UserService,
     public routerLink:RoutingService,
   ) { }
 

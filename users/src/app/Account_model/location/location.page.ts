@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { RoutingService } from '../../servies/routing.service';
-import { GeolocationService } from 'src/app/servies/geolocation.service';
-import { FirebaseService } from 'src/app/servies/firebase.service';
+import { GeolocationService } from 'src/app/service/geolocation.service';
+import { RoutingService } from 'src/app/service/routing.service';
+import { UserService } from 'src/app/service/user.service';
 
 @Component({
   selector: 'app-location',
@@ -16,7 +16,7 @@ export class LocationPage implements OnInit {
   constructor(
     public routerLink:RoutingService,
     private geolocationService: GeolocationService,
-    private userService: FirebaseService
+    private userService: UserService
   ) { }
 
   ngOnInit() {

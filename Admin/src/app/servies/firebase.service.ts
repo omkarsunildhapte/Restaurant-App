@@ -8,6 +8,7 @@ export class FirebaseService {
   db= inject(Firestore);
   foodItemCollection =collection(this.db,'foods');
   foodComboCollection =collection(this.db,'foodCombo');
+  tableCollection =collection(this.db,'table');
   
   // get food List 
   getFood():Observable<any>{
@@ -36,6 +37,12 @@ export class FirebaseService {
   // add new food item 
    addFoodCombo(value:any):Observable<any>{
     const promise = addDoc(this.foodComboCollection,value);
+    return from(promise)
+   } 
+
+   // add new Table item 
+   addTable(value:any):Observable<any>{
+    const promise = addDoc(this.tableCollection,value);
     return from(promise)
    } 
 }

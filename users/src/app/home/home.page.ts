@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { NavController } from '@ionic/angular';
-import { RoutingService } from '../servies/routing.service';
-import { FirebaseService } from '../servies/firebase.service';
+import { RoutingService } from '../service/routing.service';
+import { FoodService } from '../service/food.service';
 @Component({
   selector: 'app-home',
   templateUrl: 'home.page.html',
@@ -14,7 +13,7 @@ export class HomePage implements OnInit {
 
   constructor(
     public routerLink :RoutingService,
-    public fireBaseService :FirebaseService
+    public fireBaseService :FoodService
   ){}
   ngOnInit(): void {
     this.fireBaseService.getFood().subscribe((res:any)=>{
