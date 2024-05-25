@@ -4,7 +4,7 @@ import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 const routes: Routes = [
   {
     path: '',
-    redirectTo: 'register',
+    redirectTo: 'login',
     pathMatch: 'full'
   },
   {
@@ -31,8 +31,6 @@ const routes: Routes = [
     path: 'location',
     loadChildren: () => import('./Account_model/location/location.module').then( m => m.LocationPageModule)
   }
-
-
 ];
 
 @NgModule({

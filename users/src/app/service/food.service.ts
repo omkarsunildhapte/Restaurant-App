@@ -7,6 +7,7 @@ import { Observable, from, map } from 'rxjs';
 export class FoodService {
 
   constructor(private firestore: AngularFirestore) { }
+  
   getFood(): Observable<any[]> {
     return this.firestore.collection<any>('foods').snapshotChanges().pipe(
       map(actions => {
@@ -70,5 +71,18 @@ export class FoodService {
   addOrder(order: any): Observable<void> {
     const id = this.firestore.createId();
     return from(this.firestore.doc<any>(`orders/${id}`).set(order));
+  }
+
+  getUserOrder(userId: string): Observable<any[]> {
+    return this.firestore.collection('users').doc(userId)
+      .collection<any>('addOrder').snapshotChanges().pipe(
+        map(actions => {
+          return actions.map(a => {
+            const data = a.payload.doc.data();
+            const id = a.payload.doc.id;
+            return { id, ...data };
+          });
+        })
+      );
   }
 }

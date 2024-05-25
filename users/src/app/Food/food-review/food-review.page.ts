@@ -11,7 +11,7 @@ import { RoutingService } from 'src/app/service/routing.service';
 export class FoodReviewPage implements OnInit {
  segment: string='delivery';
  product: any;
-  subProduct: any;
+subProduct: any[]=[];
 constructor(
   public routing:RoutingService,
   private foodService :FoodService,
@@ -23,7 +23,6 @@ constructor(
       this.foodService.getFoodById(params.params.id).subscribe((res:any)=>{
         this.product = res;
         this.product.number=1
-        debugger
         this.product.totolAmount = res.price
       }) 
     })
@@ -46,20 +45,22 @@ constructor(
   getAddtoCart(){
     const uid = localStorage.getItem('uid'); 
       if (uid) {
-        const subitem = {
-          name : this.subProduct.itemName,
-          price: this.subProduct.price,
-          totalNumber:this.subProduct.number,
-          img : this.subProduct.logoUrl
+        let subItem:any[]=[] ;
+        if(this.subProduct.length>0){
+          subItem = this.subProduct.map((e:any)=>({
+              name : e.itemName,
+              price: e.price,
+              totalNumber:e.number,
+              image : e.logoUrl
+          }))
         }
         const item = {
           name : this.product.itemName,
           price: this.product.price,
           totalNumber:this.product.number,
-          img : this.product.logoUrl,
-          subItem : subitem
+          image : this.product.logoUrl,
+          subItem : subItem
         }
-      
         this.foodService.addToCart(uid, item).then(() => {
           this.routing.navigateUrl('/main/add-cart',undefined)
         });

@@ -1,14 +1,15 @@
 <ion-header>
   <ion-toolbar>
-    <ion-icon name="chevron-back-outline" aria-hidden="true" slot="start" (click)="routing.goBack()"></ion-icon>
+    <ion-icon name="chevron-back-outline" aria-hidden="true" slot="start"></ion-icon>
     <ion-title>Track Order</ion-title>
     <ion-button slot="end" class="view-button" (click)="showValue=!showValue">
       {{ showValue?'View Map':'Details'}}
     </ion-button>
   </ion-toolbar>
 </ion-header>
-<ion-content [fullscreen]="true">
+<ion-content [fullscreen]="true" *ngFor=" let order of orderDetails">
   <div class="show">
+    <div class="map" #map></div>
   </div>
   <div class="showmap" *ngIf="showValue">
     <ion-card slot="end">
@@ -23,43 +24,57 @@
           </div>
         </div>
       </ion-card-header>
-      <ion-card-content class="flex">
+      <!-- order Values -->
+      <ion-card-content class="flex" *ngIf="!expaneded">
         <div class="w-9/12">
-          <p>Prime Beef - Pizza Beautifu…</p>
+          <p>{{order.items[0].name}}</p>
           <p>
-            <span>$ 20.99</span> . <span>2 items</span> . <span>Credit Card</span>
+            <span>$ {{order.totalValue}}</span> . <span>{{order.items.length}} items</span> . <span>{{order.paymentType}}</span>
           </p>
         </div>
         <div class="w-3/12">
-          <ion-button>Detail</ion-button>
+          <ion-button (click)="expaneded=!expaneded">Detail</ion-button>
+        </div>
+      </ion-card-content>
+      <ion-card-content *ngIf="expaneded">
+        <ion-item class="flex" style="--padding-start: 0px;" *ngFor="let item of order.items">
+          <div class="w-3/12">
+            <ion-img [src]="item.image"></ion-img>
+          </div>
+          <div class="w-6/12" >
+            <p>{{item.name}}</p>
+          </div>
+         <div class="w-3/12">
+           <p><span>$ {{item.amount}}</span> </p>
+         </div>
+        </ion-item>
+        <div class="w-full">
+          <ion-button (click)="expaneded=!expaneded">Close Detail</ion-button>
         </div>
       </ion-card-content>
     </ion-card>
     <ion-card slot="end">
+      <!-- order Address -->
       <ion-card-header class="rounded-sm flex flex-col">
         <div class="flex">
           <div class="w-2/12 flex justify-center items-center mx-3">
             <ion-icon name="location" class="text-base"></ion-icon>
           </div>
           <div class="w-full">
-            <p class="text-sm font-bold">Burger King - 1453 Ave Los Angeles</p>
-            <p>
-              <span>Restaurant</span> . <span>13:00 PM</span> . <span>Credit Card</span>
-            </p>
+            <p class="text-sm font-bold">Restaurant - 1453 Ave Los Angeles</p>
           </div>
         </div>
-          <div class="flex mt-2">
+          <div class="flex mt-3">
             <div class="w-2/12 flex justify-center items-center mx-3">
               <ion-icon name="location" class="text-base"></ion-icon>
             </div>
             <div class="w-full">
-              <p class="text-sm font-bold">You - 49th St Los Angeles, California</p>
-              <p>
-                <span>Restaurant</span> . <span>13:00 PM</span> . <span>Credit Card</span>
-              </p>
+              <p class="text-sm font-bold">You - {{location}}</p>
             </div>
         </div>
       </ion-card-header>
+      
+      <!-- order boy -->
       <ion-card-content class="flex">
         <div class="w-3/12">
             <img src="../../assets/icon/driverimg.svg" alt="">

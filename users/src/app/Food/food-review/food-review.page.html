@@ -4,7 +4,7 @@
     <ion-title>Bucket</ion-title>
   </ion-toolbar>
 </ion-header>
-<ion-content>
+<ion-content *ngIf="product">
   <ion-card>
     <ion-card-content>
       <div class="h-36">
@@ -107,12 +107,5 @@
         </div>
       </div>
     </ion-card-content>
-  </ion-card>
-  <ion-card class="general">
-    <ion-card-header class="rounded-sm">
-      <ion-card-title>
-        Similar Foods
-      </ion-card-title>
-    </ion-card-header>
   </ion-card>
 </ion-content>

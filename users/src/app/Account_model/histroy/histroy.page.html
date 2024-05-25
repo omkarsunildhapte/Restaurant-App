@@ -1,0 +1,63 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>History</ion-title>
+    <ion-icon name="chevron-back-outline" aria-hidden="true" slot="start"></ion-icon>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <ion-card class="mains">
+    <ion-card-content>
+      <ion-segment [(ngModel)]="segment" value="table">
+        <ion-segment-button value="table">
+          <ion-label>Table</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="order">
+          <ion-label>Order</ion-label>
+        </ion-segment-button>
+      </ion-segment>
+      <div [ngSwitch]="segment">
+        <ion-list *ngSwitchCase="'table'">
+          <ion-item>
+            <div class="w-3/12"> 
+              <img src="../../../assets/icon/burger.svg" alt="">
+            </div>
+          </ion-item>
+        </ion-list>
+        <ion-list *ngSwitchCase="'order'">
+          <ion-item>
+            <div class="flex flex-col pt-4">
+              <div class="flex justify-between">
+                <div></div>
+                <div class="flex text-xs justify-end">
+                  <span>
+                    Tuesday, 03 March 2023
+                  </span>
+                </div>
+              </div>
+              <div class="w-full flex">
+                <div class="w-3/12"> 
+                  <img src="../../../assets/icon/burger.svg" alt="">
+                </div>
+                <div class="w-full">
+                  <div>
+                    <span class="text-base">
+                      Starbucks
+                    </span>
+                    <p class="text-xs">8700 Beverly, CA 90048</p>
+                    <p>8700 . 
+                      <span>2 items</span>
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div class="w-full flex gap-4 py-4">
+                  <ion-button style="min-height: 43px;" class="w-6/12" shape="round" >Rate</ion-button>
+                  <ion-button  style="min-height: 43px;" class="w-6/12"  shape="round">ReOrder</ion-button>
+              </div>
+            </div>
+          </ion-item>
+        </ion-list>
+      </div>
+    </ion-card-content>
+  </ion-card>
+</ion-content>

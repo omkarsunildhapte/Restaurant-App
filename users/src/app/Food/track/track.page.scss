@@ -21,7 +21,6 @@ ion-header {
 }
 
 .show {
-    // background-image: url('../../assets/icon/maps.svg');
     width: 100vw;
     height: 100vh;
     position: absolute;
@@ -33,4 +32,16 @@ ion-header {
     position: relative;
     z-index: 1;
     top: 20%;
+}
+.map {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    background-color: transparent;
+    opacity: 0;
+    transition: opacity 150ms ease-in;
+}
+
+.map.visible {
+    opacity: 1;
 }

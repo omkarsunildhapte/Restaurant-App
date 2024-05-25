@@ -5,13 +5,23 @@
   </ion-toolbar>
 </ion-header>
 <ion-content>
-  <ion-card>
+  <ion-card *ngIf="table">
     <ion-card-content>
-      <div class="h-36">
-        <img src="../../assets/icon/table_img.jpg" class="w-full h-full" alt="" srcset="">
-      </div>
+      <ng-container *ngFor="let img of table.bannerImages"> 
+        <div class="h-36">
+          <ion-img [src]="img.url" class="w-full h-full" alt="" srcset=""></ion-img>
+        </div>
+      </ng-container>
       <div class="w-full">
-        <p>909-1/2 E 49th St Los Angeles, California(CA), 90011</p>
+        <div class="flex flex-wrap justify-between">
+          <span class="text-base">
+            {{table.itemName}}
+          </span>
+          <span>
+           $ {{table.price}}
+          </span>
+        </div>
+        <p class="text-sm">{{table.description}}</p>
       </div>
     </ion-card-content>
   </ion-card>
@@ -70,9 +80,9 @@
                 <p class="itemheader">Guests</p>
                 <div class="flex items-center">
                   <span class="action">
-                    <ion-icon class="minus" slot="start" name="remove-outline"></ion-icon>
-                    2
-                    <ion-icon class="plus" name="add-outline" slot="end"></ion-icon>
+                    <ion-icon class="minus" slot="start" name="remove-outline" (click)="minusGuests()"></ion-icon>
+                    {{bookingValue.guests}}
+                    <ion-icon class="plus" name="add-outline" slot="end" (click)="plusGuests()"></ion-icon>
                   </span>
                 </div>
               </div>
@@ -101,7 +111,7 @@
                 </div>
               </div>
             </ion-item>
-            <ion-item>
+            <!-- <ion-item>
               <div class="py-2 flex justify-between w-full">
                 <div>
                   <p class="itemheader">Special Requirements</p>
@@ -110,10 +120,10 @@
                   <ion-checkbox labelPlacement="stacked"></ion-checkbox>
                 </div>
               </div>
-            </ion-item>
+            </ion-item> -->
           </ion-list>
           <div class="flex gap-4 pt-4">
-            <ion-button style="min-height: 43px;"shape="round">Book Table</ion-button>
+            <ion-button style="min-height: 43px;"shape="round" (click)="submit()">Book Table</ion-button>
           </div>
         </div>
       </div>
@@ -122,8 +132,13 @@
   <ion-modal class="datetime-modal" trigger="open-date">
     <ng-template>
       <ion-content>
-        <ion-datetime size="cover" presentation="date"  #datetimeId show-default-buttons="true" 
-        show-default-time-label="false" cancel-text="Close"
+        <ion-datetime 
+          size="cover" 
+          presentation="date" 
+          (ionChange)="onDateChange($event)"
+          show-default-buttons="true" 
+          show-default-time-label="false" 
+          cancel-text="Close"
           done-text="Submit">
         </ion-datetime>
       </ion-content>
@@ -131,9 +146,14 @@
   </ion-modal>
   <ion-modal class="datetime-modal time" trigger="open-time">
     <ng-template>
-      <ion-content class="">
-        <ion-datetime size="cover" presentation="time" #datetimeId show-default-buttons="true" 
-        show-default-time-label="false" cancel-text="Close"
+      <ion-content>
+        <ion-datetime 
+          size="cover" 
+          presentation="time" 
+          (ionChange)="onTimeChange($event)"
+          show-default-buttons="true" 
+          show-default-time-label="false" 
+          cancel-text="Close"
           done-text="Submit">
         </ion-datetime>
       </ion-content>

@@ -44,7 +44,8 @@ const routes: Routes = [
       {
         path: 'add-cart',
         loadChildren: () => import('../Food/add-cart/add-cart.module').then(m => m.AddCartPageModule)
-      }, {
+      }, 
+      {
         path: 'account-information',
         loadChildren: () => import('../Account_model/account-information/account-information.module').then( m => m.AccountInformationPageModule)
       },
@@ -57,8 +58,12 @@ const routes: Routes = [
         loadChildren: () => import('../Account_model/payment-methods/payment-methods.module').then( m => m.PaymentMethodsPageModule)
       },
       {
-        path: 'table-detials',
+        path: 'table-details',
         loadChildren: () => import('../Table_booking/table-details/table-details.module').then( m => m.TableDetailsPageModule)
+      },
+      {
+        path: 'histroy',
+        loadChildren: () => import('../Account_model/histroy/histroy.module').then( m => m.HistroyPageModule)
       }
     ]
   },

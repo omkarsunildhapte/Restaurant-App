@@ -8,5 +8,6 @@ export const environment = {
       messagingSenderId: "612732878809",
       appId: "1:612732878809:web:7ab8c444264acb7fdd23c8",
       measurementId: "G-8J67FCPHE0"
-  }
+  },
+  googleMapsApiKey:'AIzaSyCaKbVhcX_22R_pRKDYuNA7vox-PtGaDkI'
 };

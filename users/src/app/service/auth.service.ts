@@ -2,12 +2,13 @@ import { Injectable } from "@angular/core";
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { Observable, catchError, from, switchMap } from "rxjs";
 import { UserService } from "./user.service";
+import { RoutingService } from "./routing.service";
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  constructor(private afAuth: AngularFireAuth,private userService: UserService) {}
+  constructor(private afAuth: AngularFireAuth,private userService: UserService,public routerLink :RoutingService) {}
 
   login(email: string, password: string): Observable<any> {
     return from(this.afAuth.signInWithEmailAndPassword(email, password))
@@ -45,8 +46,10 @@ export class AuthService {
   
   
   logout():Observable<void> {
+    localStorage.clear();
     const promise = this.afAuth.signOut()
       .then(() => {
+        this.routerLink.navigateUrl('',undefined)
       })
       return from(promise);
   }

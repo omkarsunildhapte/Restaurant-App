@@ -12,6 +12,7 @@
     </ion-toolbar>
 </ion-header>
 <ion-content class="ion-padding" [fullscreen]="true">
+    <!-- address -->
     <ion-card>
         <div class="flex p-3">
             <div class="w-2/12">
@@ -22,6 +23,15 @@
             </div>
         </div>
     </ion-card>
+    <!-- ads  -->
+    <ion-card>
+        <ion-card-content>
+            <div class="h-36">
+                <img src="../../assets/icon/burger.svg" class="w-full h-full" alt="" srcset="">
+            </div>
+        </ion-card-content>
+    </ion-card>
+    <!-- general -->
     <ion-card class="mt-8 general">
         <ion-card-header class="rounded-sm flex">
             <div class="flex justify-between">
@@ -35,15 +45,16 @@
         </ion-card-header>
         <ion-card-content>
             <div class="flex gap-3 pt-4">
-                <div class="flex flex-col w-3/12" *ngFor="let product of products" (click)="navigateUrl(product)">
-                    <div class="list-menu">
+                <div class="flex flex-col w-3/12" *ngFor="let product of products">
+                    <div class="list-menu" (click)="navigateUrl(product)">
                         <ion-img [src]="product.logoUrl" alt="" style="width:2.5rem"></ion-img>
                     </div>
-                    <span class="text-xs text-center">{{ product.itemName }}</span>
+                    <span class="text-xs text-center" (click)="navigateUrl(product)">{{ product.itemName }}</span>
                 </div>
             </div>
         </ion-card-content>
     </ion-card>
+    <!-- combo -->
     <ion-card class="mt-8 general">
         <ion-card-header class="rounded-sm flex">
             <div class="flex justify-between">
@@ -57,10 +68,11 @@
         </ion-card-header>
         <ion-card-content>
             <div class="flex pt-4 gap-4">
-                <ng-container >
+                <ng-container>
                     <div class="w-1/6 flex-1" *ngFor="let product of comboProducts">
-                        <ion-img [src]="product.logoUrl" alt="" style="width:2.5rem"></ion-img>
-                        <span class="text-sm font-bold">{{ product.itemName }}</span>
+                        <ion-img [src]="product.logoUrl" alt="" style="width:2.5rem"
+                            (click)="navigateUrl(product)"></ion-img>
+                        <span class="text-sm font-bold" (click)="navigateUrl(product)">{{ product.itemName }}</span>
                         <div class="flex justify-between">
                             <span class="text-xs">{{ '$ ' + product.price }}</span>
                             <span class="text-xs">{{ product.type }}</span>
@@ -70,6 +82,7 @@
             </div>
         </ion-card-content>
     </ion-card>
+    <!-- combo -->
     <ion-card class="mt-8 general">
         <ion-card-header class="rounded-sm flex">
             <div class="flex justify-between">
@@ -86,13 +99,13 @@
         <ion-card-content>
             <ion-list>
                 <ion-item *ngFor="let product of comboProducts" class="w-100 flex">
-                    <div class="w-4/12">
+                    <div class="w-4/12" (click)="navigateUrl(product)">
                         <div class="items">
-                            <ion-img [src]="product.logoUrl" alt="" style="width:2.5rem"></ion-img>
+                            <ion-img [src]="product.logoUrl" slot="start" alt="" style="width:2.5rem"></ion-img>
                         </div>
                     </div>
                     <div class="w-6/12">
-                        <span>{{ product.itemName }}</span>
+                        <span (click)="navigateUrl(product)">{{ product.itemName }}</span>
                         <div class="flex gap-2 items-center">
                             <span class="text-xs text-nowrap">{{ '$ ' + product.price }}</span>
                             <div>.</div>
@@ -100,7 +113,7 @@
                         </div>
                     </div>
                     <div class="w-2/12 flex justify-end" style="padding: 0px 18px;">
-                        <ion-icon name="star" slot="end"></ion-icon>
+                        <ion-icon name="star-outline" slot="end"></ion-icon>
                     </div>
                 </ion-item>
             </ion-list>

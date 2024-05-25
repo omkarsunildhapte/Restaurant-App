@@ -1,16 +1,16 @@
 ion-header {
-  ion-toolbar {
-      padding-top: 10px;
-      height: 60px;
-      --background: white;
-      font-size: 17px;
-      font-weight: 500;
-      --border-color: blue;
+    ion-toolbar {
+        padding-top: 10px;
+        height: 60px;
+        --background: white;
+        font-size: 17px;
+        font-weight: 500;
+        --border-color: blue;
 
-      ion-icon {
-          padding: 10px;
-      }
-  }
+        ion-icon {
+            padding: 10px;
+        }
+    }
 }
 ion-content{
     .general {

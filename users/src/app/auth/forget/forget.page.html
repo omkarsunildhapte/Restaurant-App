@@ -16,10 +16,10 @@
           <ion-card-content>
             <ion-item>
               <ion-icon name="mail"></ion-icon>
-              <ion-input placeholder="Enter Your Email"></ion-input>
+              <ion-input placeholder="Enter Your Email" [formControl]="forgetPassword"></ion-input>
             </ion-item>
             <div class="bottom-section">
-              <ion-button>Reset Password</ion-button>
+              <ion-button (click)="resetPassword()">Reset Password</ion-button>
             </div>
           </ion-card-content>
         </ion-card>

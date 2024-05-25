@@ -16,16 +16,26 @@
       <div class="flex flex-wrap">
         <ng-container *ngFor="let table of tables">
           <div class="w-5/12 m-3 flex-col flex" (click)="getTable(table)">
-            <img [src]="table.image" alt="">
+            <div #swiperContainer class="swiper-container">
+              <div class="swiper-wrapper">
+                <div class="swiper-slide" *ngFor="let img of table.bannerImages">
+                  <img [src]="img.url" alt="" class="w-full h-full">
+                </div>
+              </div>
+              <div class="swiper-pagination"></div>
+              <div class="swiper-button-next"></div>
+              <div class="swiper-button-prev"></div>
+              <div class="swiper-scrollbar"></div>
+            </div>
             <span class="pt-3 text-sm font-bold">
-              {{ table.name }}
+              {{ table.itemName }}
             </span>
             <div class="flex justify-between">
               <span class="text-xs">
                 $ {{ table.price }}
               </span>
               <span class="text-xs">
-                {{ table.availability }}
+                {{ table?.availability }}
               </span>
             </div>
           </div>    
