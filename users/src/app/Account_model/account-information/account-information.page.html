@@ -1,7 +1,7 @@
 <ion-header>
   <ion-toolbar>
+    <ion-icon name="chevron-back-outline" aria-hidden="true" slot="start"></ion-icon>
     <ion-title>Account Information</ion-title>
-    <ion-icon name="heart" aria-hidden="true" slot="end"></ion-icon>
   </ion-toolbar>
 </ion-header>
 
@@ -51,4 +51,5 @@
     </ion-card>
     <ion-button expand="block" shape="round" type="submit">Change Information</ion-button>
   </form>
+  <loading *ngIf="isLoader"></loading>
 </ion-content>

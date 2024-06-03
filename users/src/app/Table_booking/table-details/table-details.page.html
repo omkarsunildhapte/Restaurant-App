@@ -7,7 +7,7 @@
 <ion-content>
   <ion-card *ngIf="table">
     <ion-card-content>
-      <ng-container *ngFor="let img of table.bannerImages"> 
+      <ng-container *ngFor="let img of table.bannerImages">
         <div class="h-36">
           <ion-img [src]="img.url" class="w-full h-full" alt="" srcset=""></ion-img>
         </div>
@@ -18,7 +18,7 @@
             {{table.itemName}}
           </span>
           <span>
-           $ {{table.price}}
+            $ {{table.price}}
           </span>
         </div>
         <p class="text-sm">{{table.description}}</p>
@@ -47,8 +47,10 @@
                   <p class="m-0 text-sm font-semibold">Victoria Champain</p>
                   <span class="pt-3">
                     <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path fill-rule="evenodd" clip-rule="evenodd" d="M8.55406 3.79199L9.7234 6.25866L12.1181 6.51266C12.366 6.53671 12.5747 6.70849 12.646 6.94717C12.7172 7.18586 12.6369 7.44393 12.4427 7.59999L10.5334 9.16999L11.1241 11.8093C11.178 12.0491 11.0834 12.298 10.8838 12.4414C10.6841 12.5848 10.4181 12.595 10.2081 12.4673L8.00006 11.124L5.79006 12.4667C5.57993 12.5941 5.314 12.5838 5.11435 12.4405C4.9147 12.2972 4.81987 12.0485 4.8734 11.8087L5.46673 9.16999L3.5574 7.59999C3.36463 7.44353 3.28535 7.1862 3.35664 6.94839C3.42792 6.71057 3.63568 6.53929 3.88273 6.51466L6.27673 6.26066L7.44606 3.79199C7.54766 3.57812 7.76329 3.44183 8.00006 3.44183C8.23684 3.44183 8.45246 3.57812 8.55406 3.79199Z" fill="#EF9F27"/>
-                      </svg>                    
+                      <path fill-rule="evenodd" clip-rule="evenodd"
+                        d="M8.55406 3.79199L9.7234 6.25866L12.1181 6.51266C12.366 6.53671 12.5747 6.70849 12.646 6.94717C12.7172 7.18586 12.6369 7.44393 12.4427 7.59999L10.5334 9.16999L11.1241 11.8093C11.178 12.0491 11.0834 12.298 10.8838 12.4414C10.6841 12.5848 10.4181 12.595 10.2081 12.4673L8.00006 11.124L5.79006 12.4667C5.57993 12.5941 5.314 12.5838 5.11435 12.4405C4.9147 12.2972 4.81987 12.0485 4.8734 11.8087L5.46673 9.16999L3.5574 7.59999C3.36463 7.44353 3.28535 7.1862 3.35664 6.94839C3.42792 6.71057 3.63568 6.53929 3.88273 6.51466L6.27673 6.26066L7.44606 3.79199C7.54766 3.57812 7.76329 3.44183 8.00006 3.44183C8.23684 3.44183 8.45246 3.57812 8.55406 3.79199Z"
+                        fill="#EF9F27" />
+                    </svg>
                   </span>
                 </div>
                 <div class="w-4/12">
@@ -56,7 +58,8 @@
                 </div>
               </div>
               <div class="w-full text-xs">
-                Food, as always, is good both upstairs and downstairs is always clean (download the bk app for deals etc.) sit upstairs every time, more relaxed feel.
+                Food, as always, is good both upstairs and downstairs is always clean (download the bk app for deals
+                etc.) sit upstairs every time, more relaxed feel.
               </div>
               <div class="flex justify-between pt-3 w-full">
                 <div class="w-4/12 text-xs">
@@ -74,56 +77,80 @@
           <div class="flex justify-center items-center text-xl pt-3">
             Book a Table
           </div>
-          <ion-list>
-            <ion-item>
-              <div class="w-full flex justify-between py-2">
-                <p class="itemheader">Guests</p>
-                <div class="flex items-center">
-                  <span class="action">
-                    <ion-icon class="minus" slot="start" name="remove-outline" (click)="minusGuests()"></ion-icon>
-                    {{bookingValue.guests}}
-                    <ion-icon class="plus" name="add-outline" slot="end" (click)="plusGuests()"></ion-icon>
-                  </span>
+          <form [formGroup]="bookingForm">
+            <ion-list>
+              <ion-item>
+                <div class="w-full flex justify-between py-2">
+                  <p class="itemheader">Guests</p>
+                  <div class="flex items-center">
+                    <span class="action">
+                      <ion-icon class="minus" slot="start" name="remove-outline" (click)="minusGuests()"></ion-icon>
+                      {{bookingForm.controls['guests'].value}}
+                      <ion-icon class="plus" name="add-outline" slot="end" (click)="plusGuests()"></ion-icon>
+                    </span>
+                  </div>
                 </div>
+              </ion-item>
+              <small *ngIf="isSubmit && bookingForm.controls['guests'].dirty || bookingForm.controls['guests'].touched"
+                class="text-rose-500">Guests must be at least 1</small>
+              <ion-item>
+                <div class="py-2 flex justify-between w-full">
+                  <div>
+                    <p class="itemheader">Select Date</p>
+                  </div>
+                  <span>{{bookingForm.controls['date'].value}}</span>
+                  <div class="flex items-center">
+                    <ion-button id="open-date" slot="end">
+                      <ion-icon name="calendar"></ion-icon>
+                    </ion-button>
+                  </div>
+                </div>
+              </ion-item>
+              <small *ngIf="isSubmit && bookingForm.controls['date'].dirty || bookingForm.controls['date'].touched"
+                class="text-rose-500">Date is required</small>
+              <ion-item *ngIf="bookingForm.controls['date'].value">
+                <div class="flex flex-col">
+                  <div class="py-2 flex justify-between w-full">
+                    <p class="itemheader">Select Time</p>
+                  </div>
+                  <div class="flex flex-wrap">
+                    <div class="w-3/12 p-2 time-slot" [class.active]="slot===bookingForm.controls['time'].value"
+                      *ngFor="let slot of timeSlots" (click)="getTime(slot)">
+                      {{slot}}
+                    </div>
+                  </div>
+                </div>
+              </ion-item>
+              <small *ngIf="isSubmit &&  bookingForm.controls['time'].dirty || bookingForm.controls['time'].touched"
+                class="text-rose-500">Time is required</small>
+              <ion-item>
+                <ion-input placeholder="Enter the name" formControlName="firstName"></ion-input>
+              </ion-item>
+              <small
+                *ngIf="isSubmit && bookingForm.controls['firstName'].dirty || bookingForm.controls['firstName'].touched"
+                class="text-rose-500">First name is required</small>
+              <ion-item>
+                <ion-input placeholder="Enter the surname" formControlName="lastName"></ion-input>
+              </ion-item>
+              <small
+                *ngIf="isSubmit && bookingForm.controls['lastName'].dirty || bookingForm.controls['lastName'].touched"
+                class="text-rose-500">Last name is required</small>
+              <ion-item>
+                <ion-input placeholder="Enter the email" formControlName="email"></ion-input>
+              </ion-item>
+              <div *ngIf="isSubmit && bookingForm.controls['email'].dirty || bookingForm.controls['email'].touched">
+                <small class="text-rose-500" *ngIf="bookingForm.controls['email'].errors?.['required']">Email is
+                  required</small>
+                <small class="text-rose-500" *ngIf="bookingForm.controls['email'].errors?.['email']">Invalid email
+                  address</small>
               </div>
-            </ion-item>
-            <ion-item>
-              <div class="py-2 flex justify-between w-full">
-                <div>
-                  <p class="itemheader">Select Date</p>
-                </div>
-                <div class="flex items-center">
-                  <ion-button id="open-date" slot="end">
-                    <ion-icon name="calendar"></ion-icon>
-                  </ion-button>
-                </div>
-              </div>
-            </ion-item>
-            <ion-item>
-              <div class="py-2 flex justify-between w-full">
-                <div>
-                  <p class="itemheader">Select Time</p>
-                </div>
-                <div class="flex items-center">
-                  <ion-button id="open-time" slot="end">
-                    <ion-icon name="time"></ion-icon>
-                  </ion-button>
-                </div>
-              </div>
-            </ion-item>
-            <!-- <ion-item>
-              <div class="py-2 flex justify-between w-full">
-                <div>
-                  <p class="itemheader">Special Requirements</p>
-                </div>
-                <div class="flex items-center">
-                  <ion-checkbox labelPlacement="stacked"></ion-checkbox>
-                </div>
-              </div>
-            </ion-item> -->
-          </ion-list>
+              <ion-item lines="none">
+                <ion-textarea placeholder="Additional notes" formControlName="notes"></ion-textarea>
+              </ion-item>
+            </ion-list>
+          </form>
           <div class="flex gap-4 pt-4">
-            <ion-button style="min-height: 43px;"shape="round" (click)="submit()">Book Table</ion-button>
+            <ion-button style="min-height: 43px;" (click)="submit()" shape="round">Book Table</ion-button>
           </div>
         </div>
       </div>
@@ -132,31 +159,11 @@
   <ion-modal class="datetime-modal" trigger="open-date">
     <ng-template>
       <ion-content>
-        <ion-datetime 
-          size="cover" 
-          presentation="date" 
-          (ionChange)="onDateChange($event)"
-          show-default-buttons="true" 
-          show-default-time-label="false" 
-          cancel-text="Close"
-          done-text="Submit">
+        <ion-datetime size="cover" presentation="date" (ionChange)="onDateChange($event)" show-default-buttons="true"
+          show-default-time-label="false" cancel-text="Close" done-text="Submit">
         </ion-datetime>
       </ion-content>
     </ng-template>
   </ion-modal>
-  <ion-modal class="datetime-modal time" trigger="open-time">
-    <ng-template>
-      <ion-content>
-        <ion-datetime 
-          size="cover" 
-          presentation="time" 
-          (ionChange)="onTimeChange($event)"
-          show-default-buttons="true" 
-          show-default-time-label="false" 
-          cancel-text="Close"
-          done-text="Submit">
-        </ion-datetime>
-      </ion-content>
-    </ng-template>
-  </ion-modal>
+  <loading *ngIf="isLoader"></loading>
 </ion-content>

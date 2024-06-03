@@ -26,6 +26,7 @@ export class AccountPage implements OnInit {
     { header: 'FAQ', subHeader: 'Frequently Asked Questions' ,icon:"book",route:''},
   ];
   displayName:string ='';
+  isLoader:boolean=true;
   constructor(
     public routerLink : RoutingService,
     private userService:UserService,
@@ -37,6 +38,7 @@ export class AccountPage implements OnInit {
     const uid = localStorage.getItem('uid')
     if (uid){
       this.userService.getuserById(uid).subscribe((res:any)=>{
+        this.isLoader =false;
         this.displayName = res.displayName
       })
     }

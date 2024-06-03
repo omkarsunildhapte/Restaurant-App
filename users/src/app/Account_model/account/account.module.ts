@@ -8,6 +8,7 @@ import { AccountPageRoutingModule } from './account-routing.module';
 
 import { AccountPage } from './account.page';
 import { TabsPageModule } from '../../tabs/tabs.module';
+import { LoaderModule } from 'src/app/loader/loader.module';
 
 @NgModule({
   imports: [
@@ -15,6 +16,7 @@ import { TabsPageModule } from '../../tabs/tabs.module';
     FormsModule,
     IonicModule,
     AccountPageRoutingModule,
+    LoaderModule
   ],
   declarations: [AccountPage]
 })

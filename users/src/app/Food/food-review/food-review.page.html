@@ -1,7 +1,7 @@
 <ion-header>
   <ion-toolbar>
     <ion-icon name="chevron-back-outline" aria-hidden="true" slot="start" (click)="routing.goBack()"></ion-icon>
-    <ion-title>Bucket</ion-title>
+    <ion-title>Food Review</ion-title>
   </ion-toolbar>
 </ion-header>
 <ion-content *ngIf="product">
@@ -27,6 +27,41 @@
           {{product.description}}
         </span>
       </div>
+    </ion-card-content>
+  </ion-card>
+  <ion-card class="mt-8 general">
+    <ion-card-header class="rounded-sm flex">
+      <div class="flex justify-between">
+        <div class="w-4/12 mains">
+          <span class="text-nowrap">
+            Burages
+          </span>
+        </div>
+      </div>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-list>
+        <ion-item *ngFor="let product of subProduct;let i =index" class="w-100 flex" style="--padding-start: 0px;--inner-padding-end: 0px;">
+          <div class="w-2/12 items">
+              <ion-img [src]="product.logoUrl" slot="start" class="h-full" alt="" style="width:2.5rem"></ion-img>
+          </div>
+          <div class="w-6/12">
+            <span>{{ product.itemName }}</span>
+            <div class="flex gap-2 items-center">
+              <span class="text-xs text-nowrap">{{ '$ ' + product.price }}</span>
+              <div>.</div>
+              <span class="text-xs text-nowrap">{{ product.category }}</span>
+            </div>
+          </div>
+          <div class="w-4/12" style="padding: 0px 18px;">
+            <span class="action">
+              <ion-icon class="minus" slot="start" name="remove-outline" (click)="minusSubProduct(i)"></ion-icon>
+              {{product.number}}
+              <ion-icon class="plus" name="add-outline" slot="end" (click)="plusSubProduct(i)"></ion-icon>
+            </span>
+          </div>
+        </ion-item>
+      </ion-list>
     </ion-card-content>
   </ion-card>
   <ion-card class="mains">
@@ -77,7 +112,7 @@
             </div>
           </ion-item>
         </ion-list>
-        <div *ngSwitchCase="'delivery'">
+        <ng-container *ngSwitchCase="'delivery'">
           <ion-list>
             <ion-item>
               <div class="w-full flex justify-between py-2">
@@ -101,11 +136,14 @@
             </ion-item>
           </ion-list>
           <div class="flex gap-4 pt-4">
-            <ion-button style="min-height: 43px;" class="w-6/12" shape="round" (click)="getAddtoCart()">Add Cart</ion-button>
-            <ion-button  style="min-height: 43px;" class="w-6/12" (click)="viewCart()" shape="round">View Cart</ion-button>
+            <ion-button style="min-height: 43px;" class="w-6/12" shape="round" (click)="getAddtoCart()">Add
+              Cart</ion-button>
+            <ion-button style="min-height: 43px;" class="w-6/12" (click)="viewCart()" shape="round">View
+              Cart</ion-button>
           </div>
-        </div>
+        </ng-container>
       </div>
     </ion-card-content>
   </ion-card>
+  <loading *ngIf="isLoader"></loading>
 </ion-content>

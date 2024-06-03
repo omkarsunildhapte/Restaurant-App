@@ -7,6 +7,7 @@ import { HomePage } from './home.page';
 import { HttpClientModule } from '@angular/common/http';
 import { HomePageRoutingModule } from './home-routing.module';
 import { TabsPageModule } from '../tabs/tabs.module';
+import { LoaderModule } from '../loader/loader.module';
 
 
 @NgModule({
@@ -17,7 +18,8 @@ import { TabsPageModule } from '../tabs/tabs.module';
     ReactiveFormsModule,
     HttpClientModule,
     HomePageRoutingModule,
-    TabsPageModule
+    TabsPageModule,
+    LoaderModule
   ],
   declarations: [HomePage]
 })

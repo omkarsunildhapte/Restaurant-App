@@ -8,31 +8,35 @@ import Swiper from 'swiper';
   styleUrls: ['./table.page.scss'],
 })
 export class TablePage implements OnInit {
-  @ViewChild('swiperContainer', { static: false }) swiperContainer!: ElementRef;
-  tables:any[] =[];
+  @ViewChild('swiperContainer', { static: false }) swiperContainer?: ElementRef;
+  isLoader: boolean = true;
+  tables: any[] = [];
   constructor(
-    public routerLink : RoutingService,
-    private tableService:TableService
+    public routerLink: RoutingService,
+    private tableService: TableService
   ) { }
 
   ngOnInit() {
-    this.tableService.getTable().subscribe((res:any)=>{
-      this.tables = res;      
+    this.tableService.getTable().subscribe((res: any) => {
+      this.isLoader = false;
+      this.tables = res;
     })
   }
   ngAfterViewInit() {
-    new Swiper(this.swiperContainer.nativeElement, {
-      navigation: true,
-      pagination: { clickable: true },
-      scrollbar: { draggable: true }
-    });
+    if(this.swiperContainer){
+      new Swiper(this.swiperContainer.nativeElement, {
+        navigation: true,
+        pagination: { clickable: true },
+        scrollbar: { draggable: true }
+      });
+    }
   }
 
-  getTable(value:any){
-    const selected= {
-      id:value.id
+  getTable(value: any) {
+    const selected = {
+      id: value.id
     }
-    this.routerLink.navigateUrl('/main/table-details',selected)
+    this.routerLink.navigateUrl('/main/table-details', selected)
   }
 
 }

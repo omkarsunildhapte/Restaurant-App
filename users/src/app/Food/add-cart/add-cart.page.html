@@ -4,49 +4,85 @@
     <ion-title>View Cart</ion-title>
   </ion-toolbar>
 </ion-header>
-<ion-content class="ion-padding">
-  <ion-card class="mt-8 general">
-    <ion-card-header class="rounded-sm">
-      <ion-card-title>
-        Cart
-      </ion-card-title>
-    </ion-card-header>
-    <ion-card-content class="flex gap-3 mains">
-      <ion-list *ngIf="cartList.length>0">
-        <ion-item class="order-list" *ngFor="let product of cartList;let i=index">
-          <div class="flex w-full py-3">
-            <div class="w-18 px-5">
-              <ion-img [src]="product.image" alt="" style="width:2.5rem"></ion-img>
-            </div>
-            <div class="w-full">
-              <p class="itemheader">{{product.name}}</p>
-              <div class="flex items-center">
-                <span class="action">
-                  <ion-icon class="minus" slot="start" name="remove-outline" (click)="getMinus(i)"></ion-icon>
-                 {{product.totalNumber}}
-                  <ion-icon class="plus" name="add-outline" slot="end" (click)="getPlus(i)"></ion-icon>
-                </span>
-                <span class="text-center pt-3 px-5 text-sm text-amber-300">
-                  $ {{getPrice(product.price,product.totalNumber,i)}}
-                </span>
+<ion-content class="ion-padding" [fullscreen]="true">
+  <ng-container *ngIf="cartList.length==0 && !isLoader">
+    <p class="empty-cart-message">Your cart is empty.</p>
+    <div class="bottom-button w-full">
+      <ion-button expand="block" shape="round" (click)="routing.navigateUrl('/main/foods',undefined)">Make Order</ion-button>
+    </div>
+  </ng-container>
+  <ng-container *ngIf="cartList.length>0 && !isLoader">
+    <ion-card class="mt-8 general">
+      <ion-card-header class="rounded-sm">
+        <ion-card-title>
+          Cart
+        </ion-card-title>
+      </ion-card-header>
+      <ion-card-content class="flex gap-3 mains">
+        <ion-list>
+          <ion-item class="order-list" *ngFor="let product of cartList;let i=index">
+            <div class="flex flex-col">
+              <div class="flex w-full py-3 justify-between">
+                <div class="w-5/12 px-5">
+                  <ion-img [src]="product.image" alt="" class="w-full h-full"></ion-img>
+                </div>
+                <div class="w-full">
+                  <p class="itemheader">{{product.name}}</p>
+                  <div class="flex items-center justify-between">
+                    <span class="action">
+                      <ion-icon class="minus" slot="start" name="remove-outline" (click)="getMinus(i)"></ion-icon>
+                     {{product.totalNumber}}
+                      <ion-icon class="plus" name="add-outline" slot="end" (click)="getPlus(i)"></ion-icon>
+                    </span>
+                    <span class="text-center pt-3 px-5 text-sm text-amber-300">
+                      $ {{product.price * product.totalNumber }}
+                    </span>
+                  </div>
+                </div>
               </div>
+              <ng-container *ngFor="let subProduct of product.subItem;let j=index">
+                  <div class="flex w-full py-3 justify-between">
+                    <div class="w-5/12 px-5">
+                      <ion-img [src]="subProduct.image" alt="" class="w-full h-full"></ion-img>
+                    </div>
+                    <div class="w-full">
+                      <p class="itemheader">{{subProduct.name}}</p>
+                      <div class="flex items-center justify-between">
+                        <span class="action">
+                          <ion-icon class="minus" slot="start" name="remove-outline" (click)="getSubMinus(i,j)"></ion-icon>
+                         {{subProduct.totalNumber}}
+                          <ion-icon class="plus" name="add-outline" slot="end" (click)="getSubPlus(i,j)"></ion-icon>
+                        </span>
+                        <span class="text-center pt-3 px-5 text-sm text-amber-300">
+                          $ {{subProduct.price * subProduct.totalNumber }}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+              </ng-container>
             </div>
-          </div>
-        </ion-item>
-        <ion-item>
-          <div class="w-10/12">
-            <span class="text-base">
-              Total
-            </span>
-          </div>
-          <div class="w-2/12">
-            <span class="text-base text-amber-300 text-nowrap">$ {{getTotalAmount()}}</span>
-          </div>
-        </ion-item>
-      </ion-list>
-    </ion-card-content>
-  </ion-card>
-  <div class="bottom-button w-full">
-    <ion-button expand="block" shape="round" (click)="routing.navigateUrl('/main/confirm-order',undefined)">Confirm</ion-button>
-  </div>
+          </ion-item>
+          <ion-item>
+            <div class="w-8/12">
+              <span class="text-base">
+                Total
+              </span>
+            </div>
+            <div class="w-4/12 flex justify-end">
+              <span class="text-center pt-3 px-5 text-sm text-amber-300">$ {{totalAmount}}</span>
+            </div>
+          </ion-item>
+        </ion-list>
+      </ion-card-content>
+      <div class="bottom-button w-full flex gap-2 py-4 px-3">
+        <ion-button style="min-height: 43px;" class="w-6/12" shape="round" (click)="updateAllInCart()">
+          Confirm Order
+        </ion-button>
+        <ion-button style="min-height: 43px;" class="w-6/12" (click)="routing.navigateUrl('/main/foods',undefined)" shape="round">
+         Check Food
+        </ion-button>
+      </div>
+    </ion-card>
+  </ng-container>
+  <loading *ngIf="isLoader"></loading>
 </ion-content>

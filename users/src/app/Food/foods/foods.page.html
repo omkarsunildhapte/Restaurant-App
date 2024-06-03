@@ -12,7 +12,7 @@
   </ion-toolbar>
 </ion-header>
 <ion-content>
-  <div class="w-full px-3 pt-3 pb-2">
+  <!-- <div class="w-full px-3 pt-3 pb-2">
     <span class="text-xl font-semibold">Select Category</span>
   </div>
   <div class="flex px-3">
@@ -28,17 +28,17 @@
       <ion-icon name="pin" color="primary"></ion-icon>
       <ion-label>Icon Chip</ion-label>
     </ion-chip>
-  </div>
+  </div> -->
   <ion-card>  
     <ion-card-content>
       <ion-list>
-        <ion-item *ngFor="let product of itemList" class="w-100 flex" (click)="navigateUrl(product)">
-          <div class="w-4/12">
+        <ion-item *ngFor="let product of itemList" class="w-100 flex">
+          <div class="w-4/12" (click)="navigateUrl(product)">
             <div class="items">
               <ion-img [src]="product.logoUrl" alt="" style="width:2.5rem"></ion-img>
             </div>
           </div>
-          <div class="w-6/12">
+          <div class="w-6/12" (click)="navigateUrl(product)">
             <span>{{ product.itemName }}</span>
             <div class="flex gap-2 items-center">
               <span class="text-xs text-nowrap">{{ '$ ' + product.price }}</span>
@@ -53,4 +53,5 @@
       </ion-list>
     </ion-card-content>
   </ion-card>
+  <loading *ngIf="isLoader"></loading>
 </ion-content>

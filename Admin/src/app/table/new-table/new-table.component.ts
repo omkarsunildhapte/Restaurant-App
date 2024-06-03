@@ -1,11 +1,11 @@
 import { Component, inject } from '@angular/core';
-import { ButtonModule } from 'primeng/button';
-import { FirebaseService } from '../../servies/firebase.service';
 import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
-import { InputTextModule } from 'primeng/inputtext';
 import { InputNumberModule } from 'primeng/inputnumber';
+import { InputTextModule } from 'primeng/inputtext';
 import { InputTextareaModule } from 'primeng/inputtextarea';
+import { TableService } from '../../service/table.service';
 
 @Component({
   selector: 'app-new-table',
@@ -16,12 +16,11 @@ import { InputTextareaModule } from 'primeng/inputtextarea';
     InputNumberModule,
     InputTextareaModule,
     ReactiveFormsModule],
-  templateUrl: './new-table.component.html',
-  styleUrl: './new-table.component.css'
+  templateUrl: './new-table.component.html'
 })
 export class NewTableComponent {
   visible: boolean = false;
-  tableService = inject(FirebaseService);
+  tableService = inject(TableService);
   fb = inject(FormBuilder)
   newItemForm!: FormGroup;
   isSubmit:boolean=false;

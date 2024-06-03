@@ -10,13 +10,17 @@ export class HomePage implements OnInit {
   products:any[] =[];
   bestProduct:any[]=[];
   comboProducts:any[] = [];
+  isLoader:boolean=true;
 
   constructor(
     public routerLink :RoutingService,
     public fireBaseService :FoodService
   ){}
+  
   ngOnInit(): void {
+    this.isLoader=true;
     this.fireBaseService.getFood().subscribe((res:any)=>{
+      this.isLoader =false;
       this.products = res.filter((e:any)=>e.type=='single');
       this.comboProducts = res.filter((e:any)=>e.type=='combo')
     })      

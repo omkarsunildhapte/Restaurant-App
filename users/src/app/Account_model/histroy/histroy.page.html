@@ -1,7 +1,7 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>History</ion-title>
     <ion-icon name="chevron-back-outline" aria-hidden="true" slot="start"></ion-icon>
+    <ion-title>History</ion-title>
   </ion-toolbar>
 </ion-header>
 <ion-content>
@@ -60,4 +60,5 @@
       </div>
     </ion-card-content>
   </ion-card>
+  <loading *ngIf="isLoader"></loading>
 </ion-content>

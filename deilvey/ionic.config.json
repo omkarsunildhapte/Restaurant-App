@@ -1,0 +1,7 @@
+{
+  "name": "deilvey",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}

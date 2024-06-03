@@ -7,6 +7,7 @@ import { IonicModule } from '@ionic/angular';
 import { AccountInformationPageRoutingModule } from './account-information-routing.module';
 
 import { AccountInformationPage } from './account-information.page';
+import { LoaderModule } from 'src/app/loader/loader.module';
 
 @NgModule({
   imports: [
@@ -14,7 +15,8 @@ import { AccountInformationPage } from './account-information.page';
     FormsModule,
     IonicModule,
     AccountInformationPageRoutingModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    LoaderModule
   ],
   declarations: [AccountInformationPage]
 })

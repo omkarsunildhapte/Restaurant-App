@@ -1,0 +1,60 @@
+ion-header {
+    ion-toolbar {
+      padding-top: 10px;
+      height: 60px;
+      --background: white;
+      font-size: 17px;
+      font-weight: 500;
+      --border-color: blue;
+  
+      ion-icon {
+        padding: 10px;
+      }
+    }
+  }
+  
+  .time {
+    --height: 246px;
+  }
+  
+  ion-icon {
+    border: 0px;
+    border-radius: 10px;
+  }
+  
+  .minus {
+    background: gray;
+    color:white;
+  }
+  
+  .plus {
+    background: #241029;
+    color:white;
+  }
+  
+  ion-datetime {
+    height: auto;
+    width: auto;
+    max-width: 350px;
+  }
+  
+  ion-modal {
+    --width: 290px;
+    --height: 382px;
+    --border-radius: 8px;
+  }
+  
+  ion-modal ion-datetime {
+    height: 382px;
+  }
+  
+  .time-slot {
+    border: 1px solid #ddd;
+    text-align: center;
+    margin-bottom: 10px;
+  }
+  
+  .active {
+    background-color: #241029;
+    color:white;
+  }

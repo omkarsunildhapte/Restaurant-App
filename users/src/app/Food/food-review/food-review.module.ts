@@ -7,13 +7,15 @@ import { IonicModule } from '@ionic/angular';
 import { FoodReviewPageRoutingModule } from './food-review-routing.module';
 
 import { FoodReviewPage } from './food-review.page';
+import { LoaderModule } from 'src/app/loader/loader.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    FoodReviewPageRoutingModule
+    FoodReviewPageRoutingModule,
+    LoaderModule
   ],
   declarations: [FoodReviewPage]
 })

@@ -1,0 +1,89 @@
+ion-header {
+    ion-toolbar {
+        padding-top: 10px;
+        height: 60px;
+        --background: white;
+        font-size: 17px;
+        font-weight: 500;
+        --border-color: blue;
+
+        ion-icon {
+            padding: 10px;
+        }
+    }
+}
+ion-content {
+    --ion-background-color: #fff;
+    font-family: Arial, Helvetica, sans-serif;
+}
+ion-card {
+    background: transparent;
+    box-shadow: none;
+    text-align: center;
+    ion-card-content {
+        ion-item {
+            --ion-item-background: transparent;
+            --border-width: 0;
+            --inner-border-width: 0;
+            --highlight-color-focused: none;
+              margin-bottom: 15px;
+            ion-icon{
+                padding: 5px;
+                background-color: #251029;
+                margin-right: 10px;
+                color: white;
+                border-radius: 20px;
+                border: 2px solid;
+            }
+            ion-input {
+                width: 257px;
+                height: 42px;
+                border-radius: 15px;
+                border: 1.5px solid #251029;
+                font-size: 14px;
+                font-weight: 300;
+                color: #251029;
+                --padding-start: 30px;
+            }
+
+        }
+
+        a {
+            text-decoration: none;
+            color: #251029;
+            font-weight: 300;
+            font-size: 13px;
+        }
+    }
+
+    .bottom-section {
+        margin-top: 30px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        ion-button {
+            height: 45px;
+            width: 147px;
+            font-size: 12px;
+            text-transform: none;
+            --background: #251029;
+            font-weight: 400;
+            --border-radius: 15px !important;
+            color: #fff;
+        }
+
+        span {
+            margin-top: 10px;
+            font-weight: 330;
+
+            a {
+                font-weight: 400;
+            }
+        }
+    }
+}
+
+::ng-deep ion-content {
+    --keyboard-offset: 0px !important
+}

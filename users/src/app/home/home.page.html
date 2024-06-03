@@ -4,119 +4,114 @@
             <div class="w-3/12 first">
                 <img src="../../assets/icon/icon.jpg" alt="" />
             </div>
-            <div class="w-full pt-4">
-                <ion-searchbar animated="true" placeholder="Search The Order" class="text-white"
-                    show-clear-button="always"></ion-searchbar>
+            <div class="w-full flex mt-3">
+                <ion-icon name="navigate" class="text-lg text-white pt-2"></ion-icon>
+                <span class="text-sm text-white ps-3">
+                    <span class="font-bold">
+                        Delivery to
+                    </span>
+                    <br />
+                    1014 Prospect Valley
+                </span>
             </div>
         </div>
     </ion-toolbar>
 </ion-header>
 <ion-content class="ion-padding" [fullscreen]="true">
-    <!-- address -->
-    <ion-card>
-        <div class="flex p-3">
-            <div class="w-2/12">
-                <ion-icon name="navigate" class="text-lg"></ion-icon>
-            </div>
-            <div class="w-full flex flex-col">
-                <span class="text-sm"> <span class="font-bold">Delivery to</span> 1014 Prospect Vall </span>
-            </div>
-        </div>
-    </ion-card>
-    <!-- ads  -->
-    <ion-card>
-        <ion-card-content>
-            <div class="h-36">
-                <img src="../../assets/icon/burger.svg" class="w-full h-full" alt="" srcset="">
-            </div>
-        </ion-card-content>
-    </ion-card>
-    <!-- general -->
-    <ion-card class="mt-8 general">
-        <ion-card-header class="rounded-sm flex">
-            <div class="flex justify-between">
-                <div class="w-4/12 mains">
-                    General
+    <ng-container *ngIf="!isLoader">
+        <ion-card>
+            <ion-card-content>
+                <div class="h-36">
+                    <img src="../../assets/icon/burger.svg" class="w-full h-full" alt="" srcset="">
                 </div>
-                <div class="w-2/12 font-semibold text-black">
-                    See all
-                </div>
-            </div>
-        </ion-card-header>
-        <ion-card-content>
-            <div class="flex gap-3 pt-4">
-                <div class="flex flex-col w-3/12" *ngFor="let product of products">
-                    <div class="list-menu" (click)="navigateUrl(product)">
-                        <ion-img [src]="product.logoUrl" alt="" style="width:2.5rem"></ion-img>
+            </ion-card-content>
+        </ion-card>
+        <!-- general -->
+        <ion-card class="mt-8 general">
+            <ion-card-header class="rounded-sm flex">
+                <div class="flex justify-between">
+                    <div class="w-4/12 mains">
+                        General
                     </div>
-                    <span class="text-xs text-center" (click)="navigateUrl(product)">{{ product.itemName }}</span>
+                    <div class="w-2/12 font-semibold text-black">
+                        See all
+                    </div>
                 </div>
-            </div>
-        </ion-card-content>
-    </ion-card>
-    <!-- combo -->
-    <ion-card class="mt-8 general">
-        <ion-card-header class="rounded-sm flex">
-            <div class="flex justify-between">
-                <div class="w-4/12 mains">
-                    Combo
+            </ion-card-header>
+            <ion-card-content>
+                <div class="flex gap-3 pt-4">
+                    <div class="flex flex-col w-3/12" *ngFor="let product of products">
+                        <div class="list-menu" (click)="navigateUrl(product)">
+                            <ion-img [src]="product.logoUrl" alt="" style="width:2.5rem"></ion-img>
+                        </div>
+                        <span class="text-xs text-center" (click)="navigateUrl(product)">{{ product.itemName }}</span>
+                    </div>
                 </div>
-                <div class="w-2/12 font-semibold text-black">
-                    See all
+            </ion-card-content>
+        </ion-card>
+        <!-- combo -->
+        <ion-card class="mt-8 general">
+            <ion-card-header class="rounded-sm flex">
+                <div class="flex justify-between">
+                    <div class="w-4/12 mains">
+                        Combo
+                    </div>
+                    <div class="w-2/12 font-semibold text-black">
+                        See all
+                    </div>
                 </div>
-            </div>
-        </ion-card-header>
-        <ion-card-content>
-            <div class="flex pt-4 gap-4">
-                <ng-container>
-                    <div class="w-1/6 flex-1" *ngFor="let product of comboProducts">
-                        <ion-img [src]="product.logoUrl" alt="" style="width:2.5rem"
-                            (click)="navigateUrl(product)"></ion-img>
-                        <span class="text-sm font-bold" (click)="navigateUrl(product)">{{ product.itemName }}</span>
-                        <div class="flex justify-between">
-                            <span class="text-xs">{{ '$ ' + product.price }}</span>
-                            <span class="text-xs">{{ product.type }}</span>
+            </ion-card-header>
+            <ion-card-content>
+                <div class="flex pt-4 gap-4">
+                    <div class="w-1/6 flex-1 flex-col flex justify-center items-center" *ngFor="let product of comboProducts">
+                        <div style="width:2.4rem;height: 2.5rem;">
+                            <ion-img [src]="product.logoUrl" (click)="navigateUrl(product)"></ion-img>
+                        </div>
+                        <div class="flex justify-between w-full">
+                            <span class="text-sm font-bold" (click)="navigateUrl(product)">{{ product.itemName }}</span>
+                            <span class="text-sm font-bold">{{ '$ ' + product.price }}</span>
                         </div>
                     </div>
-                </ng-container>
-            </div>
-        </ion-card-content>
-    </ion-card>
-    <!-- combo -->
-    <ion-card class="mt-8 general">
-        <ion-card-header class="rounded-sm flex">
-            <div class="flex justify-between">
-                <div class="w-4/12 mains">
-                    <span class="text-nowrap">
-                        Hot Burger Combo
-                    </span>
                 </div>
-                <div class="w-2/12 font-semibold text-black">
-                    See all
+            </ion-card-content>
+        </ion-card>
+        <!-- combo -->
+        <ion-card class="mt-8 general">
+            <ion-card-header class="rounded-sm flex">
+                <div class="flex justify-between">
+                    <div class="w-4/12 mains">
+                        <span class="text-nowrap">
+                            Hot Burger Combo
+                        </span>
+                    </div>
+                    <div class="w-2/12 font-semibold text-black">
+                        See all
+                    </div>
                 </div>
-            </div>
-        </ion-card-header>
-        <ion-card-content>
-            <ion-list>
-                <ion-item *ngFor="let product of comboProducts" class="w-100 flex">
-                    <div class="w-4/12" (click)="navigateUrl(product)">
-                        <div class="items">
-                            <ion-img [src]="product.logoUrl" slot="start" alt="" style="width:2.5rem"></ion-img>
+            </ion-card-header>
+            <ion-card-content>
+                <ion-list>
+                    <ion-item *ngFor="let product of comboProducts" class="w-100 flex">
+                        <div class="w-4/12" (click)="navigateUrl(product)">
+                            <div class="items">
+                                <ion-img [src]="product.logoUrl" slot="start" alt="" style="width:2.5rem"></ion-img>
+                            </div>
                         </div>
-                    </div>
-                    <div class="w-6/12">
-                        <span (click)="navigateUrl(product)">{{ product.itemName }}</span>
-                        <div class="flex gap-2 items-center">
-                            <span class="text-xs text-nowrap">{{ '$ ' + product.price }}</span>
-                            <div>.</div>
-                            <span class="text-xs text-nowrap">{{ product.category }}</span>
+                        <div class="w-6/12">
+                            <span (click)="navigateUrl(product)">{{ product.itemName }}</span>
+                            <div class="flex gap-2 items-center">
+                                <span class="text-xs text-nowrap">{{ '$ ' + product.price }}</span>
+                                <div>.</div>
+                                <span class="text-xs text-nowrap">{{ product.category }}</span>
+                            </div>
                         </div>
-                    </div>
-                    <div class="w-2/12 flex justify-end" style="padding: 0px 18px;">
-                        <ion-icon name="star-outline" slot="end"></ion-icon>
-                    </div>
-                </ion-item>
-            </ion-list>
-        </ion-card-content>
-    </ion-card>
+                        <div class="w-2/12 flex justify-end" style="padding: 0px 18px;">
+                            <ion-icon name="star-outline" slot="end"></ion-icon>
+                        </div>
+                    </ion-item>
+                </ion-list>
+            </ion-card-content>
+        </ion-card>
+    </ng-container>
+    <loading *ngIf="isLoader"></loading>
 </ion-content>

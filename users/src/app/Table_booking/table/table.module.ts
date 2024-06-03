@@ -7,13 +7,15 @@ import { IonicModule } from '@ionic/angular';
 import { TablePageRoutingModule } from './table-routing.module';
 
 import { TablePage } from './table.page';
+import { LoaderModule } from 'src/app/loader/loader.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    TablePageRoutingModule
+    TablePageRoutingModule,
+    LoaderModule
   ],
   declarations: [TablePage]
 })

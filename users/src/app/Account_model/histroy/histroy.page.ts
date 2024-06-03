@@ -7,6 +7,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HistroyPage implements OnInit {
   segment: string='order';
+  isLoader:boolean=false;
   constructor() { }
 
   ngOnInit() {

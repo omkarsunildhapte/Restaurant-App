@@ -1,3 +1,4 @@
+@if(!loader){
 <div class="container mx-auto px-4 sm:px-8">
     <div class="py-8">
       <div class="flex justify-between">
@@ -52,6 +53,8 @@
                 <td
                   class="px-5 py-5 border-b border-gray-200 bg-white text-sm text-right"
                 >
+                <p-speedDial [model]="getItems(item)" radius="120" direction="up-right" type="quarter-circle"
+                    buttonClassName="p-button-success" />
                 </td>
               </tr>
             }
@@ -61,4 +64,7 @@
       </div>
     </div>
   </div>
-  <app-new-combo-maker #newValue></app-new-combo-maker>
+  <app-new-combo-maker #newValue (onNameChange)="getValue()"></app-new-combo-maker>
+} @else{
+  <loading></loading>
+}

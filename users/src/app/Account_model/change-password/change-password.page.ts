@@ -10,9 +10,10 @@ import { UserService } from 'src/app/service/user.service';
 })
 export class ChangePasswordPage implements OnInit {
   passwordForm: FormGroup;
-  showPassword = false;
-  showNewPassword = false;
-  showConfirmPassword = false;
+  showPassword:boolean = false;
+  showNewPassword:boolean = false;
+  showConfirmPassword:boolean = false;
+  isLoader:boolean = false;
 
   constructor(
     private fb: FormBuilder, 
@@ -47,10 +48,12 @@ export class ChangePasswordPage implements OnInit {
 
   onSubmit() {
     if (this.passwordForm.valid) {
+      this.isLoader=true;
       const currentPassword = this.passwordForm.value.currentPassword;
       const newPassword = this.passwordForm.value.newPassword;
       this.authService.updatePassword(currentPassword, newPassword).subscribe(
         () => {
+          this.isLoader=false;
           this.routerLink.navigateUrl('/main/account',undefined)
         },
         error => {

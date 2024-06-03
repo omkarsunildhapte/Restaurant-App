@@ -9,14 +9,16 @@ import { RoutingService } from 'src/app/service/routing.service';
 })
 export class FoodsPage implements OnInit {
  itemList:any[]=[];
+ isLoader:boolean=true;
   constructor(
     private foodService :FoodService,
     public routerLink : RoutingService
-
   ) { }
 
   ngOnInit() {
+    this.isLoader=true;
     this.foodService.getFood().subscribe((res:any)=>{
+      this.isLoader=false;
       this.itemList = res;
     })  
   }

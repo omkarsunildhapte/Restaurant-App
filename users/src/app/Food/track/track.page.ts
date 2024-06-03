@@ -26,9 +26,10 @@ export class TrackPage implements OnInit {
   destination_marker: any;
   trackSub!: Subscription;
   showValue: boolean=true;
-  orderDetails: any ={};
+  orderDetails: any;
   expaneded: boolean=false;
-  location:string='49th St Los Angeles, California'
+  location:string='49th St Los Angeles, California';
+  isLoading:boolean = true;
   constructor(
     private renderer: Renderer2,
     private geolocationService: GeolocationService,
@@ -48,20 +49,27 @@ export class TrackPage implements OnInit {
     //     }
     //   },
     // });
+    this.getOrder();
   }
 
   ngAfterViewInit() {
     // this.loadMap();
-    this.getOrder();
   }
 
   getOrder() {
     let uid = localStorage.getItem('uid');
-    if (uid)
+    if (uid){
+      this.isLoading = true;
       this.foodService.getUserOrder(uid).subscribe((res: any) => {
-        debugger;
-        this.orderDetails = res;
+        this.isLoading = false;
+        this.orderDetails = res[0];
+        console.log(this.orderDetails)
       });
+    }
+  }
+
+  callPhoneNumber(phoneNumber: string) {
+    window.open(`tel:${phoneNumber}`, '_system');
   }
 
   // map code

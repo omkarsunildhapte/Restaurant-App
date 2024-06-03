@@ -10,7 +10,7 @@ import { UserService } from 'src/app/service/user.service';
 })
 export class AccountInformationPage implements OnInit {
   accountForm!: FormGroup;
-
+  isLoader:boolean=true;
   constructor(
     private fb: FormBuilder,
     private userService:UserService,
@@ -31,6 +31,7 @@ export class AccountInformationPage implements OnInit {
     let uid = localStorage.getItem('uid');
     if(uid){
       this.userService.getuserById(uid).subscribe((res:any)=>{
+        this.isLoader = false;
         this.accountForm.get('displayName')?.setValue(res.displayName);
         this.accountForm.get('email')?.setValue(res.email);
         this.accountForm.get('phoneNumber')?.setValue(res.phoneNumber)
@@ -44,11 +45,12 @@ export class AccountInformationPage implements OnInit {
       if (uid){
         const rawValue = this.accountForm.getRawValue();
         rawValue.updateAt = new Date();
+        this.isLoader = true;
         this.userService.updateAccount(uid,rawValue).subscribe((res:any)=>{
+          this.isLoader = false;
           this.routerLink.navigateUrl('/main/account',undefined)
         })
       }
-      console.log(this.accountForm.value);
     }
   }
 

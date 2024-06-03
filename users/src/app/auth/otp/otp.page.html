@@ -1,0 +1,28 @@
+<div class="background-pic">
+  <ion-content>
+    <ion-card>
+      <ion-card-header>
+        <div class="flex justify-center"> 
+          <img src="../../assets/icon/icon.jpg" style="width: 40%;" />
+        </div>
+        <ion-card-title>
+          Verify Number
+        </ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <form [formGroup]="otpForm" (ngSubmit)="onSubmit()">
+          <ion-item>
+            <ion-icon name="mail"></ion-icon>
+            <ion-input placeholder="Enter Your Phone Number" formControlName="otp"></ion-input>
+          </ion-item>
+          <div *ngIf="isSubmit && otpForm.controls['phoneNumber'].touched && otpForm.controls['phoneNumber'].errors?.['required']" class="error-message">
+            Otp is required.
+          </div>
+          <div class="bottom-section">
+            <ion-button type="submit">Add Number</ion-button>
+          </div>
+        </form>
+      </ion-card-content>
+    </ion-card>
+  </ion-content>
+</div>

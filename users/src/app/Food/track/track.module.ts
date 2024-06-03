@@ -1,16 +1,14 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 
 import { TrackPageRoutingModule } from './track-routing.module';
 
-import { TrackPage } from './track.page';
+import { LoaderModule } from 'src/app/loader/loader.module';
 import { GeolocationService } from 'src/app/service/geolocation.service';
-import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
-import { AngularFireModule } from '@angular/fire/compat';
-import { environment } from 'src/environments/environment';
+import { TrackPage } from './track.page';
 
 @NgModule({
   imports: [
@@ -18,8 +16,7 @@ import { environment } from 'src/environments/environment';
     FormsModule,
     IonicModule,
     TrackPageRoutingModule,
-    AngularFirestoreModule,
-    AngularFireModule.initializeApp(environment.firebase),
+    LoaderModule
   ],
   declarations: [TrackPage],
   providers:[GeolocationService]

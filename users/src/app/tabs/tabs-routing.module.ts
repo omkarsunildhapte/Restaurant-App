@@ -64,6 +64,10 @@ const routes: Routes = [
       {
         path: 'histroy',
         loadChildren: () => import('../Account_model/histroy/histroy.module').then( m => m.HistroyPageModule)
+      },
+      {
+        path: 'table-confirm',
+        loadChildren: () => import('../Table_booking/table-confirm/table-confirm.module').then( m => m.TableConfirmPageModule)
       }
     ]
   },

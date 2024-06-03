@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, ValidationErrors, Validators } from '@angular/forms';
 
-import { catchError, finalize, of } from 'rxjs';
+import { finalize } from 'rxjs';
 import { AlertService } from 'src/app/service/alert.service';
 import { AuthService } from 'src/app/service/auth.service';
 import { RoutingService } from 'src/app/service/routing.service';
@@ -56,10 +56,21 @@ export class RegisterPage implements OnInit {
         .subscribe(
           () => {
             this.routerlink.navigateUrl('/login', undefined);
+            this.alertService.presentAlert(
+              'Registration Success', 
+              '', 
+              'The Account Created Successfully', 
+              'success'
+            );
           },
           (error) => {
             if (error.code == 'auth/email-already-in-use') {
-              this.alertService.presentAlert('Registration Failed', '', 'The email address is already in use by another account', 'error');
+              this.alertService.presentAlert(
+                'Registration Failed', 
+                '', 
+                'The email address is already in use by another account', 
+                'error'
+              );
             } else {
               this.alertService.presentAlert('Registration Failed', '', 'There had issue in  email address is already in use by another account', 'error');
             }

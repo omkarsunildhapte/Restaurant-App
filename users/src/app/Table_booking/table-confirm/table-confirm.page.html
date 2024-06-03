@@ -1,0 +1,53 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Table Booking Confirm</ion-title>
+    <ion-icon name="chevron-back-outline" aria-hidden="true" slot="start"></ion-icon>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <div class="container mx-auto p-4" *ngIf="!isLoading && bookingValue">
+    <ion-card class="mb-8">
+      <ion-card-header>
+        <ion-card-title class="text-xl font-bold text-center">Thank You!</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <div>
+          <p class="text-lg">Your reservation has been confirmed.</p>
+          <p class="text-lg">We look forward to serving you.</p>
+        </div>
+        <div class="pt-3">
+          <p style="font-size:1.10rem !important;font-weight: bold;">Mahesh Lunch Home</p>
+          <p class="text-lg">North Indian, Mughlai, Street Food, Seafood, Beverages Camp Area, Pune,+1234567890</p>
+        </div>
+      </ion-card-content>
+      <ion-card-header>
+        <ion-card-title class="text-lg font-bold">Reservation Details</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <div class="flex flex-wrap mb-4">
+          <div class="w-full md:w-1/2 mb-4">
+            <span class="font-semibold">Name:</span>
+            {{bookingValue.firstName}} {{bookingValue.lastName}}
+          </div>
+          <div class="w-full md:w-1/2 mb-4">
+            <span class="font-semibold">Guests:</span>
+            {{bookingValue.guests}}
+          </div>
+          <div class="w-full md:w-1/2 mb-4">
+            <span class="font-semibold">Date:</span>
+            {{bookingValue.date}}({{bookingValue.time}})
+          </div>
+          <div class="w-full md:w-1/2 mb-4">
+            <span class="font-semibold">Email:</span>
+            {{bookingValue.email}}
+          </div>
+        </div>
+      </ion-card-content>
+    </ion-card>
+    <ion-card>
+      <ion-button expand="block" shape="round" (click)="routerLink.navigateUrl('/main/home',undefined)">Back to
+        Home</ion-button>
+    </ion-card>
+  </div>
+  <loading *ngIf="isLoading"></loading>
+</ion-content>

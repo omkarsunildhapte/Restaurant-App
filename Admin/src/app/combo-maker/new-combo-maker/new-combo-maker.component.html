@@ -1,3 +1,4 @@
+@if(!loader){
 <p-dialog header="New Item" [modal]="true" [(visible)]="visible" [style]="{ width: '40rem' }">
     <form [formGroup]="newItemForm" (ngSubmit)="onSave()">
         <div class="flex align-items-center gap-3 mb-3 flex-col">
@@ -58,3 +59,6 @@
         </div>
     </form>
 </p-dialog>
+} @else{
+    <loading></loading>
+  }

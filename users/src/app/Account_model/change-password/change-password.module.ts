@@ -7,6 +7,7 @@ import { IonicModule } from '@ionic/angular';
 import { ChangePasswordPageRoutingModule } from './change-password-routing.module';
 
 import { ChangePasswordPage } from './change-password.page';
+import { LoaderModule } from 'src/app/loader/loader.module';
 
 @NgModule({
   imports: [
@@ -14,7 +15,8 @@ import { ChangePasswordPage } from './change-password.page';
     FormsModule,
     IonicModule,
     ChangePasswordPageRoutingModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    LoaderModule
   ],
   declarations: [ChangePasswordPage]
 })

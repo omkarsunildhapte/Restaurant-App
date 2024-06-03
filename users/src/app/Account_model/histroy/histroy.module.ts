@@ -7,13 +7,15 @@ import { IonicModule } from '@ionic/angular';
 import { HistroyPageRoutingModule } from './histroy-routing.module';
 
 import { HistroyPage } from './histroy.page';
+import { LoaderModule } from 'src/app/loader/loader.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    HistroyPageRoutingModule
+    HistroyPageRoutingModule,
+    LoaderModule
   ],
   declarations: [HistroyPage]
 })

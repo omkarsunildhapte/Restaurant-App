@@ -5,15 +5,15 @@
 </ion-header>
 <ion-content class="ion-padding">
   <ion-card class="profile">
-    <ion-card-header>
+    <ion-card-header *ngIf="displayName">
       <ion-card-title class="py-5">
         <div class="flex justify-center w-100 items-center flex-col">
-          <div>
-            <img src="../../assets/icon/icon.jpg" alt="" class="h-20 w-20 rounded-full">
+          <div class="flex items-center">
+            <div class="h-20 w-20 rounded-full bg-gray-300 flex items-center justify-center">
+              <span class="text-lg font-bold text-gray-600">{{ displayName.charAt(0) }}</span>
+            </div>
           </div>
-          <span class="text-sm pt-4 font-normal">
-            {{displayName}}
-          </span>
+          <span class="text-sm pt-4 font-normal">{{ displayName }}</span>
         </div>
       </ion-card-title>
     </ion-card-header>
@@ -83,4 +83,5 @@
       </div>
     </ion-card-content>
   </ion-card>
+  <loading *ngIf="isLoader"></loading>
 </ion-content>

@@ -1,10 +1,11 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
+import { authGuard } from './service/auth.guard';
 
 const routes: Routes = [
   {
     path: '',
-    redirectTo: 'login',
+    redirectTo: '/main/home',
     pathMatch: 'full'
   },
   {
@@ -17,19 +18,27 @@ const routes: Routes = [
   },
   {
     path: 'login',
-    loadChildren: () => import('./auth/login/login.module').then(m => m.LoginPageModule)
+    loadChildren: () => import('./auth/login/login.module').then(m => m.LoginPageModule),
   },
   {
     path:'main',
-    loadChildren:()=> import ('./tabs/tabs.module').then(m => m.TabsPageModule)
+    loadChildren:()=> import ('./tabs/tabs.module').then(m => m.TabsPageModule),
+    canActivate: [authGuard]
   },
   {
     path: 'phonenumber',
-    loadChildren: () => import('./auth/phone-number/phone-number.module').then( m => m.PhoneNumberPageModule)
+    loadChildren: () => import('./auth/phone-number/phone-number.module').then( m => m.PhoneNumberPageModule),
+    canActivate: [authGuard]
   },
   {
     path: 'location',
-    loadChildren: () => import('./Account_model/location/location.module').then( m => m.LocationPageModule)
+    loadChildren: () => import('./Account_model/location/location.module').then( m => m.LocationPageModule),
+    canActivate: [authGuard]
+  },
+  {
+    path: 'otp',
+    loadChildren: () => import('./auth/otp/otp.module').then( m => m.OtpPageModule),
+    canActivate: [authGuard]
   }
 ];
 

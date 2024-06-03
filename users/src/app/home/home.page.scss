@@ -1,4 +1,6 @@
 ion-header {
+  background: transparent;
+  z-index: unset;
   ion-toolbar {
     height: 74px;
     border-bottom-left-radius: 47px;
@@ -60,8 +62,9 @@ ion-content {
     ion-card-content {
       .list-menu {
         padding: 15px;
-        border-radius: 50%;
-        background: #FFFAE5;
+        border-radius: 23%;
+        background: #e372ff;
+        height: 3.8rem;
       }
 
       .items {

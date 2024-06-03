@@ -1,0 +1,71 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-icon name="chevron-back-outline" aria-hidden="true" slot="start"></ion-icon>
+    <ion-title>Personal Document</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <ion-card>
+    <ion-card-content>
+      <input id="file-upload" #profile type="file" name="fileUpload" accept="image/*" hidden
+        (change)="onFileSelected($event, 'profile')" />
+      <label for="file-upload" id="file-drag">
+        <ng-container *ngIf="!documentForm.controls['profile'].value;else elseBlock">
+          <ion-icon name="cloud-upload" size="large"></ion-icon>
+          <div>Your Profile Image</div>
+          <div id="notimage">Please select an image</div>
+          <ion-button id="file-upload-btn" expand="block" (click)="triggerFileInput('profile')">Select a
+            file</ion-button>
+        </ng-container>
+        <ng-template #elseBlock>
+          <img [src]="documentForm.controls['profile'].value" alt="Preview">
+          <ion-button id="file-upload-btn" expand="block" (click)="resetFileInput('profile')">Clear</ion-button>
+        </ng-template>
+      </label>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card>
+    <ion-card-content>
+      <input id="file-upload" #drivingLicence type="file" name="fileUpload" accept="image/*" hidden
+        (change)="onFileSelected($event, 'drivingLicence')" />
+      <label for="file-upload" id="file-drag">
+        <ng-container *ngIf="!documentForm.controls['drivingLicence'].value;else elseBlock">
+          <ion-icon name="cloud-upload" size="large"></ion-icon>
+          <div>Your Profile Image</div>
+          <div id="notimage">Please select an image</div>
+          <ion-button id="file-upload-btn" expand="block" (click)="triggerFileInput('drivingLicence')">Select a
+            file</ion-button>
+        </ng-container>
+        <ng-template #elseBlock>
+          <img [src]="documentForm.controls['drivingLicence'].value" alt="Preview">
+          <ion-button id="file-upload-btn" expand="block" (click)="resetFileInput('drivingLicence')">Clear</ion-button>
+        </ng-template>
+      </label>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card>
+    <ion-card-content>
+      <input id="file-upload" #nationalId type="file" name="fileUpload" accept="image/*" hidden
+        (change)="onFileSelected($event, 'nationalId')" />
+      <label for="file-upload" id="file-drag">
+        <ng-container *ngIf="!documentForm.controls['nationalId'].value;else elseBlock">
+          <ion-icon name="cloud-upload" size="large"></ion-icon>
+          <div>Your Profile Image</div>
+          <div id="notimage">Please select an image</div>
+          <ion-button id="file-upload-btn" expand="block" (click)="triggerFileInput('nationalId')">Select a
+            file</ion-button>
+        </ng-container>
+        <ng-template #elseBlock>
+          <img [src]="documentForm.controls['nationalId'].value" alt="Preview">
+          <ion-button id="file-upload-btn" expand="block" (click)="resetFileInput('nationalId')">Clear</ion-button>
+        </ng-template>
+      </label>
+    </ion-card-content>
+  </ion-card>
+
+  <div class="bottom-section">
+    <ion-button type="submit">Register</ion-button>
+  </div>
+</ion-content>

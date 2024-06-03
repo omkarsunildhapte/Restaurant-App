@@ -39,8 +39,7 @@ export class FoodService {
   }
    
   getCartItems(userId: string): Observable<any[]> {
-    return this.firestore.collection('users').doc(userId)
-      .collection<any>('addToCart').snapshotChanges().pipe(
+    return this.firestore.collection('users').doc(userId).collection<any>('addToCart').snapshotChanges().pipe(
         map(actions => {
           return actions.map(a => {
             const data = a.payload.doc.data();
@@ -64,13 +63,30 @@ export class FoodService {
     }));
   }
 
+  updateCartItemsByIds(userId: string, itemUpdates: any): Observable<void> {
+    const cartCollection = this.firestore.collection(`users/${userId}/addToCart`);
+    return from(
+      (async () => {
+        try {
+          const batch = this.firestore.firestore.batch();
+          for (const itemUpdate of itemUpdates) {
+            const itemDocRef = cartCollection.doc(itemUpdate.id).ref;
+            batch.update(itemDocRef, itemUpdate);
+          }
+          await batch.commit();
+        } catch (error) {
+        }
+      })()
+    );
+  }
+  
   addToUserOrder(userId: string, itemData: any): Observable<any> {
     return from(this.firestore.collection('users').doc(userId).collection('addOrder').add(itemData));
   }
   
   addOrder(order: any): Observable<void> {
-    const id = this.firestore.createId();
-    return from(this.firestore.doc<any>(`orders/${id}`).set(order));
+    const ordersCollection = this.firestore.collection('orders');
+    return from(ordersCollection.add(order).then(() => {}));
   }
 
   getUserOrder(userId: string): Observable<any[]> {
