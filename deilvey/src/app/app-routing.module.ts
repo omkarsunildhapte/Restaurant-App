@@ -43,6 +43,10 @@ const routes: Routes = [
     path: 'account',
     loadChildren: () => import('./account/account.module').then( m => m.AccountPageModule)
   },
+  {
+    path: 'track-map',
+    loadChildren: () => import('./track-map/track-map.module').then( m => m.TrackMapPageModule)
+  },
 ];
 
 @NgModule({

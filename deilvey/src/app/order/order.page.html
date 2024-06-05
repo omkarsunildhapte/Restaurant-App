@@ -17,12 +17,58 @@
       </ion-segment>
       <div [ngSwitch]="segment">
         <ng-container *ngSwitchCase="'delivery'">
-          <ion-list>
-            <ion-item>
-              <div class="flex justify-between relative my-10">
-                <div class="flex flex-col">
-                  <p>Order No.</p>
-                  <p>#11250</p>
+          <ion-list class="pt-2">
+            <ion-item class="border-3 border rounded-md">
+              <div class="flex flex-col w-full">
+                <div class="flex justify-between relative mt-4 w-full">
+                  <div class="flex flex-col w-6/12">
+                    <span class="text-base">Order No.</span>
+                    <p>#11250</p>
+                  </div>
+                  <div class="w-6/12 text-end">
+                    <span class="bg-blue-100 text-blue-800 text-xs font-medium me-2 px-2.5 py-0.5 rounde">
+                      Pickup Pending
+                    </span>
+                  </div>
+                  <div class="absolute" style="bottom: -14%;left: 40%;">
+                    <ion-icon name="chevron-down-outline"></ion-icon>
+                  </div>
+                </div>
+                <div class="border-t-2 flex justify-between relative flex-col my-4 w-full">
+                  <div class="flex justify-between w-full">
+                    <div class="w-9/12 flex gap-2 p-3">
+                      <ion-icon slot="start" name="person-outline"></ion-icon>
+                      <span class="text-bold">
+                        Aman Sharma
+                      </span>
+                      <ion-icon slot="end" name="call"></ion-icon>
+                    </div>
+                  </div>
+                  <div class="flex w-full">
+                    <div class="w-4/12" style="height: 4.5rem;">
+                      <ion-img src="../../assets/icon/burger.svg" class="w-full h-full"></ion-img>
+                    </div>
+                    <div class="w-8/12 flex flex-col gap-2">
+                      <span class="text-bold text-sm">Aman Sharma</span>
+                      <span class="text-bold text-sm">Qlt : 2</span>
+                    </div>
+                  </div>
+                  <div class="flex flex-col w-full p-4">
+                    <div class="flex w-full gap-3 items-center">
+                      <ion-icon slot="start" class="text-base" name="location-outline"></ion-icon>
+                      <span class="text-bold text-base">Location</span>
+                    </div>
+                      <p class="pt-3">201/D, Ananta Apts, Near
+                        Jal Bhawan, Andheri 400069</p>
+                  </div>
+                  <div class="flex flex-col w-full p-4">
+                    <div class="flex w-full gap-3 items-center">
+                      <ion-icon slot="start" class="text-base" name="cash-outline"></ion-icon>
+                      <span class="text-bold text-base">Paid</span>
+                      <span class="text-bold text-lg">5500</span>
+                    </div>
+                  </div>
+                  <ion-button class="confirm_order" type="submit">Pickup Order</ion-button>
                 </div>
               </div>
             </ion-item>

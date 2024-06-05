@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, ValidationErrors, Validators } from '@angular/forms';
 
-import { catchError, finalize, of } from 'rxjs';
+import { finalize } from 'rxjs';
 import { AlertService } from 'src/app/service/alert.service';
 import { AuthService } from 'src/app/service/auth.service';
 import { RoutingService } from 'src/app/service/routing.service';
@@ -55,7 +55,7 @@ export class RegisterPage implements OnInit {
         )
         .subscribe(
           () => {
-            this.routerlink.navigateUrl('/login', undefined);
+            this.routerlink.navigateUrl('/personal-information', undefined);
             this.alertService.presentAlert(
               'Registration Success', 
               '', 

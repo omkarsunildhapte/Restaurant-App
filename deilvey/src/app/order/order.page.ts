@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { OrderService } from '../service/order.service';
+import { UserService } from '../service/user.service';
 
 @Component({
   selector: 'app-order',
@@ -7,10 +9,17 @@ import { Component, OnInit } from '@angular/core';
 })
 export class OrderPage implements OnInit {
   segment: string = 'delivery';
+  orderList: any[]=[];
 
-  constructor() { }
+  constructor(
+    private orderService:OrderService,
+    private userService:UserService
+  ) { }
 
   ngOnInit() {
+    this.orderService.getOrder().subscribe((res:any)=>{
+      this.orderList=res
+    })
   }
 
 }

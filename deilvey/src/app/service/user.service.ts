@@ -2,15 +2,19 @@ import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { EmailAuthProvider, reauthenticateWithCredential, updatePassword } from 'firebase/auth';
-import { Observable, catchError, from, map, switchMap } from 'rxjs';
+import { Observable, catchError, from, map, switchMap, throwError } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
-  constructor(private firestore: AngularFirestore,private afAuth: AngularFireAuth) { }
+  
+  constructor(
+    private firestore: AngularFirestore,
+    private afAuth: AngularFireAuth
+  ) { }
 
   checkAndAddUser(uid: string, email: string, displayName: string): Observable<any> {
-    return this.firestore.collection('users').doc(uid).get().pipe(
+    return this.firestore.collection('deliveryPatner').doc(uid).get().pipe(
       switchMap((docSnapshot: any) => {
         if (!docSnapshot.exists) {
           const userData = {
@@ -19,28 +23,16 @@ export class UserService {
             uid: uid,
             createdAt: new Date()
           };
-          return from(this.firestore.collection('users').doc(uid).set(userData));
+          return from(this.firestore.collection('deliveryPatner').doc(uid).set(userData));
         } else {
           return from(Promise.resolve(true));
         }
       })
     );
   }
-
-  updatePhoneNumber(uid: string, phoneNumber: string): Observable<any> {
-    return this.firestore.collection('users').doc(uid).get().pipe(
-      switchMap((docSnapshot: any) => {
-        if (docSnapshot.exists) {
-          return from(this.firestore.collection('users').doc(uid).update({ phoneNumber: phoneNumber }));
-        } else {
-          return from(Promise.reject('User does not exist.'));
-        }
-      })
-    );
-  }
-
+  
   getUserByUID(uid: string): Observable<any> {
-    return this.firestore.collection('users').doc(uid).get().pipe(
+    return this.firestore.collection('deliveryPatner').doc(uid).get().pipe(
       map(doc => {
         if (doc.exists) {
           return doc.data();
@@ -50,12 +42,24 @@ export class UserService {
       })
     );
   }
-
-  updateAccount(id: string, data: any): Observable<any> {
-    return from(this.firestore.collection('users').doc(id).update(data));
+  
+  updateDocument(uid: string, profile: string,drivingLicence:string,nationalId:string,personalStatus:number,documentStatus:number): Observable<any> {
+    return this.firestore.collection('deliveryPatner').doc(uid).get().pipe(
+      switchMap((docSnapshot: any) => {
+        if (docSnapshot.exists) {
+          return from(this.firestore.collection('deliveryPatner').doc(uid).update({ profile: profile,drivingLicence:drivingLicence,nationalId:nationalId,personalStatus:personalStatus,documentStatus:documentStatus}));
+        } else {
+          return from(Promise.reject('User does not exist.'));
+        }
+      })
+    );
   }
 
-  getuserById(id: string): Observable<any> {
+  updateAccount(id: string, data: any): Observable<any> {
+    return from(this.firestore.collection('deliveryPatner').doc(id).update(data));
+  }
+
+  getUserById(id: string): Observable<any> {
     return this.firestore.doc<any>(`users/${id}`).snapshotChanges().pipe(
       map(doc => {
         if (doc.payload.exists) {

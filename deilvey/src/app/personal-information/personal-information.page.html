@@ -4,44 +4,123 @@
     <ion-title>Personal Details</ion-title>
   </ion-toolbar>
 </ion-header>
+
 <ion-content>
   <ion-card>
     <ion-card-content>
-      <form>
+      <form [formGroup]="personalDetailsForm" (ngSubmit)="onSubmit()">
         <ion-item>
-          <ion-input placeholder="Please enter first name"></ion-input>
+          <ion-input formControlName="firstName" placeholder="Please enter first name"></ion-input>
         </ion-item>
+        <div *ngIf="isSubmit && personalDetailsForm.controls['firstName'].touched">
+          <div *ngIf="personalDetailsForm.controls['firstName'].errors?.['required']" class="error-message">
+            First name is required.
+          </div>
+        </div>
+
         <ion-item>
-          <ion-input placeholder="Please enter last name"></ion-input>
+          <ion-input formControlName="lastName" placeholder="Please enter last name"></ion-input>
         </ion-item>
+        <div *ngIf="isSubmit && personalDetailsForm.controls['lastName'].touched">
+          <div *ngIf="personalDetailsForm.controls['lastName'].errors?.['required']" class="error-message">
+            Last name is required.
+          </div>
+        </div>
+
         <ion-item>
-          <ion-input placeholder="Please enter father’s name"></ion-input>
+          <ion-input formControlName="fathersName" placeholder="Please enter father’s name"></ion-input>
         </ion-item>
+        <div *ngIf="isSubmit && personalDetailsForm.controls['fathersName'].touched">
+          <div *ngIf="personalDetailsForm.controls['fathersName'].errors?.['required']" class="error-message">
+            Father's name is required.
+          </div>
+        </div>
+
         <ion-item>
-          <ion-input placeholder="Please enter date of brith"></ion-input>
+          <div class="relative">
+            <ion-input formControlName="dateOfBirth" placeholder="Please enter date of birth"></ion-input>
+            <ion-button class="absolute top-1 right-1" style="z-index: 99;" id="open-date" slot="end">
+              <ion-icon name="calendar"></ion-icon>
+            </ion-button>
+          </div>
         </ion-item>
+        <div *ngIf="isSubmit && personalDetailsForm.controls['dateOfBirth'].touched">
+          <div *ngIf="personalDetailsForm.controls['dateOfBirth'].errors?.['required']" class="error-message">
+            Date of birth is required.
+          </div>
+        </div>
+
         <ion-item>
-          <ion-input placeholder="Please enter mobile number"></ion-input>
+          <ion-input formControlName="mobileNumber" placeholder="Please enter mobile number"></ion-input>
         </ion-item>
+        <div *ngIf="isSubmit && personalDetailsForm.controls['mobileNumber'].touched">
+          <div *ngIf="personalDetailsForm.controls['mobileNumber'].errors?.['required']" class="error-message">
+            Mobile number is required.
+          </div>
+          <div *ngIf="personalDetailsForm.controls['mobileNumber'].errors?.['pattern']" class="error-message">
+            Mobile number must be 10 digits.
+          </div>
+        </div>
+
         <ion-item>
-          <ion-input placeholder="Please enter blood group"></ion-input>
+          <ion-select formControlName="bloodGroup" placeholder="Please select blood group">
+            <ion-select-option *ngFor="let group of bloodGroups" [value]="group">{{ group }}</ion-select-option>
+          </ion-select>
         </ion-item>
+        <div *ngIf="isSubmit && personalDetailsForm.controls['bloodGroup'].touched">
+          <div *ngIf="personalDetailsForm.controls['bloodGroup'].errors?.['required']" class="error-message">
+            Blood group is required.
+          </div>
+        </div>
+
         <ion-item>
-          <ion-input placeholder="Please enter city"></ion-input>
+          <ion-input formControlName="city" placeholder="Please enter city"></ion-input>
         </ion-item>
+        <div *ngIf="isSubmit && personalDetailsForm.controls['city'].touched">
+          <div *ngIf="personalDetailsForm.controls['city'].errors?.['required']" class="error-message">
+            City is required.
+          </div>
+        </div>
+
         <ion-item>
-          <ion-input placeholder="Please enter address"></ion-input>
+          <ion-input formControlName="address" placeholder="Please enter address"></ion-input>
         </ion-item>
+        <div *ngIf="isSubmit && personalDetailsForm.controls['address'].touched">
+          <div *ngIf="personalDetailsForm.controls['address'].errors?.['required']" class="error-message">
+            Address is required.
+          </div>
+        </div>
+
         <ion-item>
-          <ion-input placeholder="Please enter delivery license ID"></ion-input>
+          <ion-input formControlName="deliveryLicenseId" placeholder="Please enter delivery license ID"></ion-input>
         </ion-item>
+        <div *ngIf="isSubmit && personalDetailsForm.controls['deliveryLicenseId'].touched">
+          <div *ngIf="personalDetailsForm.controls['deliveryLicenseId'].errors?.['required']" class="error-message">
+            Delivery license ID is required.
+          </div>
+        </div>
+
         <ion-item>
-          <ion-input placeholder="Please enter National ID"></ion-input>
+          <ion-input formControlName="nationalId" placeholder="Please enter National ID"></ion-input>
         </ion-item>
+        <div *ngIf="isSubmit && personalDetailsForm.controls['nationalId'].touched">
+          <div *ngIf="personalDetailsForm.controls['nationalId'].errors?.['required']" class="error-message">
+            National ID is required.
+          </div>
+        </div>
+        <div class="bottom-section">
+          <ion-button type="submit">Register</ion-button>
+        </div>
       </form>
-      <div class="bottom-section">
-        <ion-button type="submit">Register</ion-button>
-      </div>
     </ion-card-content>
   </ion-card>
+  <ion-modal class="datetime-modal" trigger="open-date">
+    <ng-template>
+      <ion-content>
+        <ion-datetime size="cover" presentation="date" (ionChange)="onDateChange($event)" show-default-buttons="true"
+          show-default-time-label="false" cancel-text="Close" done-text="Submit">
+        </ion-datetime>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
 </ion-content>

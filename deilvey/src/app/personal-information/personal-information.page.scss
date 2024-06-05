@@ -27,15 +27,7 @@ ion-card {
             --inner-border-width: 0;
             --highlight-color-focused: none;
               margin-bottom: 15px;
-            ion-icon{
-                padding: 5px;
-                background-color: #251029;
-                margin-right: 10px;
-                color: white;
-                border-radius: 20px;
-                border: 2px solid;
-            }
-            ion-input {
+            ion-input , ion-select {
                 width: 257px;
                 height: 42px;
                 border-radius: 15px;
@@ -87,3 +79,29 @@ ion-card {
 ::ng-deep ion-content {
     --keyboard-offset: 0px !important
 }
+ion-datetime {
+    height: auto;
+    width: auto;
+    max-width: 350px;
+  }
+  
+  ion-modal {
+    --width: 290px;
+    --height: 382px;
+    --border-radius: 8px;
+  }
+  
+  ion-modal ion-datetime {
+    height: 382px;
+  }
+  
+  .time-slot {
+    border: 1px solid #ddd;
+    text-align: center;
+    margin-bottom: 10px;
+  }
+  
+  .active {
+    background-color: #241029;
+    color:white;
+  }

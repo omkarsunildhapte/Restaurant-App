@@ -1,0 +1,45 @@
+ion-header{
+    ion-toolbar{
+        padding-top: 10px;
+        height: 60px;
+        --background:white;
+        font-size: 17px;
+        font-weight: 500;
+        --border-color: blue;
+        ion-icon{
+            padding: 10px;
+        }
+    }
+}
+ion-content{
+    .profile{
+        margin: 0px;
+        height: 180px;
+        box-shadow: none;
+        border-bottom: 1px solid;
+    }
+    .general{
+        ion-card-header{
+            border-bottom: 0.1px solid;
+            ion-card-title{
+                font-size: 14px;
+            }
+        }
+        ion-card-content{
+            ion-list{
+                padding: 0px;
+                margin: 0px;
+            }
+        }
+    }
+    .nav-header{
+        text-align: start;
+        padding: 0px 25px;
+        font-weight: 600;
+    }
+    .nav-sub-header{
+        text-align: start;
+        padding: 0px 25px;
+        color:gray;  
+    }
+}

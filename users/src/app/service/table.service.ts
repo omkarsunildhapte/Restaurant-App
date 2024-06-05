@@ -10,7 +10,7 @@ export class TableService {
   constructor(private firestore: AngularFirestore) { }
 
   getTable(): Observable<any[]> {
-    return this.firestore.collection<any>('table').snapshotChanges().pipe(
+    return this.firestore.collection<any>('orders').snapshotChanges().pipe(
       map(actions => {
         return actions.map(a => {
           const data = a.payload.doc.data();
