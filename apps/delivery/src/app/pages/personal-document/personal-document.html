@@ -1,0 +1,46 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button [defaultHref]="backLink"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Personal Document</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <form [formRoot]="documentForm" novalidate>
+    @for (document of page.FIELDS; track document.key) {
+      @let image = documentForm[document.key]().value();
+      <ion-card>
+        <ion-card-content class="document-card">
+          @if (!image) {
+            <label class="document-label" [for]="document.inputId">
+              <ion-icon name="cloud-upload" size="large" aria-hidden="true"></ion-icon>
+              <span>{{ document.label }}</span>
+              <span>Please select an image</span>
+            </label>
+            <input
+              type="file"
+              accept="image/*"
+              hidden
+              [id]="document.inputId"
+              [attr.data-testid]="'document-' + document.key"
+              (change)="onFileSelected($event, document.key)"
+            />
+          } @else {
+            <img class="preview" alt="Preview" [src]="image" />
+            <ion-button expand="block" class="clear-button" (click)="clear(document.key)"
+              >Clear</ion-button
+            >
+          }
+        </ion-card-content>
+      </ion-card>
+    }
+    <div class="bottom-section">
+      <ion-button type="submit" data-testid="document-submit">Upload</ion-button>
+      <span>Need help? Contact Support</span>
+    </div>
+  </form>
+  @if (documentForm().submitting()) {
+    <app-loader />
+  }
+</ion-content>

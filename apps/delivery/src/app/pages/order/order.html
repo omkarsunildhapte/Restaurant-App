@@ -1,0 +1,65 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button [defaultHref]="backLink"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Order</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <ion-card class="mains">
+    <ion-card-content>
+      <ion-segment [value]="segment()" (ionChange)="onSegmentChange($event)">
+        @for (tab of page.SEGMENTS; track tab.value) {
+          <ion-segment-button [value]="tab.value">
+            <ion-label>{{ tab.label }}</ion-label>
+          </ion-segment-button>
+        }
+      </ion-segment>
+      <ion-list class="pt-2">
+        @for (order of list(); track order.id) {
+          <ion-item class="border rounded-md">
+            <div class="flex flex-col w-full">
+              <div class="flex justify-between relative mt-4 w-full">
+                <div class="flex flex-col w-6/12">
+                  <span class="text-base">Order No.</span>
+                  <p>#{{ order.id }}</p>
+                </div>
+                <div class="w-6/12 text-end">
+                  <span
+                    class="bg-blue-100 text-blue-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-sm"
+                    >{{ page.STATUS_LABELS[order.status] }}</span
+                  >
+                </div>
+              </div>
+              <div class="border-t-2 flex flex-col my-4 w-full">
+                <div class="flex flex-col w-full p-4">
+                  <div class="flex w-full gap-3 items-center">
+                    <ion-icon
+                      class="text-base"
+                      name="location-outline"
+                      aria-hidden="true"
+                    ></ion-icon>
+                    <span class="text-bold text-base">Location</span>
+                  </div>
+                  <p class="pt-3">{{ order.deliveryAddress }}</p>
+                </div>
+                <div class="flex w-full gap-3 items-center p-4">
+                  <ion-icon class="text-base" name="cash-outline" aria-hidden="true"></ion-icon>
+                  <span class="text-bold text-base">Cash to collect</span>
+                  <span class="text-bold text-lg">{{ order.codAmount | currency: 'INR' }}</span>
+                </div>
+              </div>
+            </div>
+          </ion-item>
+        } @empty {
+          @if (orders.isLoading()) {
+            <p class="empty-state">Loading…</p>
+          } @else {
+            <p class="empty-state" data-testid="order-empty">{{ emptyText() }}</p>
+          }
+        }
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
+</ion-content>

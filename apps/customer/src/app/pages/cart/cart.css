@@ -1,0 +1,72 @@
+ion-header ion-toolbar {
+  padding-top: 10px;
+  height: 60px;
+  --background: white;
+  font-size: 17px;
+  font-weight: 500;
+  --border-color: blue;
+}
+ion-header ion-toolbar ion-icon {
+  padding: 10px;
+}
+
+ion-content .empty-cart-message {
+  text-align: center;
+  margin-top: 2rem;
+  font-size: 1.2rem;
+  color: #888;
+}
+ion-content {
+  position: relative;
+}
+ion-content .general ion-card-header {
+  border-bottom: 0.1px solid;
+}
+ion-content .general ion-card-header ion-card-title {
+  font-size: 14px;
+}
+ion-content .general ion-card-content {
+  padding-top: 10px !important;
+}
+ion-content .general .mains {
+  padding: 10px 0px;
+}
+ion-content .general .mains ion-list .order-list {
+  display: flex;
+  flex-direction: column;
+}
+ion-content .general .mains ion-list .order-list .itemheader {
+  font-size: 16px;
+  color: black;
+}
+ion-content .general .mains ion-list .order-list .action {
+  margin-top: 15px;
+  height: 25px;
+  padding: 0px 10px;
+  border-radius: 12px;
+  background: #e1e1e2;
+  color: white;
+  font-size: 12px;
+  display: flex;
+  gap: 15px !important;
+  width: 84px;
+  align-items: center;
+}
+ion-content .general .mains ion-list .order-list .action ion-icon {
+  border: 0px;
+  border-radius: 10px;
+}
+ion-content .general .mains ion-list .order-list .action .minus {
+  background: gray;
+}
+ion-content .general .mains ion-list .order-list .action .plus {
+  background: orange;
+}
+ion-content .bottom-button ion-button {
+  --padding-start: 0px;
+  --padding-end: 0px;
+}
+
+.tall {
+  min-height: 43px;
+}

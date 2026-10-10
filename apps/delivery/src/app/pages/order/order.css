@@ -1,0 +1,20 @@
+ion-header {
+  ion-toolbar {
+    padding-top: 10px;
+    height: 60px;
+    --background: white;
+    font-size: 17px;
+    font-weight: 500;
+    --border-color: blue;
+
+    ion-icon {
+      padding: 10px;
+    }
+  }
+}
+
+.empty-state {
+  padding: 24px 8px;
+  text-align: center;
+  color: #666;
+}

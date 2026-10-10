@@ -25,40 +25,31 @@
                 "input": "public"
               }
             ],
-            "styles": [
-              "src/global.scss",
-              "src/tailwind.css",
-              "src/theme/variables.scss"
-            ],
+            "styles": ["src/styles.css"],
             "scripts": [],
             "browser": "src/main.ts",
             "server": "src/main.server.ts",
             "outputMode": "server",
             "security": {
-              "allowedHosts": [
-                "localhost",
-                "127.0.0.1"
-              ]
+              "allowedHosts": ["localhost", "127.0.0.1"]
             },
             "ssr": {
               "entry": "src/server.ts"
             },
-            "polyfills": [
-              "./src/register-icons"
-            ]
+            "polyfills": ["./src/app/icons"]
           },
           "configurations": {
             "production": {
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "2mb",
-                  "maximumError": "5mb"
+                  "maximumWarning": "500kB",
+                  "maximumError": "1MB"
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "2kb",
-                  "maximumError": "4kb"
+                  "maximumWarning": "4kB",
+                  "maximumError": "8kB"
                 }
               ],
               "fileReplacements": [
@@ -73,13 +64,13 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "2mb",
-                  "maximumError": "5mb"
+                  "maximumWarning": "500kB",
+                  "maximumError": "1MB"
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "2kb",
-                  "maximumError": "4kb"
+                  "maximumWarning": "4kB",
+                  "maximumError": "8kB"
                 }
               ],
               "fileReplacements": [
@@ -141,26 +132,21 @@
           "options": {
             "runner": "vitest",
             "tsConfig": "tsconfig.spec.json",
-            "buildTarget": "app:build:development"
+            "buildTarget": "app:build:development",
+            "setupFiles": ["src/utils/testing/test-setup.ts"]
           }
         },
         "lint": {
           "builder": "@angular-eslint/builder:lint",
           "options": {
-            "lintFilePatterns": [
-              "src/**/*.ts",
-              "src/**/*.html"
-            ]
+            "lintFilePatterns": ["src/**/*.ts", "src/**/*.html"]
           }
         }
       }
     }
   },
   "cli": {
-    "schematicCollections": [
-      "angular-eslint",
-      "@ionic/angular-toolkit"
-    ],
+    "schematicCollections": ["angular-eslint", "@ionic/angular-toolkit"],
     "analytics": false
   },
   "schematics": {

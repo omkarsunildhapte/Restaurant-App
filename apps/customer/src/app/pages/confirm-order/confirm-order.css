@@ -1,0 +1,36 @@
+ion-header ion-toolbar {
+  padding-top: 10px;
+  height: 60px;
+  --background: white;
+  font-size: 17px;
+  font-weight: 500;
+  --border-color: blue;
+}
+ion-header ion-toolbar ion-icon {
+  padding: 10px;
+}
+
+ion-content .general ion-card-header {
+  border-bottom: 0.1px solid;
+}
+ion-content .general ion-card-header ion-card-title {
+  font-size: 14px;
+}
+ion-content .general ion-card-content {
+  padding-top: 10px !important;
+}
+ion-content .general .mains {
+  padding: 10px 0px;
+}
+ion-content .general .mains ion-list .order-list .itemheader {
+  font-size: 16px;
+  color: black;
+}
+
+.summary {
+  min-width: 95%;
+}
+
+.payment-tile {
+  width: calc(50% - 0.75rem);
+}

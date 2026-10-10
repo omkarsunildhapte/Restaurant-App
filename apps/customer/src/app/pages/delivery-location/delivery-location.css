@@ -1,0 +1,118 @@
+.background-pic {
+  height: 100vh;
+  width: 100%;
+  background-position: 30%;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-color: #f7f7f7;
+}
+
+ion-header ion-toolbar {
+  padding-top: 10px;
+  height: 60px;
+  --background: white;
+  font-size: 17px;
+  font-weight: 500;
+  --border-color: blue;
+}
+ion-header ion-toolbar ion-icon {
+  padding: 10px;
+}
+
+ion-card {
+  margin-top: 20px;
+  background: transparent;
+  box-shadow: none;
+  text-align: center;
+}
+ion-card ion-card-header {
+  display: block;
+}
+ion-card ion-card-title {
+  padding: 30px 17px 0px 0px;
+  color: var(--color-dark);
+  font-size: 30px;
+  font-weight: 800;
+}
+ion-card ion-card-content {
+  margin-top: 30px;
+}
+ion-card ion-card-content ion-item {
+  --ion-item-background: transparent;
+  --border-width: 0;
+  --inner-border-width: 0;
+  --highlight-color-focused: none;
+  margin-bottom: 15px;
+}
+ion-card ion-card-content ion-item ion-icon {
+  padding: 5px;
+  margin-right: 10px;
+  border-radius: 20px;
+  border: 2px solid;
+}
+ion-card ion-card-content ion-item ion-input {
+  width: 257px;
+  height: 42px;
+  border-radius: 15px;
+  border: 1.5px solid var(--color-dark);
+  font-size: 14px;
+  font-weight: 300;
+  color: var(--color-dark);
+  --padding-start: 30px;
+}
+ion-card ion-card-content ion-item .showValues {
+  padding: 6px 35px;
+  background: var(--color-primary);
+  border-radius: 12px;
+  text-align: center;
+  align-items: center;
+  display: flex;
+  color: #fff;
+}
+ion-card ion-card-content a {
+  text-decoration: none;
+  color: var(--color-dark);
+  font-weight: 300;
+  font-size: 13px;
+}
+ion-card .bottom-section {
+  margin-top: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+ion-card .bottom-section ion-button {
+  height: 45px;
+  width: 147px;
+  font-size: 12px;
+  text-transform: none;
+  --background: var(--color-dark);
+  font-weight: 400;
+  --border-radius: 15px !important;
+  color: #fff;
+}
+ion-card .bottom-section span {
+  margin-top: 10px;
+  font-weight: 330;
+}
+ion-card .bottom-section span a {
+  font-weight: 400;
+}
+
+ion-content {
+  --keyboard-offset: 0px !important ;
+}
+
+.hero {
+  width: 40%;
+}
+
+.attribution {
+  font-size: 0.75rem;
+  opacity: 0.7;
+}
+
+.error-message {
+  color: var(--ion-color-danger);
+  font-size: 13px;
+}

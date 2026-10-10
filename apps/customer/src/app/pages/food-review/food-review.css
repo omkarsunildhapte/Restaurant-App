@@ -1,0 +1,52 @@
+ion-header ion-toolbar {
+  padding-top: 10px;
+  height: 60px;
+  --background: white;
+  font-size: 17px;
+  font-weight: 500;
+  --border-color: blue;
+}
+ion-header ion-toolbar ion-icon {
+  padding: 10px;
+}
+
+ion-content .items {
+  border-radius: 21%;
+  background: var(--color-primary-light);
+  display: flex;
+  height: 2.8rem;
+  margin: 0px 10px;
+  justify-content: center;
+}
+ion-content .general ion-card-header {
+  border-bottom: 0.1px solid;
+}
+ion-content .general ion-card-header ion-card-title {
+  font-size: 14px;
+}
+ion-content .general ion-card-content {
+  padding-top: 10px !important;
+}
+
+.thumb {
+  width: 2.5rem;
+}
+
+.add-on {
+  --padding-start: 0;
+  --inner-padding-end: 0;
+}
+
+.stepper {
+  padding: 0 18px;
+}
+
+.tall {
+  min-height: 43px;
+}
+
+.empty-state {
+  text-align: center;
+  margin-top: 2rem;
+  opacity: 0.7;
+}

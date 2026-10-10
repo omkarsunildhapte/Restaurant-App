@@ -1,14 +1,13 @@
 import { ApplicationConfig, importProvidersFrom, mergeApplicationConfig } from '@angular/core';
 import { provideServerRendering, withRoutes } from '@angular/ssr';
 import { IonicServerModule } from '@ionic/angular-server';
-import { appConfig } from './app.config';
-import { serverRoutes } from './app.routes.server';
+import { appConfig } from '@app/app.config';
+import { serverRoutes } from '@app/app.routes.server';
 
 const serverConfig: ApplicationConfig = {
   providers: [
     provideServerRendering(withRoutes(serverRoutes)),
-    // @ionic/angular-server only ships IonicServerModule; its providers (hydrating Ionic's
-    // web components into the server HTML) are pulled in with importProvidersFrom.
+    // @ionic/angular-server 9 only ships IonicServerModule; its providers come in this way (Rule 27).
     importProvidersFrom(IonicServerModule),
   ],
 };

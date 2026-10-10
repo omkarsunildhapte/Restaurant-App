@@ -1,0 +1,125 @@
+<ion-header>
+  <ion-toolbar>
+    <div class="flex">
+      <div class="w-3/12 first">
+        <img
+          [src]="app.EMBLEM"
+          [alt]="app.NAME"
+          [width]="app.EMBLEM_SIZE"
+          [height]="app.EMBLEM_SIZE"
+        />
+      </div>
+      <div class="w-full flex mt-3">
+        <ion-icon name="navigate" class="text-lg text-white pt-2" aria-hidden="true"></ion-icon>
+        <span class="text-sm text-white ps-3">
+          <span class="font-bold">Delivery to</span>
+          <br />
+          {{ copy.DELIVERY_ADDRESS }}
+        </span>
+      </div>
+    </div>
+  </ion-toolbar>
+</ion-header>
+<ion-content class="ion-padding" [fullscreen]="true">
+  @if (!foods.isLoading()) {
+    <ion-card>
+      <ion-card-content>
+        <div class="h-36">
+          <img [src]="copy.HERO_IMAGE" class="w-full h-full" alt="" />
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card class="mt-8 general">
+      <ion-card-header class="rounded-xs flex">
+        <div class="flex justify-between">
+          <div class="w-4/12 mains">General</div>
+          <div class="w-2/12 font-semibold text-black">See all</div>
+        </div>
+      </ion-card-header>
+      <ion-card-content>
+        <div class="flex gap-3 pt-4">
+          @for (product of singles(); track product.id) {
+            <a
+              class="flex flex-col w-3/12"
+              [routerLink]="foodLink"
+              [queryParams]="{ id: product.id }"
+            >
+              <div class="list-menu">
+                <ion-img class="thumb" [src]="product.logoUrl" alt=""></ion-img>
+              </div>
+              <span class="text-xs text-center">{{ product.itemName }}</span>
+            </a>
+          } @empty {
+            <p class="empty-state">No menu items yet.</p>
+          }
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card class="mt-8 general">
+      <ion-card-header class="rounded-xs flex">
+        <div class="flex justify-between">
+          <div class="w-4/12 mains">Combo</div>
+          <div class="w-2/12 font-semibold text-black">See all</div>
+        </div>
+      </ion-card-header>
+      <ion-card-content>
+        <div class="flex pt-4 gap-4">
+          @for (product of combos(); track product.id) {
+            <a
+              class="w-1/6 flex-1 flex-col flex justify-center items-center"
+              [routerLink]="foodLink"
+              [queryParams]="{ id: product.id }"
+            >
+              <div class="combo-thumb">
+                <ion-img [src]="product.logoUrl" alt=""></ion-img>
+              </div>
+              <div class="flex justify-between w-full">
+                <span class="text-sm font-bold">{{ product.itemName }}</span>
+                <span class="text-sm font-bold">{{ currency }} {{ product.price }}</span>
+              </div>
+            </a>
+          } @empty {
+            <p class="empty-state">No combos yet.</p>
+          }
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card class="mt-8 general">
+      <ion-card-header class="rounded-xs flex">
+        <div class="flex justify-between">
+          <div class="w-4/12 mains"><span class="text-nowrap">Hot Burger Combo</span></div>
+          <div class="w-2/12 font-semibold text-black">See all</div>
+        </div>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-list>
+          @for (product of combos(); track product.id) {
+            <ion-item class="w-100 flex" [routerLink]="foodLink" [queryParams]="{ id: product.id }">
+              <div class="w-4/12">
+                <div class="items">
+                  <ion-img class="thumb" [src]="product.logoUrl" slot="start" alt=""></ion-img>
+                </div>
+              </div>
+              <div class="w-6/12">
+                <span>{{ product.itemName }}</span>
+                <div class="flex gap-2 items-center">
+                  <span class="text-xs text-nowrap">{{ currency }} {{ product.price }}</span>
+                  <div>.</div>
+                  <span class="text-xs text-nowrap">{{ product.category }}</span>
+                </div>
+              </div>
+              <div class="w-2/12 flex justify-end star">
+                <ion-icon name="star-outline" slot="end" aria-hidden="true"></ion-icon>
+              </div>
+            </ion-item>
+          }
+        </ion-list>
+      </ion-card-content>
+    </ion-card>
+  } @else {
+    <app-loading />
+  }
+</ion-content>

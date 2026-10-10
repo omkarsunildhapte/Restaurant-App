@@ -1,0 +1,51 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button [defaultHref]="backLink"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Vehicle Details</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-card>
+    <ion-card-content>
+      <form [formRoot]="vehicleForm" novalidate>
+        <ion-item>
+          <ion-select
+            placeholder="Please select vehicle type"
+            aria-label="Vehicle type"
+            data-testid="vehicle-type"
+            [formField]="vehicleForm.vehicleType"
+          >
+            @for (option of page.VEHICLE_TYPES; track option.value) {
+              <ion-select-option [value]="option.value">{{ option.label }}</ion-select-option>
+            }
+          </ion-select>
+        </ion-item>
+        <app-field-errors
+          [show]="vehicleForm.vehicleType().touched()"
+          [errors]="vehicleForm.vehicleType().errors()"
+        />
+        <ion-item>
+          <ion-input
+            placeholder="Please enter vehicle number"
+            aria-label="Vehicle number"
+            data-testid="vehicle-number"
+            [formField]="vehicleForm.vehicleNumber"
+          ></ion-input>
+        </ion-item>
+        <app-field-errors
+          [show]="vehicleForm.vehicleNumber().touched()"
+          [errors]="vehicleForm.vehicleNumber().errors()"
+        />
+        <div class="bottom-section">
+          <ion-button type="submit" data-testid="vehicle-submit">Save</ion-button>
+        </div>
+      </form>
+    </ion-card-content>
+  </ion-card>
+  @if (saved.isLoading() || vehicleForm().submitting()) {
+    <app-loader />
+  }
+</ion-content>

@@ -1,52 +1,28 @@
 import { Routes } from '@angular/router';
+import { authGuard } from '@guards/auth/auth.guard';
+import { APP_ROUTES } from '@constants/routes.constants';
 
-/** Same URLs as the old AppRoutingModule; each page is lazy-loaded as a standalone component. */
+/**
+ * Same URLs as before. Public screens stand alone; every signed-in screen is a child of one
+ * componentless parent route, so the guard on the parent covers them all (the app has no shell
+ * UI such as tabs, so there is no layout component). Every entry is lazy (loadComponent).
+ */
 export const routes: Routes = [
+  { path: '', redirectTo: APP_ROUTES.REGISTER, pathMatch: 'full' },
+  { path: APP_ROUTES.REGISTER, loadComponent: () => import('@pages/register/register').then((m) => m.Register) },
+  { path: APP_ROUTES.LOGIN, loadComponent: () => import('@pages/login/login').then((m) => m.Login) },
+  { path: APP_ROUTES.FORGOT_PASSWORD, loadComponent: () => import('@pages/forgot-password/forgot-password').then((m) => m.ForgotPassword) },
   {
     path: '',
-    redirectTo: 'register',
-    pathMatch: 'full',
-  },
-  {
-    path: 'register',
-    loadComponent: () => import('./register/register.page').then((m) => m.RegisterPage),
-  },
-  {
-    path: 'forget',
-    loadComponent: () => import('./forget/forget.page').then((m) => m.ForgetPage),
-  },
-  {
-    path: 'login',
-    loadComponent: () => import('./login/login.page').then((m) => m.LoginPage),
-  },
-  {
-    path: 'personal-information',
-    loadComponent: () =>
-      import('./personal-information/personal-information.page').then((m) => m.PersonalInformationPage),
-  },
-  {
-    path: 'personal-document',
-    loadComponent: () =>
-      import('./personal-document/personal-document.page').then((m) => m.PersonalDocumentPage),
-  },
-  {
-    path: 'vehicle-details',
-    loadComponent: () => import('./vehicle-details/vehicle-details.page').then((m) => m.VehicleDetailsPage),
-  },
-  {
-    path: 'backing-details',
-    loadComponent: () => import('./backing-details/backing-details.page').then((m) => m.BackingDetailsPage),
-  },
-  {
-    path: 'order',
-    loadComponent: () => import('./order/order.page').then((m) => m.OrderPage),
-  },
-  {
-    path: 'account',
-    loadComponent: () => import('./account/account.page').then((m) => m.AccountPage),
-  },
-  {
-    path: 'track-map',
-    loadComponent: () => import('./track-map/track-map.page').then((m) => m.TrackMapPage),
+    canActivate: [authGuard],
+    children: [
+      { path: APP_ROUTES.PERSONAL_INFORMATION, loadComponent: () => import('@pages/personal-information/personal-information').then((m) => m.PersonalInformation) },
+      { path: APP_ROUTES.PERSONAL_DOCUMENT, loadComponent: () => import('@pages/personal-document/personal-document').then((m) => m.PersonalDocument) },
+      { path: APP_ROUTES.VEHICLE_DETAILS, loadComponent: () => import('@pages/vehicle-details/vehicle-details').then((m) => m.VehicleDetails) },
+      { path: APP_ROUTES.BANK_DETAILS, loadComponent: () => import('@pages/bank-details/bank-details').then((m) => m.BankDetails) },
+      { path: APP_ROUTES.ORDER, loadComponent: () => import('@pages/order/order').then((m) => m.Order) },
+      { path: APP_ROUTES.ACCOUNT, loadComponent: () => import('@pages/account/account').then((m) => m.Account) },
+      { path: APP_ROUTES.TRACK_MAP, loadComponent: () => import('@pages/track-map/track-map').then((m) => m.TrackMap) },
+    ],
   },
 ];

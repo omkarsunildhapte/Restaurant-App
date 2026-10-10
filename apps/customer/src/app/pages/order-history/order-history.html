@@ -1,0 +1,66 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button
+        [defaultHref]="links.ACCOUNT"
+        icon="chevron-back-outline"
+        text=""
+      ></ion-back-button>
+    </ion-buttons>
+    <ion-title>History</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <ion-card class="mains">
+    <ion-card-content>
+      <ion-segment [value]="segment()" (ionChange)="onSegmentChange($event)">
+        @for (option of copy.SEGMENTS; track option.value) {
+          <ion-segment-button [value]="option.value">
+            <ion-label>{{ option.label }}</ion-label>
+          </ion-segment-button>
+        }
+      </ion-segment>
+      @let tab = segment();
+      @switch (tab) {
+        @case ('table') {
+          <ion-list>
+            <ion-item>
+              <div class="w-3/12"><img [src]="copy.TABLE_IMAGE" alt="" /></div>
+            </ion-item>
+          </ion-list>
+        }
+        @case ('order') {
+          <ion-list>
+            @for (order of copy.ORDERS; track order.id) {
+              <ion-item>
+                <div class="flex flex-col pt-4">
+                  <div class="flex justify-between">
+                    <div></div>
+                    <div class="flex text-xs justify-end">
+                      <span>{{ order.date }}</span>
+                    </div>
+                  </div>
+                  <div class="w-full flex">
+                    <div class="w-3/12"><img [src]="order.image" alt="" /></div>
+                    <div class="w-full">
+                      <span class="text-base">{{ order.restaurant }}</span>
+                      <p class="text-xs">{{ order.address }}</p>
+                      <p>
+                        {{ order.amount }} . <span>{{ order.itemCount }} items</span>
+                      </p>
+                    </div>
+                  </div>
+                  <div class="w-full flex gap-4 py-4">
+                    <ion-button class="w-6/12 tall" shape="round">Rate</ion-button>
+                    <ion-button class="w-6/12 tall" shape="round">ReOrder</ion-button>
+                  </div>
+                </div>
+              </ion-item>
+            }
+          </ion-list>
+        }
+        @default never;
+      }
+    </ion-card-content>
+  </ion-card>
+</ion-content>

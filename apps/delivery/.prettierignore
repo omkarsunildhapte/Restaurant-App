@@ -1,0 +1,14 @@
+# TypeScript is not formatted by Prettier: Rule 2 keeps every import on one line at any length,
+# and Prettier would wrap long imports. .ts files are formatted by hand / the editor instead.
+**/*.ts
+# Generated and third-party output.
+dist/
+www/
+.angular/
+node_modules/
+coverage/
+e2e/.artifacts/
+android/
+ios/
+package-lock.json
+public/

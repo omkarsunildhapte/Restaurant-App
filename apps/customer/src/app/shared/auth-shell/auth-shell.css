@@ -1,0 +1,112 @@
+/* Shared by the sign-in screens. ViewEncapsulation.None, so every rule is scoped under app-auth-shell. */
+app-auth-shell {
+  display: contents;
+}
+app-auth-shell ion-content {
+  --ion-background-color: #fff;
+  font-family: Arial, Helvetica, sans-serif;
+}
+app-auth-shell .background-pic {
+  height: 100vh;
+  width: 100%;
+  background-position: 30%;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-color: #f7f7f7;
+}
+app-auth-shell ion-card {
+  margin-top: 20px;
+  background: transparent;
+  box-shadow: none;
+  text-align: center;
+}
+app-auth-shell ion-card ion-card-header {
+  display: block;
+}
+app-auth-shell ion-card ion-card-title {
+  padding: 30px 17px 0px 0px;
+  color: var(--color-dark);
+  font-size: 30px;
+  font-weight: 800;
+}
+app-auth-shell ion-card ion-card-subtitle {
+  color: var(--color-dark);
+  font-size: 17px;
+  font-weight: 400;
+  padding-top: 20px;
+  text-transform: capitalize;
+}
+app-auth-shell ion-card ion-card-subtitle strong {
+  text-decoration: none;
+  font-weight: bold;
+  color: var(--color-dark);
+}
+app-auth-shell ion-card ion-card-content {
+  margin-top: 30px;
+}
+app-auth-shell ion-card ion-card-content ion-item {
+  --ion-item-background: transparent;
+  --border-width: 0;
+  --inner-border-width: 0;
+  --highlight-color-focused: none;
+  margin-bottom: 15px;
+}
+app-auth-shell ion-card ion-card-content ion-item ion-icon {
+  padding: 5px;
+  background-color: var(--color-dark);
+  margin-right: 10px;
+  color: white;
+  border-radius: 20px;
+  border: 2px solid;
+}
+app-auth-shell ion-card ion-card-content ion-item ion-input {
+  width: 257px;
+  height: 42px;
+  border-radius: 15px;
+  border: 1.5px solid var(--color-dark);
+  font-size: 14px;
+  font-weight: 300;
+  color: var(--color-dark);
+  --padding-start: 30px;
+}
+app-auth-shell ion-card ion-card-content a {
+  text-decoration: none;
+  color: var(--color-dark);
+  font-weight: 300;
+  font-size: 13px;
+}
+app-auth-shell ion-card .bottom-section {
+  margin-top: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+app-auth-shell ion-card .bottom-section ion-button {
+  height: 45px;
+  width: 147px;
+  font-size: 12px;
+  text-transform: none;
+  --background: var(--color-dark);
+  font-weight: 400;
+  --border-radius: 15px !important;
+  color: #fff;
+}
+app-auth-shell ion-card .bottom-section span {
+  margin-top: 10px;
+  font-weight: 330;
+}
+app-auth-shell ion-card .bottom-section span a {
+  font-weight: 400;
+}
+app-auth-shell ion-content {
+  --keyboard-offset: 0px !important ;
+}
+app-auth-shell .auth-logo {
+  width: 60%;
+  height: auto;
+}
+app-auth-shell .error-message {
+  color: var(--ion-color-danger);
+  font-size: 13px;
+  margin-bottom: 10px;
+}

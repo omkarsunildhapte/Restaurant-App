@@ -1,0 +1,5 @@
+@if (show()) {
+  @for (error of errors(); track error.kind) {
+    <div class="error-message" role="alert">{{ error.message }}</div>
+  }
+}

@@ -1,12 +1,13 @@
 import { RenderMode, ServerRoute } from '@angular/ssr';
+import { APP_ROUTES, SIGNED_IN_ROUTES } from '@constants/routes.constants';
 
 /**
- * Web SSR render modes. Everything renders on the server by default.
- * track-map renders on the client only: its map comes from the Google Maps JavaScript API,
- * which needs window/document and a real DOM element to draw into, so the server would only
- * produce an empty map container and then fight hydration over it.
+ * Web SSR render modes (Rule 16).
+ * - Signed-in screens are RenderMode.Client: they only make sense with the rider's session, which
+ *   lives in the browser (Rule 8). track-map also needs a real DOM for the future map.
+ * - Everything else (the public login/register/forgot screens) renders on the server.
  */
 export const serverRoutes: ServerRoute[] = [
-  { path: 'track-map', renderMode: RenderMode.Client },
-  { path: '**', renderMode: RenderMode.Server },
+  ...SIGNED_IN_ROUTES.map((path): ServerRoute => ({ path, renderMode: RenderMode.Client })),
+  { path: APP_ROUTES.WILDCARD, renderMode: RenderMode.Server },
 ];

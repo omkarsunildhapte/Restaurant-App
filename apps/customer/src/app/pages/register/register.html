@@ -1,0 +1,59 @@
+<app-auth-shell title="Create New Account" [loading]="registerForm().submitting()">
+  <ion-card-subtitle authSubtitle>
+    Already resgistered ?
+    <a [routerLink]="links.LOGIN"><strong>Login</strong></a>
+  </ion-card-subtitle>
+
+  <form [formRoot]="registerForm" novalidate>
+    <ion-item>
+      <ion-icon name="person" aria-hidden="true"></ion-icon>
+      <ion-input
+        placeholder="Full Names"
+        aria-label="Full name"
+        autocomplete="name"
+        [formField]="registerForm.name"
+      ></ion-input>
+    </ion-item>
+    <app-field-errors [field]="registerForm.name" />
+
+    <ion-item>
+      <ion-icon name="mail" aria-hidden="true"></ion-icon>
+      <ion-input
+        type="email"
+        placeholder="Email"
+        aria-label="Email"
+        autocomplete="email"
+        [formField]="registerForm.email"
+      ></ion-input>
+    </ion-item>
+    <app-field-errors [field]="registerForm.email" />
+
+    <ion-item>
+      <ion-icon name="lock-closed" aria-hidden="true"></ion-icon>
+      <ion-input
+        type="password"
+        placeholder="Password"
+        aria-label="Password"
+        autocomplete="new-password"
+        [formField]="registerForm.password"
+      ></ion-input>
+    </ion-item>
+    <app-field-errors [field]="registerForm.password" />
+
+    <ion-item>
+      <ion-icon name="lock-closed" aria-hidden="true"></ion-icon>
+      <ion-input
+        type="password"
+        placeholder="Confirm Password"
+        aria-label="Confirm password"
+        autocomplete="new-password"
+        [formField]="registerForm.confirmPassword"
+      ></ion-input>
+    </ion-item>
+    <app-field-errors [field]="registerForm.confirmPassword" />
+
+    <div class="bottom-section">
+      <ion-button type="submit">Register</ion-button>
+    </div>
+  </form>
+</app-auth-shell>

@@ -14,7 +14,14 @@
     "serve:ssr": "node dist/customer/server/server.mjs",
     "watch": "ng build --watch --configuration development",
     "test": "ng test --watch=false",
-    "lint": "ng lint"
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "e2e": "playwright test",
+    "e2e:ui": "playwright test --ui",
+    "e2e:headed": "playwright test --headed --workers=1",
+    "e2e:report": "playwright show-report"
   },
   "private": true,
   "dependencies": {
@@ -52,6 +59,7 @@
     "@capacitor/cli": "^8.5.3",
     "@eslint/js": "^9.39.5",
     "@ionic/angular-toolkit": "^13.0.0",
+    "@playwright/test": "^1.64.0",
     "@tailwindcss/postcss": "^4.3.3",
     "@types/express": "^5.0.1",
     "@types/node": "^22.12.0",
@@ -59,6 +67,7 @@
     "eslint": "^9.39.5",
     "jsdom": "^30.1.2",
     "postcss": "^8.5.29",
+    "prettier": "^3.9.9",
     "tailwindcss": "^4.3.3",
     "typescript": "~6.0.3",
     "typescript-eslint": "^8.71.1",

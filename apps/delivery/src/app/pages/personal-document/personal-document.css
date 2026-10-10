@@ -1,0 +1,122 @@
+.document-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 11px 0px;
+  border: 1px solid #eee;
+  border-radius: 5px;
+}
+
+.document-label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 10px;
+  font-size: 16px;
+}
+
+.document-label ion-icon {
+  font-size: 40px;
+  margin-bottom: 5px;
+}
+
+.clear-button {
+  margin-top: 4px;
+  width: 32%;
+  background-color: #eee;
+  border: none;
+  border-radius: 5px;
+  max-height: 0px;
+  height: 0px;
+  min-height: 35px;
+}
+
+.clear-button:hover {
+  background-color: #ddd;
+}
+
+.preview {
+  max-width: 200px;
+  max-height: 100px;
+  object-fit: cover;
+  margin-bottom: 10px;
+  height: 100px;
+}
+
+.bottom-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 30px;
+}
+
+.bottom-section ion-button {
+  height: 45px;
+  width: 147px; /* Adjust width as needed */
+  font-size: 12px;
+  text-transform: none;
+  --background: #251029;
+  font-weight: 400;
+  --border-radius: 15px !important;
+  color: #fff;
+  margin-bottom: 10px;
+}
+
+.bottom-section span {
+  font-size: 12px;
+  color: #666;
+  text-align: center;
+
+  a {
+    color: #251029;
+    text-decoration: none;
+  }
+}
+
+input[type='file'] {
+  display: none;
+}
+
+ion-button {
+  margin-top: 1rem;
+}
+.bottom-section {
+  margin-top: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  ion-button {
+    height: 45px;
+    width: 147px;
+    font-size: 12px;
+    text-transform: none;
+    --background: #251029;
+    font-weight: 400;
+    --border-radius: 15px !important;
+    color: #fff;
+  }
+
+  span {
+    margin-top: 10px;
+    font-weight: 330;
+
+    a {
+      font-weight: 400;
+    }
+  }
+}
+ion-header {
+  ion-toolbar {
+    padding-top: 10px;
+    height: 60px;
+    --background: white;
+    font-size: 17px;
+    font-weight: 500;
+    --border-color: blue;
+
+    ion-icon {
+      padding: 10px;
+    }
+  }
+}

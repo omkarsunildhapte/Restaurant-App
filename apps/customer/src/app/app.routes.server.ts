@@ -1,28 +1,28 @@
 import { RenderMode, ServerRoute } from '@angular/ssr';
+import { APP_ROUTES } from '@constants/routes.constants';
+
+const main = (segment: string): string => `${APP_ROUTES.MAIN}/${segment}`;
 
 /**
- * Web SSR render modes. Default: RenderMode.Server.
- *
- * The Supabase session lives only in the browser (localStorage), so the server can't know who
- * the user is. authGuard therefore lets the server render guarded routes, and re-checks in the
- * browser after hydration (an anonymous visitor is then sent to /login).
- *
- * RenderMode.Client is used for pages that show or change the signed-in user's own data
- * (account, cart, order, tracking, phone/OTP, delivery address). Rendering them on the server
- * would only produce an empty, user-less shell and then flash, so they render in the browser.
+ * Web SSR render modes (Rule 16). Default: RenderMode.Server. The Supabase session lives only in
+ * the browser, so authGuard lets the server render and re-checks in the browser. RenderMode.Client
+ * for screens that show or change the signed-in user's own data (account, cart, order, tracking,
+ * phone/OTP, delivery address): on the server they would only be an empty, user-less shell.
  */
 export const serverRoutes: ServerRoute[] = [
-  { path: 'main/account', renderMode: RenderMode.Client },
-  { path: 'main/account-information', renderMode: RenderMode.Client },
-  { path: 'main/change-password', renderMode: RenderMode.Client },
-  { path: 'main/payment-method', renderMode: RenderMode.Client },
-  { path: 'main/histroy', renderMode: RenderMode.Client },
-  { path: 'main/add-cart', renderMode: RenderMode.Client },
-  { path: 'main/confirm-order', renderMode: RenderMode.Client },
-  { path: 'main/track', renderMode: RenderMode.Client },
-  { path: 'main/table-confirm', renderMode: RenderMode.Client },
-  { path: 'phonenumber', renderMode: RenderMode.Client },
-  { path: 'otp', renderMode: RenderMode.Client },
-  { path: 'location', renderMode: RenderMode.Client },
-  { path: '**', renderMode: RenderMode.Server },
+  ...[
+    main(APP_ROUTES.ACCOUNT),
+    main(APP_ROUTES.ACCOUNT_INFORMATION),
+    main(APP_ROUTES.CHANGE_PASSWORD),
+    main(APP_ROUTES.PAYMENT_METHODS),
+    main(APP_ROUTES.HISTORY),
+    main(APP_ROUTES.CART),
+    main(APP_ROUTES.CONFIRM_ORDER),
+    main(APP_ROUTES.TRACK),
+    main(APP_ROUTES.TABLE_CONFIRM),
+    APP_ROUTES.PHONE_NUMBER,
+    APP_ROUTES.OTP,
+    APP_ROUTES.LOCATION,
+  ].map((path): ServerRoute => ({ path, renderMode: RenderMode.Client })),
+  { path: APP_ROUTES.WILDCARD, renderMode: RenderMode.Server },
 ];

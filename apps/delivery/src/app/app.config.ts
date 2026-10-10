@@ -1,18 +1,21 @@
-import { ApplicationConfig, provideZonelessChangeDetection } from '@angular/core';
-import { provideHttpClient, withFetch } from '@angular/common/http';
+import { ApplicationConfig, provideBrowserGlobalErrorListeners, provideZonelessChangeDetection } from '@angular/core';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { provideClientHydration } from '@angular/platform-browser';
-import { PreloadAllModules, RouteReuseStrategy, provideRouter, withPreloading } from '@angular/router';
-import { IonicRouteStrategy, provideIonicAngular } from '@ionic/angular';
+import { PreloadAllModules, RouteReuseStrategy, provideRouter, withComponentInputBinding, withPreloading } from '@angular/router';
+import { IonicRouteStrategy } from '@ionic/angular/ionic-route-strategy';
+import { provideIonicAngular } from '@ionic/angular/provide';
+import { routes } from '@app/app.routes';
+import { authTokenInterceptor } from '@interceptors/auth-token/auth-token.interceptor';
 
-import { routes } from './app.routes';
-
+/** Browser (and base server) providers. HttpClient uses the Fetch backend by default (Rule 24). */
 export const appConfig: ApplicationConfig = {
   providers: [
+    provideBrowserGlobalErrorListeners(),
     provideZonelessChangeDetection(),
-    provideRouter(routes, withPreloading(PreloadAllModules)),
+    provideRouter(routes, withPreloading(PreloadAllModules), withComponentInputBinding()),
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     provideIonicAngular(),
-    provideHttpClient(withFetch()),
+    provideHttpClient(withInterceptors([authTokenInterceptor])),
     provideClientHydration(),
   ],
 };

@@ -1,0 +1,57 @@
+/*
+ * Global styles only (Rule 4): Ionic's CSS, Tailwind CSS 4, base resets and the overlay classes
+ * AlertService applies (alerts render outside every component, so they cannot live in one).
+ * Component styles live in each component's own .css file.
+ */
+@import '@ionic/angular/css/core.css';
+@import '@ionic/angular/css/normalize.css';
+@import '@ionic/angular/css/structure.css';
+@import '@ionic/angular/css/typography.css';
+@import '@ionic/angular/css/display.css';
+@import '@ionic/angular/css/padding.css';
+@import '@ionic/angular/css/float-elements.css';
+@import '@ionic/angular/css/text-alignment.css';
+@import '@ionic/angular/css/text-transformation.css';
+@import '@ionic/angular/css/flex-utils.css';
+
+/*
+ * Tailwind CSS v4 with preflight. Preflight lives in @layer base, so Ionic's unlayered CSS above
+ * still wins over it and Ionic components keep their own styling.
+ */
+@import 'tailwindcss';
+
+/* v3 compatibility: v4 changed the default border color from gray-200 to currentColor. */
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentColor);
+  }
+}
+
+/* AlertService (ALERT.CSS_CLASS / ALERT.OK_CSS_CLASS). */
+.alert-success {
+  --background: var(--ion-color-success);
+  --color: white;
+}
+
+.alert-error {
+  --background: var(--ion-color-danger);
+  --color: rgb(56, 18, 18);
+}
+
+.alert-warning {
+  --background: var(--ion-color-warning);
+  --color: white;
+}
+
+.alert-button-ok {
+  --color: white;
+  --background: transparent;
+}
+
+.alert-title.sc-ion-alert-ios {
+  color: #fff !important;
+}

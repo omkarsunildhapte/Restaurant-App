@@ -1,0 +1,51 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button [defaultHref]="backLink"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Track Order</ion-title>
+    <ion-button slot="end" class="view-button" data-testid="track-toggle" (click)="toggleDetails()">
+      {{ showDetails() ? 'View Map' : 'Details' }}
+    </ion-button>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div class="show">
+    <div class="map"></div>
+    @if (showDetails()) {
+      <div class="showmap">
+        <ion-card>
+          <ion-card-content class="flex flex-col">
+            @if (current(); as job) {
+              <div class="flex">
+                <div class="w-3/12">
+                  <div class="h-10 w-10 rounded-full bg-gray-300 flex items-center justify-center">
+                    <span class="text-lg font-bold text-gray-600">{{ initial() }}</span>
+                  </div>
+                </div>
+                <div class="w-9/12">
+                  <p class="text-base font-semibold">{{ job.customerName }}</p>
+                  <p>
+                    <span>Delivery</span> · <span>{{ job.customerPhone }}</span>
+                  </p>
+                </div>
+              </div>
+              <div class="flex flex-col w-full p-4">
+                <div class="flex w-full gap-3 items-center">
+                  <ion-icon class="text-base" name="location-outline" aria-hidden="true"></ion-icon>
+                  <span class="text-bold text-base">Location</span>
+                </div>
+                <p class="pt-3">{{ job.deliveryAddress }}</p>
+              </div>
+            } @else {
+              <p class="empty-state" data-testid="track-empty">
+                {{ delivery.isLoading() ? 'Loading…' : 'No active delivery right now.' }}
+              </p>
+            }
+          </ion-card-content>
+        </ion-card>
+      </div>
+    }
+  </div>
+</ion-content>

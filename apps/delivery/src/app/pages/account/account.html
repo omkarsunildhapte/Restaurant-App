@@ -1,0 +1,84 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Profile</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content class="ion-padding">
+  <ion-card class="profile">
+    <ion-card-header>
+      <ion-card-title class="py-5">
+        <div class="flex justify-center w-full items-center flex-col">
+          <div class="h-20 w-20 rounded-full bg-gray-300 flex items-center justify-center">
+            <span class="text-lg font-bold text-gray-600">{{ initial() }}</span>
+          </div>
+          <span class="text-sm pt-4 font-normal" data-testid="account-name">{{
+            displayName()
+          }}</span>
+        </div>
+      </ion-card-title>
+    </ion-card-header>
+  </ion-card>
+  <ion-card class="mt-8 general">
+    <ion-card-header class="rounded-xs">
+      <ion-card-title>General</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-list [inset]="true">
+        @for (item of page.GENERAL; track item.id) {
+          <ion-item class="pt-9">
+            <div class="flex w-full pb-3">
+              <div class="w-8 flex items-center">
+                <ion-icon class="text-base" [name]="item.icon" aria-hidden="true"></ion-icon>
+              </div>
+              <div class="w-full text-center">
+                <div class="flex flex-col">
+                  <span class="text-sm nav-header">{{ item.header }}</span>
+                  <span class="text-xs nav-sub-header">{{ item.subHeader }}</span>
+                </div>
+              </div>
+            </div>
+          </ion-item>
+        }
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
+  <ion-card class="mt-8 general">
+    <ion-card-header class="rounded-xs">
+      <ion-card-title>More</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-list [inset]="true">
+        @for (item of page.MORE; track item.id) {
+          <ion-item class="pt-9">
+            <div class="flex w-full">
+              <div class="w-8 text-center">
+                <ion-icon class="text-base" [name]="item.icon" aria-hidden="true"></ion-icon>
+              </div>
+              <div class="w-full text-center">
+                <div class="flex flex-col">
+                  <span class="text-sm nav-header">{{ item.header }}</span>
+                  <span class="text-xs nav-sub-header">{{ item.subHeader }}</span>
+                </div>
+              </div>
+            </div>
+          </ion-item>
+        }
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
+  <ion-card class="pt-5">
+    <ion-card-content>
+      <ion-button
+        class="logout"
+        fill="clear"
+        expand="block"
+        data-testid="account-logout"
+        (click)="logout()"
+      >
+        <ion-icon slot="start" name="log-out" aria-hidden="true"></ion-icon>
+        <span class="text-sm nav-header">Log Out</span>
+        <ion-icon slot="end" name="chevron-forward-outline" aria-hidden="true"></ion-icon>
+      </ion-button>
+    </ion-card-content>
+  </ion-card>
+</ion-content>

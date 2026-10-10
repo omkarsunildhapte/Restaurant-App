@@ -1,0 +1,140 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button
+        [defaultHref]="links.CART"
+        icon="chevron-back-outline"
+        text=""
+      ></ion-back-button>
+    </ion-buttons>
+    <ion-title>Confirm Order</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content class="ion-padding" [fullscreen]="true">
+  <ion-card class="mt-8 general">
+    <ion-card-header class="rounded-xs">
+      <ion-card-title>Delivery to</ion-card-title>
+    </ion-card-header>
+    @if (profile(); as user) {
+      <ion-card-content class="flex gap-3">
+        <div class="w-18 px-5">
+          <img src="icon/map.svg" alt="" class="w-full h-full" />
+        </div>
+        <div class="w-full">
+          <p>{{ user.phoneNumber }}</p>
+          <p>{{ copy.DELIVERY_ADDRESS }}</p>
+          <div class="flex pt-3 justify-between items-center">
+            <span class="text-slate-400">
+              <ion-icon name="location" aria-hidden="true" slot="start"></ion-icon>
+              {{ copy.DISTANCE }}
+            </span>
+            <a class="text-primary-light text-xs" [routerLink]="links.LOCATION">Change location</a>
+          </div>
+        </div>
+      </ion-card-content>
+    }
+  </ion-card>
+
+  <ion-card class="mt-8 general">
+    <ion-card-header class="rounded-xs">
+      <ion-card-title>Delivery to</ion-card-title>
+    </ion-card-header>
+    <ion-card-content class="flex gap-3 mains">
+      <ion-list class="summary">
+        @for (product of cart.value(); track product.id) {
+          <ion-item class="order-list">
+            <div class="flex flex-col">
+              <div class="flex w-full py-3">
+                <div class="w-6/12 px-5">
+                  <ion-img [src]="product.image" alt="" class="w-full h-full"></ion-img>
+                </div>
+                <div class="w-full flex flex-col justify-end">
+                  <p class="itemheader">{{ product.name }}</p>
+                  <div class="flex items-center justify-between">
+                    <span class="text-center pt-3 px-5 text-sm text-on-dark-accent">{{
+                      product.totalNumber
+                    }}</span>
+                    <span class="text-center pt-3 px-5 text-sm text-on-dark-accent"
+                      >{{ currency }} {{ lineTotal(product) }}</span
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+          </ion-item>
+          <ion-item>
+            <div class="w-8/12">
+              <span class="text-sm">Subtotal ({{ product.subItem.length }} items)</span>
+            </div>
+            <div class="w-4/12 text-center">
+              <span class="text-sm">{{ currency }} {{ addOnsTotal(product) }}</span>
+            </div>
+          </ion-item>
+        }
+        <ion-item>
+          <div class="w-8/12"><span class="text-sm">Delivery</span></div>
+          <div class="w-4/12 text-center">
+            <span class="text-sm">{{ currency }} {{ copy.DELIVERY_CHARGE }}</span>
+          </div>
+        </ion-item>
+        <ion-item>
+          <div class="w-8/12"><span class="text-sm">Voucher</span></div>
+          <div class="w-4/12 text-center">
+            <span class="text-sm">{{ copy.NO_VOUCHER }}</span>
+          </div>
+        </ion-item>
+        <ion-item>
+          <div class="w-8/12"><span class="text-base">Total</span></div>
+          <div class="w-4/12 text-center">
+            <span class="text-base text-on-dark-accent text-nowrap"
+              >{{ currency }} {{ total() }}</span
+            >
+          </div>
+        </ion-item>
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card class="mt-8 general">
+    <ion-card-content class="flex gap-3">
+      <div class="w-3/12 px-6">
+        <img src="icon/percentage.svg" alt="" class="w-full h-full" />
+      </div>
+      <div class="w-7/12"><span>Add Voucher</span></div>
+      <div class="w-2/12"><span class="text-sm text-on-dark-accent">Add</span></div>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card class="mt-8 general">
+    <ion-card-content>
+      <div class="p-2 flex flex-wrap gap-3 justify-center">
+        @for (option of copy.PAYMENT_OPTIONS; track option.type) {
+          <div class="payment-tile flex gap-3 p-3 rounded-lg" [class]="option.tileClass">
+            <div class="w-3/12">
+              @if (option.image) {
+                <img [src]="option.image" alt="" />
+              } @else if (option.icon) {
+                <ion-icon
+                  [name]="option.icon"
+                  class="text-xl text-black"
+                  aria-hidden="true"
+                ></ion-icon>
+              }
+            </div>
+            <div class="w-full flex flex-col">
+              <span [class]="option.amountClass">{{ currency }} {{ total() }}</span>
+              <span class="text-sm" [class]="option.labelClass">{{ option.label }}</span>
+            </div>
+          </div>
+        }
+      </div>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card>
+    <ion-button expand="block" shape="round" (click)="placeOrder()">Confirm</ion-button>
+  </ion-card>
+  @if (cart.isLoading()) {
+    <app-loading />
+  }
+</ion-content>

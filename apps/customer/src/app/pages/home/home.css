@@ -1,0 +1,101 @@
+ion-header {
+  background: transparent;
+  z-index: unset;
+}
+ion-header ion-toolbar {
+  height: 74px;
+  border-bottom-left-radius: 47px;
+  border-bottom-right-radius: 47px;
+  --background: var(--color-primary);
+}
+ion-header ion-toolbar div .first {
+  padding: 12px 10px;
+}
+ion-header ion-toolbar div .first img {
+  height: 36px;
+  border-radius: 50%;
+}
+ion-header ion-toolbar div .searchbar-search-icon.sc-ion-searchbar-ios {
+  color: #fff;
+}
+ion-header ion-toolbar div .searchbar-clear-icon.sc-ion-searchbar-ios {
+  color: #fff;
+}
+ion-header ion-toolbar div .second {
+  align-items: center;
+}
+ion-header ion-toolbar div .second ion-icon {
+  font-size: 36px;
+  padding: 12px 10px;
+  color: #fff;
+}
+
+ion-content .filterButton {
+  min-height: 36px;
+  width: 85px;
+  display: flex;
+  justify-content: space-between;
+  margin: 0px;
+  --padding-start: 2px !important;
+  --padding-end: 4px !important;
+  --background: var(--color-dark);
+}
+ion-content .filterButton ion-icon {
+  font-size: 16px;
+  margin: 0px 8px;
+}
+ion-content .general ion-card-header {
+  border-bottom: 0.1px solid;
+}
+ion-content .general ion-card-header .mains {
+  font-weight: 700;
+  font-size: 17px;
+  color: #000;
+}
+ion-content .general ion-card-content .list-menu {
+  padding: 15px;
+  border-radius: 23%;
+  background: var(--color-primary-light);
+  height: 3.8rem;
+}
+ion-content .general ion-card-content .items {
+  border-radius: 21%;
+  background: var(--color-primary-light);
+  margin: 15px 0px;
+  width: 71%;
+  display: flex;
+  justify-content: center;
+  padding: 10px 0px;
+}
+ion-content .general ion-card-content ion-list {
+  padding: 0px;
+  margin: 0px;
+}
+ion-content .general ion-card-content ion-list ion-item {
+  --padding-start: 0px;
+  --inner-padding-end: 0px;
+  width: 100%;
+}
+
+.thumb {
+  width: 2.5rem;
+}
+
+.combo-thumb {
+  width: 2.4rem;
+  height: 2.5rem;
+}
+
+.star {
+  padding: 0 18px;
+}
+
+.empty-state {
+  font-size: 0.85rem;
+  opacity: 0.7;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}

@@ -1,0 +1,10 @@
+<ion-tabs class="tab-bottom">
+  <ion-tab-bar slot="bottom" class="tab-bottom">
+    @for (item of items; track item.tab) {
+      <ion-tab-button class="tab-back" [tab]="item.tab" [class.active]="activeTab() === item.tab">
+        <ion-icon [name]="item.icon" aria-hidden="true"></ion-icon>
+        <ion-label>{{ item.label }}</ion-label>
+      </ion-tab-button>
+    }
+  </ion-tab-bar>
+</ion-tabs>

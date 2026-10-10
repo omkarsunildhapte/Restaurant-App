@@ -185,7 +185,8 @@ Angular 22 extends built-in sanitization to dynamic `href`/`xlink:href` on SVG `
 
 
 ## 27. Ionic & Capacitor (customer, delivery, staff)
-- Ionic 9 is standalone: import each `Ion*` component and controller from `@ionic/angular` (there is no `/standalone` subpath and no `IonicModule`). `provideIonicAngular()` lives in `app.config.ts`; the server config uses `importProvidersFrom(IonicServerModule)`.
+- Ionic 9 is standalone: there is no `IonicModule` and no `/standalone` subpath. Controllers (`AlertController`, `ToastController` …) and `provideIonicAngular()` come from `@ionic/angular`; components come from their own entry points (next point). `provideIonicAngular()` lives in `app.config.ts`; the server config uses `importProvidersFrom(IonicServerModule)`.
+- **Import each Ion* component from its own entry point** (e.g. `import { IonButton } from '@ionic/angular/ion-button'`), never from the `@ionic/angular` barrel: the barrel pulls ~700 kB of `@ionic/core` into the initial bundle (measured in `apps/delivery`: 1.39 MB → 830 kB).
 - Icons are registered once in `src/app/icons.ts` via `addIcons()`, which is loaded through the build's `polyfills` (written without `.ts`), so server-rendered `<ion-icon>` resolves before code-split chunks run. Register only icons that are used.
 - Capacitor plugins are called only on the browser side and behind a service (`@services/location`, `@services/push` …), never directly from a component. Check `Capacitor.isNativePlatform()` before native-only APIs.
 - App identity: `com.thaliyo.app` (customer), `com.thaliyo.rider` (delivery), `com.thaliyo.staff` (staff). Static files live in `public/`, served from the site root.

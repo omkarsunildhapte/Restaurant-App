@@ -1,0 +1,134 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button
+        [defaultHref]="links.HOME"
+        icon="chevron-back-outline"
+        text=""
+      ></ion-back-button>
+    </ion-buttons>
+    <ion-title>Track Order</ion-title>
+    <ion-button slot="end" class="view-button" (click)="showDetails.set(!showDetails())">
+      {{ showDetails() ? 'View Map' : 'Details' }}
+    </ion-button>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  @if (orders.isLoading()) {
+    <app-loading />
+  } @else if (order(); as current) {
+    <div class="show">
+      <div class="map"></div>
+      @if (showDetails()) {
+        <div class="showmap">
+          <ion-card slot="end">
+            <ion-card-header class="rounded-xs flex">
+              <div class="flex">
+                <div class="w-2/12 flex justify-center items-center mx-3">
+                  <ion-icon name="cart" class="text-2xl" aria-hidden="true"></ion-icon>
+                </div>
+                <div class="w-full">
+                  <p class="text-base font-bold">Delivery Your Order</p>
+                  <p>{{ copy.ETA }}</p>
+                </div>
+              </div>
+            </ion-card-header>
+            @if (!expanded()) {
+              <ion-card-content class="flex">
+                <div class="w-9/12">
+                  <p class="order-title">{{ current.items[0]?.name }}</p>
+                  <p class="order-meta">
+                    <span class="text-sm text-bold">{{ currency }} {{ current.totalValue }}</span> .
+                    <span>{{ current.items.length }} items</span> .
+                    <span>{{ current.paymentType }}</span>
+                  </p>
+                </div>
+                <div class="w-3/12">
+                  <ion-button (click)="expanded.set(true)">Detail</ion-button>
+                </div>
+              </ion-card-content>
+            } @else {
+              <ion-card-content>
+                @for (item of current.items; track item.name) {
+                  <ion-item class="line">
+                    <div class="flex flex-col w-full">
+                      <div class="flex w-full py-3">
+                        <div class="w-3/12">
+                          <ion-img class="line-img w-full h-full" [src]="item.image"></ion-img>
+                        </div>
+                        <div class="w-6/12 px-3">
+                          <p class="text-base">{{ item.name }}</p>
+                        </div>
+                        <div class="w-3/12">
+                          <span>{{ currency }} {{ item.amount }}</span>
+                        </div>
+                      </div>
+                      @for (sub of item.subItems; track sub.name) {
+                        <div class="flex w-full">
+                          <div class="w-3/12">
+                            <ion-img class="line-img w-full h-full" [src]="sub.image"></ion-img>
+                          </div>
+                          <div class="w-6/12 px-3">
+                            <p>{{ sub.name }}</p>
+                          </div>
+                          <div class="w-3/12">
+                            <span>{{ currency }} {{ sub.amount }}</span>
+                          </div>
+                        </div>
+                      }
+                    </div>
+                  </ion-item>
+                }
+                <div class="w-full">
+                  <ion-button (click)="expanded.set(false)">Close Detail</ion-button>
+                </div>
+              </ion-card-content>
+            }
+          </ion-card>
+
+          <ion-card slot="end">
+            <ion-card-header class="rounded-xs flex flex-col">
+              <div class="flex">
+                <div class="w-2/12 flex justify-center items-center mx-3">
+                  <ion-icon name="location" class="text-base" aria-hidden="true"></ion-icon>
+                </div>
+                <div class="w-full">
+                  <p class="text-sm font-bold">Restaurant - {{ copy.RESTAURANT_ADDRESS }}</p>
+                </div>
+              </div>
+              <div class="flex mt-3">
+                <div class="w-2/12 flex justify-center items-center mx-3">
+                  <ion-icon name="location" class="text-base" aria-hidden="true"></ion-icon>
+                </div>
+                <div class="w-full">
+                  <p class="text-sm font-bold">You - {{ copy.CUSTOMER_ADDRESS }}</p>
+                </div>
+              </div>
+            </ion-card-header>
+            <ion-card-content class="flex">
+              <div class="w-3/12">
+                <div class="h-20 w-20 rounded-full bg-gray-300 flex items-center justify-center">
+                  <span class="text-lg font-bold text-gray-600">{{ copy.COURIER_INITIAL }}</span>
+                </div>
+              </div>
+              <div class="w-9/12">
+                <p class="text-base font-semibold">{{ copy.COURIER_NAME }}</p>
+                <p>
+                  <span>Delivery</span> . <span>{{ copy.COURIER_PHONE_LABEL }}</span>
+                </p>
+              </div>
+              <div class="w-3/12">
+                <ion-button class="call" [href]="courierTel" aria-label="Call the courier">
+                  <ion-icon class="text-sm" name="call" aria-hidden="true"></ion-icon>
+                </ion-button>
+              </div>
+            </ion-card-content>
+          </ion-card>
+        </div>
+      }
+    </div>
+  } @else {
+    <p class="empty-state">No order to track yet.</p>
+  }
+</ion-content>

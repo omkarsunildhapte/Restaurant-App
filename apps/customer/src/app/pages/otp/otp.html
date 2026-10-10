@@ -1,0 +1,19 @@
+<app-auth-shell title="Verify Number" [loading]="otpForm().submitting()">
+  <form [formRoot]="otpForm" novalidate>
+    <ion-item>
+      <ion-icon name="mail" aria-hidden="true"></ion-icon>
+      <ion-input
+        inputmode="numeric"
+        placeholder="Enter Your Otp"
+        aria-label="OTP"
+        autocomplete="one-time-code"
+        [formField]="otpForm.otp"
+      ></ion-input>
+    </ion-item>
+    <app-field-errors [field]="otpForm.otp" />
+
+    <div class="bottom-section">
+      <ion-button type="submit">Add Number</ion-button>
+    </div>
+  </form>
+</app-auth-shell>

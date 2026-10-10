@@ -1,0 +1,180 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button
+        [defaultHref]="links.TABLE"
+        icon="chevron-back-outline"
+        text=""
+      ></ion-back-button>
+    </ion-buttons>
+    <ion-title>Table Booking</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  @if (table.value(); as current) {
+    <ion-card>
+      <ion-card-content>
+        @for (img of current.bannerImages; track img.url) {
+          <div class="h-36">
+            <ion-img [src]="img.url" class="w-full h-full" alt=""></ion-img>
+          </div>
+        }
+        <div class="w-full">
+          <div class="flex flex-wrap justify-between">
+            <span class="text-base">{{ current.itemName }}</span>
+            <span>{{ currency }} {{ current.price }}</span>
+          </div>
+          <p class="text-sm">{{ current.description }}</p>
+        </div>
+      </ion-card-content>
+    </ion-card>
+  }
+  <ion-card class="mains">
+    <ion-card-content>
+      <ion-segment [value]="segment()" (ionChange)="onSegmentChange($event)">
+        @for (option of copy.SEGMENTS; track option.value) {
+          <ion-segment-button [value]="option.value">
+            <ion-label>{{ option.label }}</ion-label>
+          </ion-segment-button>
+        }
+      </ion-segment>
+      @let tab = segment();
+      @switch (tab) {
+        @case ('review') {
+          <ion-list>
+            @for (review of reviews; track review.id) {
+              <ion-item>
+                <app-review-card [review]="review" />
+              </ion-item>
+            }
+          </ion-list>
+        }
+        @case ('booking') {
+          <div>
+            <div class="flex justify-center items-center text-xl pt-3">Book a Table</div>
+            <form [formRoot]="bookingForm" novalidate>
+              <ion-list>
+                <ion-item>
+                  <div class="w-full flex justify-between py-2">
+                    <p class="itemheader">Guests</p>
+                    <div class="flex items-center">
+                      <app-quantity-stepper
+                        [value]="bookingForm.guests().value()"
+                        label="guests"
+                        (changed)="changeGuests($event)"
+                      />
+                    </div>
+                  </div>
+                </ion-item>
+                <app-field-errors [field]="bookingForm.guests" />
+
+                <ion-item>
+                  <div class="py-2 flex justify-between w-full">
+                    <div><p class="itemheader">Select Date</p></div>
+                    <span>{{ bookingForm.date().value() }}</span>
+                    <div class="flex items-center">
+                      <ion-button
+                        slot="end"
+                        aria-label="Pick a date"
+                        (click)="datePickerOpen.set(true)"
+                      >
+                        <ion-icon name="calendar" aria-hidden="true"></ion-icon>
+                      </ion-button>
+                    </div>
+                  </div>
+                </ion-item>
+                <app-field-errors [field]="bookingForm.date" />
+
+                @if (bookingForm.date().value()) {
+                  <ion-item>
+                    <div class="flex flex-col">
+                      <div class="py-2 flex justify-between w-full">
+                        <p class="itemheader">Select Time</p>
+                      </div>
+                      <div class="flex flex-wrap">
+                        @for (slot of slots(); track slot) {
+                          <button
+                            type="button"
+                            class="w-3/12 p-2 time-slot"
+                            [class.active]="slot === bookingForm.time().value()"
+                            (click)="pickTime(slot)"
+                          >
+                            {{ slot }}
+                          </button>
+                        }
+                      </div>
+                    </div>
+                  </ion-item>
+                }
+                <app-field-errors [field]="bookingForm.time" />
+
+                <ion-item>
+                  <ion-input
+                    placeholder="Enter the name"
+                    aria-label="First name"
+                    autocomplete="given-name"
+                    [formField]="bookingForm.firstName"
+                  ></ion-input>
+                </ion-item>
+                <app-field-errors [field]="bookingForm.firstName" />
+                <ion-item>
+                  <ion-input
+                    placeholder="Enter the surname"
+                    aria-label="Last name"
+                    autocomplete="family-name"
+                    [formField]="bookingForm.lastName"
+                  ></ion-input>
+                </ion-item>
+                <app-field-errors [field]="bookingForm.lastName" />
+                <ion-item>
+                  <ion-input
+                    type="email"
+                    placeholder="Enter the email"
+                    aria-label="Email"
+                    autocomplete="email"
+                    [formField]="bookingForm.email"
+                  ></ion-input>
+                </ion-item>
+                <app-field-errors [field]="bookingForm.email" />
+                <ion-item lines="none">
+                  <ion-textarea
+                    placeholder="Additional notes"
+                    aria-label="Notes"
+                    [formField]="bookingForm.notes"
+                  ></ion-textarea>
+                </ion-item>
+              </ion-list>
+              <div class="flex gap-4 pt-4">
+                <ion-button class="tall" type="submit" shape="round">Book Table</ion-button>
+              </div>
+            </form>
+          </div>
+        }
+        @default never;
+      }
+    </ion-card-content>
+  </ion-card>
+
+  <ion-modal
+    class="datetime-modal"
+    [isOpen]="datePickerOpen()"
+    (didDismiss)="datePickerOpen.set(false)"
+  >
+    <ng-template>
+      <ion-content>
+        <ion-datetime
+          size="cover"
+          presentation="date"
+          [showDefaultButtons]="true"
+          [showDefaultTimeLabel]="false"
+          cancelText="Close"
+          doneText="Submit"
+          (ionChange)="onDateChange($event)"
+        ></ion-datetime>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
+  @if (table.isLoading()) {
+    <app-loading />
+  }
+</ion-content>

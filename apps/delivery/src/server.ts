@@ -1,79 +1,44 @@
-import {
-  AngularNodeAppEngine,
-  createNodeRequestHandler,
-  isMainModule,
-  writeResponseToNodeResponse,
-} from '@angular/ssr/node';
+import { AngularNodeAppEngine, createNodeRequestHandler, isMainModule, writeResponseToNodeResponse } from '@angular/ssr/node';
 import express from 'express';
 import { join } from 'node:path';
+import { SERVER } from '@constants/server.constants';
 
-const browserDistFolder = join(import.meta.dirname, '../browser');
+const browserDistFolder = join(import.meta.dirname, SERVER.BROWSER_DIST);
 
-const app = express();
 /**
- * Host headers the SSR engine accepts (SSRF protection). Comma-separated NG_ALLOWED_HOSTS,
- * e.g. NG_ALLOWED_HOSTS=delivery.example.com,delivery-staging.example.com. Merged with
+ * Host headers the SSR engine accepts (SSRF protection): comma-separated NG_ALLOWED_HOSTS, e.g.
+ * NG_ALLOWED_HOSTS=delivery.example.com,delivery-staging.example.com. Merged with
  * security.allowedHosts in angular.json.
  */
-const allowedHosts = (process.env['NG_ALLOWED_HOSTS'] ?? 'localhost,127.0.0.1')
-  .split(',')
+const allowedHosts = (process.env[SERVER.ALLOWED_HOSTS_ENV] ?? SERVER.DEFAULT_ALLOWED_HOSTS)
+  .split(SERVER.ALLOWED_HOSTS_SEPARATOR)
   .map((host) => host.trim())
   .filter(Boolean);
 
+const app = express();
 const angularApp = new AngularNodeAppEngine({ allowedHosts });
 
-/**
- * Example Express Rest API endpoints can be defined here.
- * Uncomment and define endpoints as necessary.
- *
- * Example:
- * ```ts
- * app.get('/api/{*splat}', (req, res) => {
- *   // Handle API request
- * });
- * ```
- */
+/** Static files from /browser (content-hashed, so long-lived caching is safe). */
+app.use(express.static(browserDistFolder, { maxAge: SERVER.STATIC_MAX_AGE, index: false, redirect: false }));
 
-/**
- * Serve static files from /browser
- */
-app.use(
-  express.static(browserDistFolder, {
-    maxAge: '1y',
-    index: false,
-    redirect: false,
-  }),
-);
-
-/**
- * Handle all other requests by rendering the Angular application.
- */
+/** Everything else is rendered by Angular. */
 app.use((req, res, next) => {
   angularApp
     .handle(req)
-    .then((response) =>
-      response ? writeResponseToNodeResponse(response, res) : next(),
-    )
+    .then((response) => (response ? writeResponseToNodeResponse(response, res) : next()))
     .catch(next);
 });
 
-/**
- * Start the server if this module is the main entry point, or it is ran via PM2.
- * The server listens on the port defined by the `PORT` environment variable, or defaults to 4003
- * (4000 is the backend API).
- */
-if (isMainModule(import.meta.url) || process.env['pm_id']) {
-  const port = process.env['PORT'] || 4003;
+/** Starts the server when run directly (or under PM2) on PORT, default 4003 (4000 is the API). */
+if (isMainModule(import.meta.url) || process.env[SERVER.PM2_ENV]) {
+  const port = process.env[SERVER.PORT_ENV] || SERVER.DEFAULT_PORT;
   app.listen(port, (error) => {
     if (error) {
       throw error;
     }
-
     console.log(`Node Express server listening on http://localhost:${port}`);
   });
 }
 
-/**
- * Request handler used by the Angular CLI (for dev-server and during build) or Firebase Cloud Functions.
- */
+/** Request handler used by the Angular CLI (dev-server and build). */
 export const reqHandler = createNodeRequestHandler(app);

@@ -1,17 +1,17 @@
 # Required Changes to the Existing Code
 
-What must change in the current repo (`Admin/`, `users/`, `deilvey/`, `templates/modern-cafe`) to reach the platform in [ROADMAP.md](ROADMAP.md). Tick items as they are done.
+What must change in the current repo (`apps/business-panel` ex-`Admin/`, `apps/customer` ex-`users/`, `apps/delivery` ex-`deilvey/`, `templates/modern-cafe`) to reach the platform in [ROADMAP.md](ROADMAP.md). Tick items as they are done.
 
 - **Last updated:** 2026-10-10
 
 ---
 
 ## 1. Whole project (Phase 0–1)
-- [ ] Upgrade Angular 17 / Ionic 7 / Capacitor 6 → Angular 22 / Ionic 8 / Capacitor 7
-- [ ] Restructure into 4 apps + backend: web console, staff app, customer app, delivery app
-- [ ] Backend API; move data from Firestore to Postgres (Supabase); Firebase only for push
+- [x] Upgrade Angular 17 / Ionic 7 / Capacitor 6 → Angular 22.2 / Ionic 9 / Capacitor 8 (SSR on web, zoneless, Tailwind 4, Vitest, standalone; PrimeNG, Karma/Jasmine and zone.js removed)
+- [x] Restructure into apps + backend: `apps/business-panel`, `apps/super-admin`, `apps/staff`, `apps/customer`, `apps/delivery`, `backend/`, `supabase/` (see [REPO-LAYOUT.md](REPO-LAYOUT.md))
+- [ ] Backend API; move data from Firestore to Postgres (Supabase); Firebase only for push *(backend, Supabase Auth and FCM-only Firebase done; Business panel data on Supabase; customer and delivery data calls are stubs until Phases 8 and 5)*
 - [ ] Security: check which Firestore rules are live (repo rules deny all), then role-based access
-- [ ] Dev, staging and production environments; secrets out of code
+- [ ] Dev, staging and production environments; secrets out of code *(dev works locally; staging/production configs exist with placeholders until the cloud projects exist; service-role key only in `backend/.env`)*
 
 ## 2. Data, multi-restaurant (Phase 1)
 - [x] Tenant (brand) → outlet structure
@@ -24,7 +24,7 @@ What must change in the current repo (`Admin/`, `users/`, `deilvey/`, `templates
 - [ ] Per-restaurant menu: categories, variants, add-ons, GST rates (foods, beverages, combos) *(built; wiring and browser test pending)*
 - [ ] Per-outlet table setup *(built; wiring and browser test pending)*
 - [ ] Order statuses (new → preparing → ready → served/delivered) and filters
-- [ ] Chats page: build or remove (currently empty)
+- [x] Chats page: removed with the old `/main` pages
 - [ ] Dashboard with real sales, best sellers, peak hours per outlet *(built; wiring and browser test pending)*
 - [ ] Staff management (invite, role, outlet) *(built; wiring and browser test pending)*
 - [ ] Onboarding setup wizard *(built; wiring and browser test pending)*
@@ -36,7 +36,7 @@ What must change in the current repo (`Admin/`, `users/`, `deilvey/`, `templates
 - [ ] POS: GST bills, discounts, split bills, thermal printer, cash/UPI/card, day close, offline mode
 
 ## 5. `deilvey/` → Delivery app (Phase 5)
-- [ ] Move folder `deilvey/` → `apps/delivery/`
+- [x] Move folder `deilvey/` → `apps/delivery/`
 **First (5a): own delivery**
 - [ ] Link riders to a restaurant (own riders); platform pool later
 - [ ] Online/offline, accept/reject, pickup → on the way → delivered
@@ -61,7 +61,7 @@ What must change in the current repo (`Admin/`, `users/`, `deilvey/`, `templates
 - [ ] Build the other 9 templates on the same structure
 
 ## 8. Before launch
-- [ ] Product name and domain
+- [x] Product name: **Thaliyo** ([`brand/`](../brand/README.md)); domain later, free subdomains for now
 - [ ] DeskDyne / Yagy Tech agreement check (before corporate mode)
 - [ ] Verify the FSSAI e-commerce licence rule for restaurants with their own ordering
 - [ ] Privacy, terms and refund pages for the platform and each restaurant site
@@ -69,6 +69,9 @@ What must change in the current repo (`Admin/`, `users/`, `deilvey/`, `templates
 ---
 
 ## Update log
+
+### 2026-10-10 (Phase 0)
+- Ticked the upgrade, repo layout, chats removal, delivery folder move and product name. Added the Thaliyo coding rules (`.agents/`, adapted from the Meal Sehat admin standard) that every Angular app now follows.
 
 ### 2026-10-10 (Phase 1)
 - Ticked sections 2 and 3 where done (data model, roles, Super Admin/Business split). Business panel menu, tables, staff, dashboard and wizard are built and marked pending until they are wired and browser-tested.

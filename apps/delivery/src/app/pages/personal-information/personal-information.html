@@ -1,0 +1,85 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button [defaultHref]="backLink"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Personal Details</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-card>
+    <ion-card-content>
+      <form [formRoot]="personalForm" novalidate>
+        @for (field of page.FIELDS; track field.key) {
+          <ion-item>
+            @switch (field.kind) {
+              @case ('text') {
+                <ion-input
+                  [placeholder]="field.placeholder"
+                  [attr.aria-label]="field.placeholder"
+                  [attr.data-testid]="'personal-' + field.key"
+                  [formField]="personalForm[field.key]"
+                ></ion-input>
+              }
+              @case ('date') {
+                <div class="relative">
+                  <ion-input
+                    [placeholder]="field.placeholder"
+                    [attr.aria-label]="field.placeholder"
+                    [formField]="personalForm[field.key]"
+                  ></ion-input>
+                  <ion-button
+                    class="date-button absolute top-1 right-1"
+                    slot="end"
+                    aria-label="Pick date of birth"
+                    [id]="page.DATE_TRIGGER_ID"
+                  >
+                    <ion-icon name="calendar" aria-hidden="true"></ion-icon>
+                  </ion-button>
+                </div>
+              }
+              @case ('select') {
+                <ion-select
+                  [placeholder]="field.placeholder"
+                  [attr.aria-label]="field.placeholder"
+                  [formField]="personalForm[field.key]"
+                >
+                  @for (group of page.BLOOD_GROUPS; track group) {
+                    <ion-select-option [value]="group">{{ group }}</ion-select-option>
+                  }
+                </ion-select>
+              }
+              @default never;
+            }
+          </ion-item>
+          <app-field-errors
+            [show]="personalForm[field.key]().touched()"
+            [errors]="personalForm[field.key]().errors()"
+          />
+        }
+        <div class="bottom-section">
+          <ion-button type="submit" data-testid="personal-submit">Register</ion-button>
+        </div>
+      </form>
+    </ion-card-content>
+  </ion-card>
+  <ion-modal class="datetime-modal" [trigger]="page.DATE_TRIGGER_ID">
+    <ng-template>
+      <ion-content>
+        <ion-datetime
+          size="cover"
+          presentation="date"
+          [showDefaultButtons]="true"
+          [showDefaultTimeLabel]="false"
+          cancelText="Close"
+          doneText="Submit"
+          (ionChange)="onDateChange($event)"
+        ></ion-datetime>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
+  @if (personalForm().submitting()) {
+    <app-loader />
+  }
+</ion-content>

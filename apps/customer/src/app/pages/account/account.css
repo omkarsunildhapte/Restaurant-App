@@ -1,0 +1,38 @@
+ion-header ion-toolbar {
+  padding-top: 10px;
+  height: 60px;
+  --background: white;
+  font-size: 17px;
+  font-weight: 500;
+  --border-color: blue;
+}
+ion-header ion-toolbar ion-icon {
+  padding: 10px;
+}
+
+ion-content .profile {
+  margin: 0px;
+  height: 180px;
+  box-shadow: none;
+  border-bottom: 1px solid;
+}
+ion-content .general ion-card-header {
+  border-bottom: 0.1px solid;
+}
+ion-content .general ion-card-header ion-card-title {
+  font-size: 14px;
+}
+ion-content .general ion-card-content ion-list {
+  padding: 0px;
+  margin: 0px;
+}
+ion-content .nav-header {
+  text-align: start;
+  padding: 0px 25px;
+  font-weight: 600;
+}
+ion-content .nav-sub-header {
+  text-align: start;
+  padding: 0px 25px;
+  color: gray;
+}

@@ -1,0 +1,95 @@
+<div class="background-pic">
+  <ion-header>
+    <ion-toolbar>
+      <ion-buttons slot="start">
+        <ion-back-button
+          [defaultHref]="links.ACCOUNT"
+          icon="chevron-back-outline"
+          text=""
+        ></ion-back-button>
+      </ion-buttons>
+      <ion-title>Location</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  <ion-content>
+    <ion-card>
+      <ion-card-header>
+        <div class="flex justify-center">
+          <img class="hero" src="icon/locationMap.svg" alt="" />
+        </div>
+        <ion-card-title>Get Location</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-item [button]="true" [detail]="false" [disabled]="busy()" (click)="useMyLocation()">
+          <div class="showValues">
+            <ion-icon slot="start" name="location" aria-hidden="true"></ion-icon>
+            <span>{{ busy() ? 'Getting your location...' : 'Use my location' }}</span>
+          </div>
+        </ion-item>
+
+        <form [formRoot]="searchForm" novalidate>
+          <ion-item>
+            <ion-input
+              placeholder="Search your location"
+              aria-label="Search address"
+              enterkeyhint="search"
+              [formField]="searchForm.query"
+            ></ion-input>
+            <ion-button
+              slot="end"
+              fill="clear"
+              type="submit"
+              aria-label="Search address"
+              [disabled]="search.isLoading()"
+            >
+              <ion-icon name="search" slot="icon-only" aria-hidden="true"></ion-icon>
+            </ion-button>
+          </ion-item>
+        </form>
+
+        @if (message(); as text) {
+          <p class="error-message" role="status">{{ text }}</p>
+        }
+        @if (results().length) {
+          <ion-list>
+            @for (result of results(); track result.placeId) {
+              <ion-item [button]="true" (click)="select(result)">
+                <ion-label class="ion-text-wrap">{{ result.displayName }}</ion-label>
+              </ion-item>
+            }
+          </ion-list>
+          <p class="attribution">{{ attribution() ?? osmFallback }}</p>
+        }
+
+        <form novalidate>
+          <ion-item>
+            <ion-input
+              label="Address"
+              labelPlacement="stacked"
+              placeholder="Enter Your location"
+              autocomplete="street-address"
+              [formField]="addressForm.line"
+            ></ion-input>
+          </ion-item>
+          @for (field of copy.ADDRESS_FIELDS; track field.key) {
+            <ion-item>
+              <ion-input
+                [label]="field.label"
+                labelPlacement="stacked"
+                [autocomplete]="field.autocomplete"
+                [formField]="addressForm[field.key]"
+              ></ion-input>
+            </ion-item>
+          }
+        </form>
+        @if (attribution(); as text) {
+          <p class="attribution">{{ text }}</p>
+        }
+
+        <div class="bottom-section">
+          <ion-button [routerLink]="links.HOME">Add Location</ion-button>
+        </div>
+      </ion-card-content>
+    </ion-card>
+  </ion-content>
+</div>

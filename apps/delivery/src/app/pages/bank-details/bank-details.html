@@ -1,0 +1,36 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button [defaultHref]="backLink"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Bank Details</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-card>
+    <ion-card-content>
+      <form [formRoot]="bankForm" novalidate>
+        <ion-item>
+          <ion-input
+            placeholder="Please enter UPI ID (name@bank)"
+            aria-label="UPI ID"
+            autocomplete="off"
+            data-testid="bank-upi"
+            [formField]="bankForm.upiId"
+          ></ion-input>
+        </ion-item>
+        <app-field-errors
+          [show]="bankForm.upiId().touched()"
+          [errors]="bankForm.upiId().errors()"
+        />
+        <div class="bottom-section">
+          <ion-button type="submit" data-testid="bank-submit">Save</ion-button>
+        </div>
+      </form>
+    </ion-card-content>
+  </ion-card>
+  @if (saved.isLoading() || bankForm().submitting()) {
+    <app-loader />
+  }
+</ion-content>

@@ -1,0 +1,18 @@
+.tab-back {
+  background-color: var(--color-primary);
+  color: white;
+}
+
+.tab-bottom {
+  border-top-right-radius: 29px;
+  border-top-left-radius: 29px;
+}
+
+ion-tab-bar.tab-bottom {
+  border: 2px solid var(--color-primary);
+}
+
+.active {
+  background: white;
+  color: var(--color-dark);
+}

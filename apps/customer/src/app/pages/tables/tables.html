@@ -1,0 +1,49 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Table Booking</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <ion-card>
+    <ion-card-content>
+      <div class="h-36">
+        <img [src]="copy.HERO_IMAGE" class="w-full h-full" alt="" />
+      </div>
+    </ion-card-content>
+  </ion-card>
+  <ion-card class="mt-8 general">
+    <ion-card-content>
+      <div class="flex flex-wrap">
+        @for (table of tables.value(); track table.id) {
+          <a
+            class="w-5/12 m-3 flex-col flex"
+            [routerLink]="detailsLink"
+            [queryParams]="{ id: table.id }"
+          >
+            <div #carousel class="swiper-container">
+              <div class="swiper-wrapper">
+                @for (img of table.bannerImages; track img.url) {
+                  <div class="swiper-slide">
+                    <img [src]="img.url" alt="" class="w-full h-full" />
+                  </div>
+                }
+              </div>
+            </div>
+            <span class="pt-3 text-sm font-bold">{{ table.itemName }}</span>
+            <div class="flex justify-between">
+              <span class="text-xs">{{ currency }} {{ table.price }}</span>
+              <span class="text-xs">{{ table.availability }}</span>
+            </div>
+          </a>
+        } @empty {
+          @if (!tables.isLoading()) {
+            <p class="empty-state">No tables to book yet.</p>
+          }
+        }
+      </div>
+    </ion-card-content>
+  </ion-card>
+  @if (tables.isLoading()) {
+    <app-loading />
+  }
+</ion-content>

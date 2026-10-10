@@ -1,0 +1,25 @@
+<div class="background-pic">
+  <ion-content>
+    <ion-card>
+      <ion-card-header>
+        <div class="flex justify-center">
+          <img
+            class="auth-logo"
+            [src]="app.LOGO"
+            [alt]="app.NAME"
+            [width]="app.LOGO_WIDTH"
+            [height]="app.LOGO_HEIGHT"
+          />
+        </div>
+        <ion-card-title>{{ title() }}</ion-card-title>
+        <ng-content select="[authSubtitle]"></ng-content>
+      </ion-card-header>
+      <ion-card-content>
+        <ng-content></ng-content>
+      </ion-card-content>
+    </ion-card>
+    @if (loading()) {
+      <app-loading></app-loading>
+    }
+  </ion-content>
+</div>

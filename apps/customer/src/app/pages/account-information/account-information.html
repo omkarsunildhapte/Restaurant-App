@@ -1,0 +1,62 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button
+        [defaultHref]="links.ACCOUNT"
+        icon="chevron-back-outline"
+        text=""
+      ></ion-back-button>
+    </ion-buttons>
+    <ion-title>Account Information</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <form [formRoot]="accountForm" novalidate>
+    <ion-card>
+      <ion-card-content>
+        <ion-list>
+          <ion-item>
+            <div class="flex w-full flex-col py-5">
+              <span class="text-sm text-slate-300 pt-4 font-normal">Full Name</span>
+              <ion-input
+                class="borderInput w-full"
+                aria-label="Full name"
+                autocomplete="name"
+                [formField]="accountForm.displayName"
+              ></ion-input>
+              <app-field-errors [field]="accountForm.displayName" />
+            </div>
+          </ion-item>
+          <ion-item>
+            <div class="flex w-full flex-col py-5">
+              <span class="text-sm text-slate-300 pt-4 font-normal">Email Address</span>
+              <ion-input
+                type="email"
+                class="borderInput w-full"
+                aria-label="Email"
+                autocomplete="email"
+                [formField]="accountForm.email"
+              ></ion-input>
+              <app-field-errors [field]="accountForm.email" />
+            </div>
+          </ion-item>
+          <ion-item>
+            <div class="flex w-full flex-col py-5">
+              <span class="text-sm text-slate-300 pt-4 font-normal">Phone Number</span>
+              <ion-input
+                type="tel"
+                class="borderInput w-full"
+                aria-label="Phone number"
+                autocomplete="tel"
+                [formField]="accountForm.phoneNumber"
+              ></ion-input>
+              <app-field-errors [field]="accountForm.phoneNumber" />
+            </div>
+          </ion-item>
+        </ion-list>
+      </ion-card-content>
+    </ion-card>
+    <ion-button expand="block" shape="round" type="submit">Change Information</ion-button>
+  </form>
+</ion-content>

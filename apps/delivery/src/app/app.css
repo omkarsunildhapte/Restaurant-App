@@ -1,0 +1,4 @@
+/* The root has no styles of its own; global tokens and Ionic CSS live in src/styles.css. */
+:host {
+  display: contents;
+}

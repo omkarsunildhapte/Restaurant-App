@@ -1,0 +1,40 @@
+<div class="flex flex-col">
+  <div class="flex w-full pt-4">
+    <div class="w-2/12 mx-3">
+      <img [src]="review().avatar" alt="" />
+    </div>
+    <div class="w-full">
+      <p class="m-0 text-sm font-semibold">{{ review().author }}</p>
+      <span class="pt-3">
+        <svg
+          width="16"
+          height="16"
+          viewBox="0 0 16 16"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+          aria-hidden="true"
+        >
+          <path
+            class="star"
+            fill-rule="evenodd"
+            clip-rule="evenodd"
+            d="M8.55406 3.79199L9.7234 6.25866L12.1181 6.51266C12.366 6.53671 12.5747 6.70849 12.646 6.94717C12.7172 7.18586 12.6369 7.44393 12.4427 7.59999L10.5334 9.16999L11.1241 11.8093C11.178 12.0491 11.0834 12.298 10.8838 12.4414C10.6841 12.5848 10.4181 12.595 10.2081 12.4673L8.00006 11.124L5.79006 12.4667C5.57993 12.5941 5.314 12.5838 5.11435 12.4405C4.9147 12.2972 4.81987 12.0485 4.8734 11.8087L5.46673 9.16999L3.5574 7.59999C3.36463 7.44353 3.28535 7.1862 3.35664 6.94839C3.42792 6.71057 3.63568 6.53929 3.88273 6.51466L6.27673 6.26066L7.44606 3.79199C7.54766 3.57812 7.76329 3.44183 8.00006 3.44183C8.23684 3.44183 8.45246 3.57812 8.55406 3.79199Z"
+          />
+        </svg>
+      </span>
+    </div>
+    <div class="w-4/12">
+      <span class="text-xs text-nowrap">{{ review().postedAt }}</span>
+    </div>
+  </div>
+  <div class="w-full text-xs">{{ review().body }}</div>
+  <div class="flex justify-between pt-3 w-full">
+    <div class="w-4/12 text-xs">
+      <ion-icon name="heart" slot="start" aria-hidden="true"></ion-icon>
+      {{ review().likes }} likes
+    </div>
+    <div class="w-2/12">
+      <ion-icon name="flag" slot="end" aria-hidden="true"></ion-icon>
+    </div>
+  </div>
+</div>

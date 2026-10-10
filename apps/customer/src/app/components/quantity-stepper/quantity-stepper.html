@@ -1,0 +1,19 @@
+<span class="action">
+  <button
+    type="button"
+    class="step"
+    [attr.aria-label]="'Decrease ' + label()"
+    (click)="changed.emit(-1)"
+  >
+    <ion-icon class="minus" name="remove-outline" aria-hidden="true"></ion-icon>
+  </button>
+  <span class="value" aria-live="polite">{{ value() }}</span>
+  <button
+    type="button"
+    class="step"
+    [attr.aria-label]="'Increase ' + label()"
+    (click)="changed.emit(1)"
+  >
+    <ion-icon class="plus" name="add-outline" aria-hidden="true"></ion-icon>
+  </button>
+</span>

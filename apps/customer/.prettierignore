@@ -1,0 +1,15 @@
+# Build output and native projects
+dist/
+www/
+android/
+.angular/
+coverage/
+node_modules/
+e2e/.artifacts/
+playwright-report/
+test-results/
+package-lock.json
+
+# TypeScript is not formatted by Prettier: it would wrap long imports over several lines, which
+# Rule 2 (.agents/rules/frontend-rules.md) forbids. ESLint covers the TypeScript files instead.
+*.ts

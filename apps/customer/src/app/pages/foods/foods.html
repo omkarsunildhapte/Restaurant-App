@@ -1,0 +1,60 @@
+<ion-header>
+  <ion-toolbar>
+    <div class="flex">
+      <ion-buttons class="w-1/12 first">
+        <ion-back-button
+          [defaultHref]="links.HOME"
+          icon="chevron-back-outline"
+          text=""
+        ></ion-back-button>
+      </ion-buttons>
+      <div class="w-full pt-4 second">
+        <ion-searchbar
+          animated="true"
+          placeholder="Search The Order"
+          class="text-white"
+          show-clear-button="always"
+        ></ion-searchbar>
+      </div>
+    </div>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <ion-card>
+    <ion-card-content>
+      <ion-list>
+        @for (product of foods.value(); track product.id) {
+          <ion-item
+            class="w-100 flex"
+            [routerLink]="links.FOOD_REVIEW"
+            [queryParams]="{ id: product.id }"
+          >
+            <div class="w-4/12">
+              <div class="items">
+                <ion-img class="thumb" [src]="product.logoUrl" alt=""></ion-img>
+              </div>
+            </div>
+            <div class="w-6/12">
+              <span>{{ product.itemName }}</span>
+              <div class="flex gap-2 items-center">
+                <span class="text-xs text-nowrap">{{ currency }} {{ product.price }}</span>
+                <div>.</div>
+                <span class="text-xs text-nowrap">{{ product.category }}</span>
+              </div>
+            </div>
+            <div class="w-2/12 flex justify-end star">
+              <ion-icon name="star-outline" slot="end" aria-hidden="true"></ion-icon>
+            </div>
+          </ion-item>
+        } @empty {
+          @if (!foods.isLoading()) {
+            <p class="empty-state">No menu items yet.</p>
+          }
+        }
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
+  @if (foods.isLoading()) {
+    <app-loading />
+  }
+</ion-content>

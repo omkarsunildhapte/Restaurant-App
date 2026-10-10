@@ -1,0 +1,64 @@
+<div class="background-pic">
+  <ion-content>
+    <ion-card>
+      <ion-card-header>
+        <div class="flex justify-center">
+          <img
+            class="logo"
+            [ngSrc]="logo.SRC"
+            [alt]="logo.ALT"
+            [width]="logo.WIDTH"
+            [height]="logo.HEIGHT"
+            priority
+          />
+        </div>
+        <ion-card-title>Login</ion-card-title>
+        <ion-card-subtitle>
+          <a [routerLink]="links.REGISTER"><strong>Sign In</strong></a>
+          to continue
+        </ion-card-subtitle>
+      </ion-card-header>
+      <ion-card-content>
+        <form [formRoot]="loginForm" novalidate>
+          <ion-item>
+            <ion-icon name="mail" aria-hidden="true"></ion-icon>
+            <ion-input
+              type="email"
+              placeholder="Enter Your Email"
+              aria-label="Enter Your Email"
+              autocomplete="username"
+              data-testid="login-email"
+              [formField]="loginForm.email"
+            ></ion-input>
+          </ion-item>
+          <app-field-errors
+            [show]="loginForm.email().touched()"
+            [errors]="loginForm.email().errors()"
+          />
+          <ion-item>
+            <ion-icon name="lock-closed" aria-hidden="true"></ion-icon>
+            <ion-input
+              type="password"
+              placeholder="Enter Your Password"
+              aria-label="Enter Your Password"
+              autocomplete="current-password"
+              data-testid="login-password"
+              [formField]="loginForm.password"
+            ></ion-input>
+          </ion-item>
+          <app-field-errors
+            [show]="loginForm.password().touched()"
+            [errors]="loginForm.password().errors()"
+          />
+          <div class="bottom-section">
+            <ion-button type="submit" data-testid="login-submit">Login</ion-button>
+            <span><a [routerLink]="links.FORGOT_PASSWORD">Forget Password ?</a></span>
+          </div>
+        </form>
+      </ion-card-content>
+    </ion-card>
+    @if (loginForm().submitting()) {
+      <app-loader />
+    }
+  </ion-content>
+</div>

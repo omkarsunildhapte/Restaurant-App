@@ -1,0 +1,19 @@
+<app-auth-shell title="Add Phone Number" [loading]="phoneForm().submitting()">
+  <form [formRoot]="phoneForm" novalidate>
+    <ion-item>
+      <ion-icon name="call-outline" aria-hidden="true"></ion-icon>
+      <ion-input
+        type="tel"
+        placeholder="Enter Your Phone Number"
+        aria-label="Phone number"
+        autocomplete="tel"
+        [formField]="phoneForm.phoneNumber"
+      ></ion-input>
+    </ion-item>
+    <app-field-errors [field]="phoneForm.phoneNumber" />
+
+    <div class="bottom-section">
+      <ion-button type="submit">Add Number</ion-button>
+    </div>
+  </form>
+</app-auth-shell>

@@ -1,0 +1,138 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button
+        [defaultHref]="links.FOODS"
+        icon="chevron-back-outline"
+        text=""
+      ></ion-back-button>
+    </ion-buttons>
+    <ion-title>Food Review</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  @if (product.value(); as item) {
+    <ion-card>
+      <ion-card-content>
+        <div class="h-36">
+          <img [src]="item.bannerImage" class="w-full h-full" alt="" />
+        </div>
+        <div class="flex flex-col">
+          <div class="text-sm justify-between flex">
+            <span class="flex gap-3">
+              <span>{{ item.itemName }}</span>
+              <div>
+                <ion-icon name="star" aria-hidden="true"></ion-icon>
+                <span>{{ copy.RATING }}</span>
+              </div>
+            </span>
+            <ion-icon name="heart" slot="end" aria-hidden="true"></ion-icon>
+          </div>
+          <span class="text-sm">{{ item.description }}</span>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card class="mt-8 general">
+      <ion-card-header class="rounded-xs flex">
+        <div class="flex justify-between">
+          <div class="w-4/12 mains"><span class="text-nowrap">Burages</span></div>
+        </div>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-list>
+          @for (beverage of beverages(); track beverage.id; let i = $index) {
+            <ion-item class="w-100 flex add-on">
+              <div class="w-2/12 items">
+                <ion-img
+                  class="thumb h-full"
+                  [src]="beverage.logoUrl"
+                  slot="start"
+                  alt=""
+                ></ion-img>
+              </div>
+              <div class="w-6/12">
+                <span>{{ beverage.itemName }}</span>
+                <div class="flex gap-2 items-center">
+                  <span class="text-xs text-nowrap">{{ currency }} {{ beverage.price }}</span>
+                  <div>.</div>
+                  <span class="text-xs text-nowrap">{{ beverage.category }}</span>
+                </div>
+              </div>
+              <div class="w-4/12 stepper">
+                <app-quantity-stepper
+                  [value]="addOnCounts()[i] ?? 0"
+                  [label]="beverage.itemName"
+                  (changed)="changeAddOn(i, $event)"
+                />
+              </div>
+            </ion-item>
+          }
+        </ion-list>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card class="mains">
+      <ion-card-content>
+        <ion-segment [value]="segment()" (ionChange)="onSegmentChange($event)">
+          @for (option of copy.SEGMENTS; track option.value) {
+            <ion-segment-button [value]="option.value">
+              <ion-label>{{ option.label }}</ion-label>
+            </ion-segment-button>
+          }
+        </ion-segment>
+        @let tab = segment();
+        @switch (tab) {
+          @case ('review') {
+            <ion-list>
+              @for (review of reviews; track review.id) {
+                <ion-item>
+                  <app-review-card [review]="review" />
+                </ion-item>
+              }
+            </ion-list>
+          }
+          @case ('delivery') {
+            <ion-list>
+              <ion-item>
+                <div class="w-full flex justify-between py-2">
+                  <p class="itemheader">{{ item.itemName }}</p>
+                  <div class="flex items-center">
+                    <app-quantity-stepper
+                      [value]="quantity()"
+                      [label]="item.itemName"
+                      (changed)="changeQuantity($event)"
+                    />
+                  </div>
+                </div>
+              </ion-item>
+              <ion-item>
+                <div class="py-2 flex justify-between">
+                  <span>Total Price</span>
+                  <span class="text-center px-5 text-sm text-on-dark-accent"
+                    >{{ currency }} {{ total() }}</span
+                  >
+                </div>
+              </ion-item>
+            </ion-list>
+            <div class="flex gap-4 pt-4">
+              <ion-button class="w-6/12 tall" shape="round" (click)="addToCart()"
+                >Add Cart</ion-button
+              >
+              <ion-button class="w-6/12 tall" shape="round" [routerLink]="links.CART"
+                >View Cart</ion-button
+              >
+            </div>
+          }
+          @default never;
+        }
+      </ion-card-content>
+    </ion-card>
+  } @else {
+    @if (product.isLoading()) {
+      <app-loading />
+    } @else {
+      <p class="empty-state">This item is not available.</p>
+    }
+  }
+</ion-content>
