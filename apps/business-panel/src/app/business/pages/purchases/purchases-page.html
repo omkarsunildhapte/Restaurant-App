@@ -1,0 +1,308 @@
+<div class="mb-4 flex flex-wrap items-end justify-between gap-3">
+  <div>
+    <h1 class="text-2xl font-semibold text-gray-900">Purchases</h1>
+    <p class="mt-1 text-sm text-gray-500">
+      What the kitchen buys each day. {{ rupees(shownTotal()) }} shown
+      @if (shownUnpaid() > 0) { · <span class="text-amber-700">{{ rupees(shownUnpaid()) }} still to pay</span> }
+    </p>
+  </div>
+  <button type="button" class="btn btn-primary px-5 py-2.5 text-sm" (click)="openAdd()" [disabled]="!ws.writable()">Add purchase</button>
+</div>
+
+<form class="mb-4 flex flex-wrap items-end gap-3 rounded-md bg-white p-4 shadow-xs" (ngSubmit)="load()">
+  <label class="block text-sm font-medium text-gray-700">
+    From
+    <input class="form-input mt-1 py-2 text-sm" type="date" name="from" [(ngModel)]="from" />
+  </label>
+  <label class="block text-sm font-medium text-gray-700">
+    To
+    <input class="form-input mt-1 py-2 text-sm" type="date" name="to" [(ngModel)]="to" />
+  </label>
+  @if (allOutlets() && ws.outlets().length > 1) {
+    <label class="block text-sm font-medium text-gray-700">
+      Outlet
+      <select class="form-input mt-1 py-2 text-sm" name="outlet" [(ngModel)]="outlet">
+        <option value="">All outlets</option>
+        @for (o of ws.outlets(); track o.id) {
+          <option [value]="o.id">{{ o.name }}</option>
+        }
+      </select>
+    </label>
+  }
+  <label class="block text-sm font-medium text-gray-700">
+    Vendor
+    <input class="form-input mt-1 w-40 py-2 text-sm" name="vendor" list="vendor-list" [(ngModel)]="vendor" placeholder="Any" />
+  </label>
+  <label class="block text-sm font-medium text-gray-700">
+    Payment
+    <select class="form-input mt-1 py-2 text-sm" name="mode" [(ngModel)]="mode">
+      <option value="">Any</option>
+      @for (m of modes; track m) {
+        <option [value]="m">{{ modeLabel[m] }}</option>
+      }
+    </select>
+  </label>
+  <label class="flex items-center gap-2 pb-2.5 text-sm text-gray-700">
+    <input type="checkbox" class="h-4 w-4" name="unpaid" [(ngModel)]="unpaidOnly" /> Unpaid only
+  </label>
+  <button type="submit" class="btn btn-primary px-4 py-2 text-sm" [disabled]="loading()">{{ loading() ? 'Loading…' : 'Show' }}</button>
+</form>
+
+@if (error()) {
+  <div class="mb-4 rounded-md border border-red-200 bg-red-50 p-4 text-sm text-red-800" role="alert">{{ error() }}</div>
+}
+
+<div class="rounded-md bg-white px-4 shadow-xs">
+  <ui-tabs [(activeIndex)]="tab">
+    <ui-tab-panel header="Records">
+      <div class="mb-3 flex justify-end">
+        <button type="button" class="btn btn-text px-3 py-1.5 text-sm" (click)="exportPurchases()" [disabled]="!purchases().length">Download CSV</button>
+      </div>
+      @for (d of days(); track d.day) {
+        <section class="mb-5">
+          <h2 class="mb-2 flex items-center justify-between text-sm font-semibold text-gray-700">
+            <span>{{ dayLabel(d.day) }}</span>
+            <span>{{ rupees(d.total) }}</span>
+          </h2>
+          <ul class="divide-y divide-gray-100 rounded-md border border-gray-200">
+            @for (p of d.list; track p.id) {
+              <li class="flex flex-wrap items-start gap-3 px-3 py-3 text-sm">
+                <div class="min-w-0 flex-1">
+                  <p class="font-medium text-gray-900">
+                    {{ p.vendor_name || 'No vendor' }}
+                    @if (allOutlets() && ws.outlets().length > 1) {
+                      <span class="ml-1 text-xs font-normal text-gray-500">· {{ outletName()(p.outlet_id) }}</span>
+                    }
+                  </p>
+                  <p class="text-gray-600">{{ itemsText(p) }}</p>
+                  <p class="mt-0.5 text-xs text-gray-500">
+                    {{ modeLabel[p.payment_mode] }}
+                    @if (p.payment_mode === 'credit' && p.paid_at) { · paid later ({{ modeLabel[p.settled_mode!] }}) }
+                    @if (p.gst_amount > 0) { · GST {{ rupees(p.gst_amount) }} }
+                    @if (p.notes) { · {{ p.notes }} }
+                  </p>
+                </div>
+                <div class="text-right">
+                  <p class="font-semibold text-gray-900">{{ rupees(p.total) }}</p>
+                  @if (!p.paid_at) {
+                    <span class="rounded-full bg-amber-100 px-2 py-0.5 text-xs text-amber-800">Unpaid</span>
+                  }
+                </div>
+                <div class="flex w-full justify-end gap-1 sm:w-auto">
+                  @if (p.bill_path) {
+                    <button type="button" class="btn btn-text px-2 py-1 text-xs" (click)="openBill(p)">Bill</button>
+                  }
+                  @if (!p.paid_at && ws.writable()) {
+                    <button type="button" class="btn btn-text px-2 py-1 text-xs" (click)="openPay(p)">Mark paid</button>
+                  }
+                  @if (ws.writable()) {
+                    <button type="button" class="btn btn-danger-text px-2 py-1 text-xs" (click)="remove(p)">Delete</button>
+                  }
+                </div>
+              </li>
+            }
+          </ul>
+        </section>
+      } @empty {
+        <p class="p-8 text-center text-sm text-gray-500">{{ loading() ? 'Loading…' : 'No purchases in these dates.' }}</p>
+      }
+    </ui-tab-panel>
+
+    <ui-tab-panel header="Summary">
+      @if (summary(); as s) {
+        <div class="grid grid-cols-2 gap-3 sm:grid-cols-4">
+          <div class="rounded-md border border-gray-200 p-3">
+            <p class="text-xs uppercase tracking-wide text-gray-500">Spent</p>
+            <p class="mt-1 text-xl font-semibold text-gray-900">{{ rupees(s.total) }}</p>
+          </div>
+          <div class="rounded-md border border-gray-200 p-3">
+            <p class="text-xs uppercase tracking-wide text-gray-500">Purchases</p>
+            <p class="mt-1 text-xl font-semibold text-gray-900">{{ s.count }}</p>
+          </div>
+          <div class="rounded-md border border-gray-200 p-3">
+            <p class="text-xs uppercase tracking-wide text-gray-500">Still to pay</p>
+            <p class="mt-1 text-xl font-semibold" [class]="s.unpaid > 0 ? 'text-amber-700' : 'text-gray-900'">{{ rupees(s.unpaid) }}</p>
+          </div>
+          <div class="rounded-md border border-gray-200 p-3">
+            <p class="text-xs uppercase tracking-wide text-gray-500">Input GST</p>
+            <p class="mt-1 text-xl font-semibold text-gray-900">{{ rupees(s.gst) }}</p>
+          </div>
+        </div>
+
+        <div class="mt-5 grid gap-5 lg:grid-cols-2">
+          <section>
+            <div class="mb-2 flex items-center justify-between">
+              <h2 class="text-sm font-semibold text-gray-900">By item</h2>
+              <button type="button" class="btn btn-text px-2 py-1 text-xs" (click)="exportSummary()" [disabled]="!s.byItem.length">Download CSV</button>
+            </div>
+            <table class="w-full text-left text-sm">
+              <thead class="text-xs uppercase tracking-wide text-gray-500">
+                <tr><th class="py-1.5">Item</th><th class="py-1.5 text-right">Quantity</th><th class="py-1.5 text-right">Avg rate</th><th class="py-1.5 text-right">Spent</th></tr>
+              </thead>
+              <tbody class="divide-y divide-gray-100">
+                @for (i of s.byItem; track i.item + i.unit) {
+                  <tr>
+                    <td class="py-1.5 text-gray-900">{{ i.item }}</td>
+                    <td class="py-1.5 text-right text-gray-600">{{ i.quantity }} {{ i.unit }}</td>
+                    <td class="py-1.5 text-right text-gray-600">{{ rupees(i.average_rate) }}/{{ i.unit }}</td>
+                    <td class="py-1.5 text-right font-medium">{{ rupees(i.amount) }}</td>
+                  </tr>
+                } @empty {
+                  <tr><td colspan="4" class="py-6 text-center text-gray-400">Nothing bought in these dates.</td></tr>
+                }
+              </tbody>
+            </table>
+          </section>
+          <section>
+            <h2 class="mb-2 text-sm font-semibold text-gray-900">By vendor</h2>
+            <table class="w-full text-left text-sm">
+              <thead class="text-xs uppercase tracking-wide text-gray-500">
+                <tr><th class="py-1.5">Vendor</th><th class="py-1.5 text-right">Purchases</th><th class="py-1.5 text-right">Unpaid</th><th class="py-1.5 text-right">Spent</th></tr>
+              </thead>
+              <tbody class="divide-y divide-gray-100">
+                @for (v of s.byVendor; track v.vendor) {
+                  <tr>
+                    <td class="py-1.5 text-gray-900">{{ v.vendor }}</td>
+                    <td class="py-1.5 text-right text-gray-600">{{ v.purchases }}</td>
+                    <td class="py-1.5 text-right" [class]="v.unpaid > 0 ? 'text-amber-700' : 'text-gray-400'">{{ v.unpaid > 0 ? rupees(v.unpaid) : '—' }}</td>
+                    <td class="py-1.5 text-right font-medium">{{ rupees(v.total) }}</td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </section>
+        </div>
+      }
+    </ui-tab-panel>
+  </ui-tabs>
+</div>
+
+<datalist id="vendor-list">
+  @for (v of vendors(); track v.id) {
+    <option [value]="v.name"></option>
+  }
+</datalist>
+<datalist id="item-list">
+  @for (s of suggestions(); track s.item_name) {
+    <option [value]="s.item_name"></option>
+  }
+</datalist>
+
+<ui-modal [(visible)]="adding" header="Add purchase" width="44rem">
+  <form id="purchase-form" class="grid gap-4" (ngSubmit)="save()">
+    <div class="grid gap-4 sm:grid-cols-3">
+      @if (ws.visibleOutlets().length > 1) {
+        <label class="block text-sm font-medium text-gray-700">
+          Outlet
+          <select class="form-input mt-1 py-2" name="fOutlet" [(ngModel)]="fOutlet">
+            @for (o of ws.visibleOutlets(); track o.id) {
+              <option [value]="o.id">{{ o.name }}</option>
+            }
+          </select>
+        </label>
+      }
+      <label class="block text-sm font-medium text-gray-700">
+        Date
+        <input class="form-input mt-1 py-2" type="date" name="fDate" [(ngModel)]="fDate" />
+      </label>
+      <label class="block text-sm font-medium text-gray-700">
+        Vendor <span class="font-normal text-gray-400">(optional)</span>
+        <input class="form-input mt-1 py-2" name="fVendor" list="vendor-list" autocomplete="off" [(ngModel)]="fVendor" placeholder="Shree Dairy" />
+      </label>
+    </div>
+
+    <div>
+      <p class="text-sm font-medium text-gray-700">Items</p>
+      @for (l of lines(); track $index; let i = $index) {
+        <div class="mt-2 grid grid-cols-[1fr_5rem_5.5rem] gap-2 sm:grid-cols-[1fr_5.5rem_6rem_6rem_6rem_2rem]">
+          <input class="form-input col-span-3 py-2 text-sm sm:col-span-1" placeholder="Item, e.g. Milk" list="item-list" autocomplete="off"
+            [attr.aria-label]="'Line ' + (i + 1) + ' item'" [name]="'item' + i" [ngModel]="l.item_name" (ngModelChange)="onItemName(i, $event)" />
+          <input class="form-input py-2 text-sm" type="number" min="0" step="0.001" inputmode="decimal" placeholder="Qty"
+            [attr.aria-label]="'Line ' + (i + 1) + ' quantity'" [name]="'qty' + i" [ngModel]="l.quantity" (ngModelChange)="setLine(i, { quantity: $event })" />
+          <select class="form-input py-2 text-sm" [attr.aria-label]="'Line ' + (i + 1) + ' unit'" [name]="'unit' + i" [ngModel]="l.unit" (ngModelChange)="setLine(i, { unit: $event })">
+            @for (u of units; track u) {
+              <option [value]="u">{{ u }}</option>
+            }
+          </select>
+          <input class="form-input py-2 text-sm" type="number" min="0" step="0.01" inputmode="decimal" placeholder="₹ rate"
+            [attr.aria-label]="'Line ' + (i + 1) + ' rate'" [name]="'rate' + i" [ngModel]="l.rate" (ngModelChange)="setLine(i, { rate: $event })" />
+          <span class="self-center text-right text-sm font-medium text-gray-900">{{ rupees(lineAmount(l)) }}</span>
+          <button type="button" class="btn btn-danger-text px-1 py-1 text-sm" (click)="removeLine(i)" [attr.aria-label]="'Remove line ' + (i + 1)">✕</button>
+        </div>
+      }
+      <button type="button" class="btn btn-text mt-2 px-3 py-2 text-sm" (click)="addLine()">Add item</button>
+    </div>
+
+    <fieldset>
+      <legend class="text-sm font-medium text-gray-700">Paid by</legend>
+      <div class="mt-1 flex flex-wrap gap-2">
+        @for (m of modes; track m) {
+          <button type="button" (click)="fMode.set(m)" [attr.aria-pressed]="fMode() === m"
+            [class]="fMode() === m ? 'rounded-md border-2 border-brand-saffron bg-brand-soft px-4 py-2 text-sm font-medium text-brand-brown' : 'rounded-md border border-gray-300 bg-white px-4 py-2 text-sm text-gray-700 hover:bg-gray-50'">
+            {{ modeLabel[m] }}
+          </button>
+        }
+      </div>
+    </fieldset>
+
+    <div class="grid gap-4 sm:grid-cols-2">
+      <label class="block text-sm font-medium text-gray-700">
+        GST on the bill <span class="font-normal text-gray-400">(optional, ₹)</span>
+        <input class="form-input mt-1 py-2" type="number" min="0" step="0.01" inputmode="decimal" name="fGst" [(ngModel)]="fGst" />
+      </label>
+      <label class="block text-sm font-medium text-gray-700">
+        Note <span class="font-normal text-gray-400">(optional)</span>
+        <input class="form-input mt-1 py-2" name="fNotes" [(ngModel)]="fNotes" />
+      </label>
+    </div>
+
+    <div class="flex flex-wrap items-center gap-3 text-sm">
+      <label class="btn btn-text cursor-pointer px-3 py-2 text-sm">
+        {{ uploading() ? 'Uploading…' : fBill() ? 'Change bill photo' : 'Add bill photo' }}
+        <input type="file" accept="image/jpeg,image/png,image/webp,application/pdf" capture="environment" class="sr-only" (change)="onBill($event)" [disabled]="uploading()" />
+      </label>
+      @if (fBill()) { <span class="text-green-700">✓ Bill attached</span> }
+      <span class="text-xs text-gray-400">Photo or PDF, up to 5 MB</span>
+    </div>
+
+    @if (formError()) {
+      <p class="rounded-md bg-red-50 p-3 text-sm text-red-800" role="alert">{{ formError() }}</p>
+    }
+  </form>
+  <div uiModalFooter class="flex flex-wrap items-center justify-end gap-3 rounded-b-md border-t border-gray-100 bg-gray-50 px-6 py-4">
+    <span class="mr-auto text-sm">
+      @if (formProblem(); as p) {
+        <span class="text-gray-500">{{ p }}</span>
+      } @else {
+        <span class="font-semibold text-gray-900">Total {{ rupees(formTotal()) }}</span>
+      }
+    </span>
+    <button type="button" class="btn border-gray-300 bg-white px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 focus-visible:ring-gray-300" (click)="adding.set(false)">Cancel</button>
+    <button type="submit" form="purchase-form" class="btn btn-primary px-4 py-2 text-sm" [disabled]="saving() || uploading() || !!formProblem()">
+      {{ saving() ? 'Saving…' : 'Save purchase' }}
+    </button>
+  </div>
+</ui-modal>
+
+<ui-modal [visible]="paying() !== null" (visibleChange)="onPayVisible($event)" header="Mark as paid" width="26rem">
+  @if (paying(); as p) {
+    <p class="text-sm text-gray-700">{{ rupees(p.total) }} to {{ p.vendor_name || 'the vendor' }}. How was it paid?</p>
+    <div class="mt-3 flex flex-wrap gap-2">
+      @for (m of modes; track m) {
+        @if (m !== 'credit') {
+          <button type="button" (click)="payMode.set(m)" [attr.aria-pressed]="payMode() === m"
+            [class]="payMode() === m ? 'rounded-md border-2 border-brand-saffron bg-brand-soft px-4 py-2 text-sm font-medium text-brand-brown' : 'rounded-md border border-gray-300 bg-white px-4 py-2 text-sm text-gray-700 hover:bg-gray-50'">
+            {{ modeLabel[m] }}
+          </button>
+        }
+      }
+    </div>
+    @if (payMode() === 'cash') {
+      <p class="mt-2 text-xs text-gray-500">Cash comes off the counter's expected cash at day close.</p>
+    }
+  }
+  <div uiModalFooter class="flex flex-wrap items-center justify-end gap-3 rounded-b-md border-t border-gray-100 bg-gray-50 px-6 py-4">
+    <button type="button" class="btn border-gray-300 bg-white px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 focus-visible:ring-gray-300" (click)="paying.set(null)">Cancel</button>
+    <button type="button" class="btn btn-primary px-4 py-2 text-sm" (click)="markPaid()">Mark paid</button>
+  </div>
+</ui-modal>

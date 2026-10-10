@@ -1,0 +1,124 @@
+<div class="mb-4 flex flex-wrap items-end justify-between gap-3">
+  <div>
+    <h1 class="text-2xl font-semibold text-gray-900">Tables</h1>
+    <p class="mt-1 text-sm text-gray-500">
+      @if (outletName()) {
+        {{ outletName() }}: {{ tables().length }} tables, {{ seatTotal() }} seats in use.
+      } @else {
+        No outlet to show.
+      }
+    </p>
+  </div>
+  @if (ws.canEditMenu() && ws.outletId()) {
+    <div class="flex gap-2">
+      <button type="button" class="btn btn-text px-4 py-2 text-sm" (click)="openBulk()">Add several</button>
+      <button type="button" class="btn btn-primary px-4 py-2 text-sm" (click)="open(null)">Add table</button>
+    </div>
+  }
+</div>
+
+@if (error()) {
+  <div class="mb-4 rounded-md border border-red-200 bg-red-50 p-4 text-sm text-red-800" role="alert">{{ error() }}</div>
+}
+
+@for (group of areas(); track group.area) {
+  <section class="mb-6">
+    <h2 class="mb-2 text-sm font-semibold uppercase tracking-wide text-gray-500">{{ group.area || 'No area' }}</h2>
+    <ul class="grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-6">
+      @for (t of group.tables; track t.id) {
+        <li class="rounded-md border bg-white p-3 shadow-xs" [class]="t.is_active ? 'border-gray-200' : 'border-dashed border-gray-300 opacity-60'">
+          <p class="text-lg font-semibold text-gray-900">{{ t.name }}</p>
+          <p class="text-sm text-gray-500">{{ t.seats }} seats{{ t.is_active ? '' : ' · not in use' }}</p>
+          @if (ws.canEditMenu()) {
+            <div class="mt-2 flex gap-1">
+              <button type="button" class="btn btn-text px-2 py-1 text-xs" (click)="open(t)" [attr.aria-label]="'Edit table ' + t.name">Edit</button>
+              <button type="button" class="btn btn-danger-text px-2 py-1 text-xs" (click)="remove(t)" [attr.aria-label]="'Delete table ' + t.name">Delete</button>
+            </div>
+          }
+        </li>
+      }
+    </ul>
+  </section>
+} @empty {
+  <p class="rounded-md bg-white p-8 text-center text-sm text-gray-500 shadow-xs">
+    @if (loading()) {
+      Loading…
+    } @else if (ws.canEditMenu()) {
+      No tables yet. Use "Add several" to create T1 to T8 in one go.
+    } @else {
+      No tables yet.
+    }
+  </p>
+}
+
+<ui-modal [(visible)]="editing" [header]="editId() ? 'Edit table' : 'Add table'" width="28rem">
+  <form id="table-form" class="grid gap-4" (ngSubmit)="save()">
+    <div class="grid grid-cols-2 gap-4">
+      <label class="block text-sm font-medium text-gray-700">
+        Name
+        <input class="form-input mt-1 py-2" name="name" required [(ngModel)]="name" placeholder="T1" />
+      </label>
+      <label class="block text-sm font-medium text-gray-700">
+        Seats
+        <input class="form-input mt-1 py-2" type="number" min="1" max="50" name="seats" [(ngModel)]="seats" />
+      </label>
+    </div>
+    <label class="block text-sm font-medium text-gray-700">
+      Area <span class="font-normal text-gray-400">(optional)</span>
+      <input class="form-input mt-1 py-2" name="area" list="table-areas" [(ngModel)]="area" placeholder="Indoor, Patio, Rooftop" />
+    </label>
+    <label class="flex items-center gap-2 text-sm text-gray-700">
+      <input type="checkbox" class="h-4 w-4" name="active" [(ngModel)]="active" /> In use
+    </label>
+    @if (formError()) {
+      <p class="rounded-md bg-red-50 p-3 text-sm text-red-800" role="alert">{{ formError() }}</p>
+    }
+  </form>
+  <div uiModalFooter class="flex flex-wrap items-center justify-end gap-3 rounded-b-md border-t border-gray-100 bg-gray-50 px-6 py-4">
+    <button type="button" class="btn border-gray-300 bg-white px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 focus-visible:ring-gray-300" (click)="editing.set(false)">Cancel</button>
+    <button type="submit" form="table-form" class="btn btn-primary px-4 py-2 text-sm" [disabled]="busy()">{{ busy() ? 'Saving…' : 'Save' }}</button>
+  </div>
+</ui-modal>
+
+<ui-modal [(visible)]="adding" header="Add several tables" width="32rem">
+  <form id="bulk-form" class="grid gap-4" (ngSubmit)="saveBulk()">
+    <div class="grid grid-cols-3 gap-3">
+      <label class="block text-sm font-medium text-gray-700">
+        Prefix
+        <input class="form-input mt-1 py-2" name="prefix" [(ngModel)]="prefix" />
+      </label>
+      <label class="block text-sm font-medium text-gray-700">
+        From
+        <input class="form-input mt-1 py-2" type="number" min="0" name="from" [(ngModel)]="from" />
+      </label>
+      <label class="block text-sm font-medium text-gray-700">
+        To
+        <input class="form-input mt-1 py-2" type="number" min="0" name="to" [(ngModel)]="to" />
+      </label>
+    </div>
+    <div class="grid grid-cols-2 gap-3">
+      <label class="block text-sm font-medium text-gray-700">
+        Seats each
+        <input class="form-input mt-1 py-2" type="number" min="1" max="50" name="bulkSeats" [(ngModel)]="bulkSeats" />
+      </label>
+      <label class="block text-sm font-medium text-gray-700">
+        Area <span class="font-normal text-gray-400">(optional)</span>
+        <input class="form-input mt-1 py-2" name="bulkArea" list="table-areas" [(ngModel)]="bulkArea" />
+      </label>
+    </div>
+    <p class="text-sm text-gray-500">Creates {{ prefix() }}{{ from() }} to {{ prefix() }}{{ to() }}. Names that already exist are skipped.</p>
+    @if (formError()) {
+      <p class="rounded-md bg-red-50 p-3 text-sm text-red-800" role="alert">{{ formError() }}</p>
+    }
+  </form>
+  <div uiModalFooter class="flex flex-wrap items-center justify-end gap-3 rounded-b-md border-t border-gray-100 bg-gray-50 px-6 py-4">
+    <button type="button" class="btn border-gray-300 bg-white px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 focus-visible:ring-gray-300" (click)="adding.set(false)">Cancel</button>
+    <button type="submit" form="bulk-form" class="btn btn-primary px-4 py-2 text-sm" [disabled]="busy()">{{ busy() ? 'Adding…' : 'Add tables' }}</button>
+  </div>
+</ui-modal>
+
+<datalist id="table-areas">
+  @for (a of areaNames(); track a) {
+    <option [value]="a"></option>
+  }
+</datalist>

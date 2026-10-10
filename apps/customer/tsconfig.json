@@ -1,0 +1,53 @@
+/* TypeScript + Angular compiler options. Aliases follow .agents/AGENTS.md (Rule 1: no relative imports). */
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "paths": {
+      "@app/*": ["./src/app/*"],
+      "@shared/*": ["./src/app/shared/*"],
+      "@pages/*": ["./src/app/pages/*"],
+      "@components/*": ["./src/app/components/*"],
+      "@layout/*": ["./src/app/layout/*"],
+      "@services/*": ["./src/services/*"],
+      "@store/*": ["./src/store/*"],
+      "@appTypes/*": ["./src/types/*"],
+      "@constants/*": ["./src/constants/*"],
+      "@utils/*": ["./src/utils/*"],
+      "@guard/*": ["./src/guards/*"],
+      "@guards/*": ["./src/guards/*"],
+      "@interceptors/*": ["./src/interceptors/*"],
+      "@directives/*": ["./src/directives/*"],
+      "@pipes/*": ["./src/pipes/*"],
+      "@environments/*": ["./src/environments/*"],
+      "@testing/*": ["./src/utils/testing/*"]
+    },
+    "types": [],
+    "outDir": "./dist/out-tsc",
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "noImplicitOverride": true,
+    "noPropertyAccessFromIndexSignature": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "isolatedModules": true,
+    "sourceMap": true,
+    "declaration": false,
+    "experimentalDecorators": true,
+    "moduleResolution": "bundler",
+    "importHelpers": true,
+    "target": "es2022",
+    "module": "preserve"
+  },
+  "angularCompilerOptions": {
+    "enableI18nLegacyMessageIdFormat": false,
+    "strictInjectionParameters": true,
+    "strictInputAccessModifiers": true,
+    "strictTemplates": true,
+    "extendedDiagnostics": {
+      "checks": {
+        "invalidBananaInBox": "error"
+      }
+    }
+  }
+}

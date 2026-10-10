@@ -1,0 +1,23 @@
+{
+  "name": "thaliyo",
+  "private": true,
+  "description": "Repo root: run scripts for every app from here. Each app keeps its own node_modules.",
+  "engines": {
+    "node": "^22.22.3 || ^24.15.0"
+  },
+  "scripts": {
+    "install:all": "npm ci --prefix apps/business-panel && npm ci --prefix apps/super-admin && npm ci --prefix apps/staff && npm ci --prefix apps/customer && npm ci --prefix apps/delivery && npm ci --prefix backend",
+    "build:all": "npm run build --prefix apps/business-panel && npm run build --prefix apps/super-admin && npm run build --prefix apps/staff && npm run build --prefix apps/marketing-site && npm run build --prefix apps/customer && npm run build --prefix apps/delivery && npm run build --prefix backend",
+    "dev:business-panel": "npm start --prefix apps/business-panel",
+    "dev:super-admin": "npm start --prefix apps/super-admin",
+    "dev:staff": "npm start --prefix apps/staff",
+    "dev:marketing-site": "npm start --prefix apps/marketing-site",
+    "dev:customer": "npm start --prefix apps/customer",
+    "dev:delivery": "npm start --prefix apps/delivery",
+    "dev:api": "npm run dev --prefix backend",
+    "dev:marketing-api": "cd backend/marketing && .venv\\Scripts\\python -m uvicorn app.main:app --reload --port 4100",
+    "db:start": "supabase start",
+    "db:stop": "supabase stop",
+    "db:reset": "supabase db reset"
+  }
+}

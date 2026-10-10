@@ -1,0 +1,24 @@
+{
+  "compilerOptions": {
+    "target": "ES2023",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "outDir": "dist",
+    "rootDir": "src",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "sourceMap": true,
+    "paths": {
+      "@config/*": ["./src/config/*"],
+      "@controller/*": ["./src/controller/*"],
+      "@dao/*": ["./src/dao/*"],
+      "@middleware/*": ["./src/middleware/*"],
+      "@router/*": ["./src/router/*"],
+      "@service/*": ["./src/service/*"],
+      "@type/*": ["./src/type/*"],
+      "@utils/*": ["./src/utils/*"]
+    }
+  },
+  "include": ["src"]
+}

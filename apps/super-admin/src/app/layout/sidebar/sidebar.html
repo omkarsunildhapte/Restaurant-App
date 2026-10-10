@@ -1,0 +1,91 @@
+<aside
+  class="flex h-full flex-col border-r border-ink-200 bg-white transition-[width] duration-200 dark:border-ink-800 dark:bg-ink-950"
+  [class]="collapsed() ? 'w-[72px]' : 'w-64'"
+>
+  <!-- Brand -->
+  <div class="flex h-16 shrink-0 items-center gap-3 border-b border-ink-200 px-4 dark:border-ink-800">
+    <img src="brand/thaliyo-emblem-256.png" alt="" width="36" height="36" class="size-9 shrink-0 object-contain" />
+    @if (!collapsed()) {
+      <span class="min-w-0">
+        <span class="block truncate text-sm font-semibold text-ink-900 dark:text-white">Thaliyo</span>
+        <span class="block truncate text-xs text-ink-500 dark:text-ink-400">Super Admin</span>
+      </span>
+    }
+  </div>
+
+  <!-- Navigation -->
+  <nav class="flex-1 overflow-y-auto px-3 py-4" aria-label="Main">
+    @for (section of nav(); track section.title) {
+      <div class="mb-6 last:mb-0">
+        @if (!collapsed()) {
+          <h2 class="px-3 pb-2 text-[11px] font-semibold uppercase tracking-wider text-ink-400 dark:text-ink-500">
+            {{ section.title }}
+          </h2>
+        }
+        <ul class="space-y-1">
+          @for (item of section.items; track item.path) {
+            <li>
+              <a
+                [routerLink]="item.path"
+                routerLinkActive="bg-brand-50 font-semibold text-brand-700 before:absolute before:left-0 before:top-1/2 before:h-5 before:w-1 before:-translate-y-1/2 before:rounded-r-full before:bg-brand-600 dark:bg-brand-600/15 dark:text-brand-300"
+                [routerLinkActiveOptions]="{ exact: exact(item.path) }"
+                #rla="routerLinkActive"
+                [attr.aria-current]="rla.isActive ? 'page' : null"
+                [attr.title]="collapsed() ? item.label : null"
+                (click)="layout.closeMobile()"
+                class="group relative flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-ink-600 outline-offset-2 transition-colors hover:bg-ink-100 hover:text-ink-900 focus-visible:outline-2 focus-visible:outline-brand-500 dark:text-ink-300 dark:hover:bg-ink-800/60 dark:hover:text-white"
+                [class.justify-center]="collapsed()"
+              >
+                <svg
+                  class="size-5 shrink-0"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <path [attr.d]="item.icon" />
+                </svg>
+                @if (!collapsed()) {
+                  <span class="flex-1 truncate">{{ item.label }}</span>
+                }
+              </a>
+            </li>
+          }
+        </ul>
+      </div>
+    }
+  </nav>
+
+  <!-- Footer: collapse toggle -->
+  @if (!forceExpanded()) {
+  <div class="shrink-0 border-t border-ink-200 p-3 dark:border-ink-800">
+    <button
+      type="button"
+      (click)="layout.toggleSidebar()"
+      class="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-ink-500 transition-colors hover:bg-ink-100 hover:text-ink-900 focus-visible:outline-2 focus-visible:outline-brand-500 dark:text-ink-400 dark:hover:bg-ink-800/60 dark:hover:text-white"
+      [class.justify-center]="collapsed()"
+      [attr.aria-label]="collapsed() ? 'Expand sidebar' : 'Collapse sidebar'"
+    >
+      <svg
+        class="size-5 shrink-0 transition-transform"
+        [class.rotate-180]="collapsed()"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.6"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"
+      >
+        <path d="M15.75 19.5L8.25 12l7.5-7.5" />
+      </svg>
+      @if (!collapsed()) {
+        <span>Collapse</span>
+      }
+    </button>
+  </div>
+}
+</aside>

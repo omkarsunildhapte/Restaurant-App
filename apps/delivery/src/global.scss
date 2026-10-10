@@ -1,0 +1,75 @@
+@import "@ionic/angular/css/core.css";
+@import "@ionic/angular/css/normalize.css";
+@import "@ionic/angular/css/structure.css";
+@import "@ionic/angular/css/typography.css";
+@import "@ionic/angular/css/display.css";
+@import "@ionic/angular/css/padding.css";
+@import "@ionic/angular/css/float-elements.css";
+@import "@ionic/angular/css/text-alignment.css";
+@import "@ionic/angular/css/text-transformation.css";
+@import "@ionic/angular/css/flex-utils.css";
+
+.alert-success {
+	--background: var(--ion-color-success);
+	--color: white;
+}
+
+.alert-error {
+	--background: var(--ion-color-danger);
+	--color: rgb(56, 18, 18);
+}
+
+.alert-warning {
+	--background: var(--ion-color-warning);
+	--color: white;
+}
+
+.alert-button-ok {
+	--color: white;
+	--background: transparent;
+}
+
+::ng-deep .alert-title.sc-ion-alert-ios {
+	color: #FFF !important;
+}
+
+#spinner {
+	-webkit-animation: frames 1s infinite linear;
+	animation: frames 1s infinite linear;
+	background: transparent;
+	border: 1.75vw solid #FFF;
+	border-radius: 100%;
+	border-top-color: #251029;
+	width: 20vw;
+	height: 20vw;
+	opacity: .6;
+	padding: 0;
+	position: absolute;
+	z-index: 999;
+	left: 40%;
+	top: 50%;
+}
+
+@keyframes frames {
+	0% {
+		-webkit-transform: rotate(0deg);
+		transform: rotate(0deg);
+	}
+
+	100% {
+		-webkit-transform: rotate(359deg);
+		transform: rotate(359deg);
+	}
+}
+
+#pause {
+	display: block;
+	background:
+		rgba(0, 0, 0, 0.66) no-repeat 0 0;
+	width: 100%;
+	height: 100%;
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	z-index: 1000;
+}

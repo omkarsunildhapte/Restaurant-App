@@ -1,0 +1,199 @@
+<div class="mb-4 flex flex-wrap items-center gap-2">
+  <input
+    type="search"
+    class="form-input w-full py-2 text-sm sm:w-64"
+    placeholder="Search items…"
+    aria-label="Search items"
+    [ngModel]="search()"
+    (ngModelChange)="search.set($event)"
+  />
+  <select class="form-input w-auto py-2 text-sm" aria-label="Category" [ngModel]="categoryFilter()" (ngModelChange)="categoryFilter.set($event)">
+    <option value="">All categories</option>
+    @for (c of menu.categories(); track c.id) {
+      <option [value]="c.id">{{ c.name }}</option>
+    }
+  </select>
+  @if (ws.canEditMenu()) {
+    <button type="button" class="btn btn-primary ml-auto px-4 py-2 text-sm" (click)="openNew()" [disabled]="!menu.categories().length">
+      Add item
+    </button>
+  }
+</div>
+
+@if (menu.loaded() && !menu.categories().length) {
+  <p class="rounded-md bg-gray-50 p-6 text-center text-sm text-gray-500">
+    Start with a category (for example "Starters" or "Hot Coffee") on the Categories tab, then add items to it.
+  </p>
+}
+
+@for (g of groups(); track g.category.id) {
+  <section class="mb-6">
+    <h2 class="mb-2 flex items-center gap-2 text-sm font-semibold uppercase tracking-wide text-gray-500">
+      {{ g.category.name }}
+      <span class="rounded-full bg-gray-100 px-2 py-0.5 text-xs font-medium normal-case text-gray-500">{{ g.items.length }}</span>
+      @if (!g.category.is_active) {
+        <span class="rounded-full bg-amber-100 px-2 py-0.5 text-xs font-medium normal-case text-amber-800">hidden category</span>
+      }
+    </h2>
+    <ul class="divide-y divide-gray-100 rounded-md border border-gray-200">
+      @for (item of g.items; track item.id) {
+        <li class="flex flex-wrap items-center gap-3 px-3 py-3" [class.opacity-60]="!item.is_available">
+          @if (item.image_url) {
+            <img [src]="item.image_url" alt="" class="h-12 w-12 shrink-0 rounded-md object-cover" loading="lazy" />
+          } @else {
+            <span class="h-12 w-12 shrink-0 rounded-md bg-gray-100" aria-hidden="true"></span>
+          }
+          <div class="min-w-0 flex-1">
+            <p class="flex items-center gap-2 font-medium text-gray-900">
+              <bp-diet-mark [diet]="item.diet" />
+              <span class="truncate">{{ item.name }}</span>
+            </p>
+            <p class="mt-0.5 text-sm text-gray-600">{{ priceText(item) }}</p>
+            <p class="mt-0.5 text-xs text-gray-400">
+              GST {{ menu.taxLabel(item.tax_rate_id) }}
+              @if (addonNames(item); as a) { · Add-ons: {{ a }} }
+            </p>
+          </div>
+          @if (ws.canEditMenu()) {
+            <label class="flex items-center gap-2 text-sm text-gray-600">
+              <input type="checkbox" class="h-4 w-4" [checked]="item.is_available" (change)="toggleAvailable(item)" />
+              Available
+            </label>
+            <button type="button" class="btn btn-text px-3 py-2 text-sm" (click)="openEdit(item)">Edit</button>
+            <button type="button" class="btn btn-danger-text px-3 py-2 text-sm" (click)="remove(item)">Delete</button>
+          } @else if (!item.is_available) {
+            <span class="text-sm text-gray-500">Not available</span>
+          }
+        </li>
+      }
+    </ul>
+  </section>
+} @empty {
+  @if (menu.loaded() && menu.categories().length) {
+    <p class="p-6 text-center text-sm text-gray-500">{{ search() || categoryFilter() ? 'No items match.' : 'No items yet.' }}</p>
+  } @else if (menu.loading()) {
+    <p class="p-6 text-center text-sm text-gray-400">Loading…</p>
+  }
+}
+
+<ui-modal [(visible)]="editing" [header]="draft()?.id ? 'Edit item' : 'Add item'" width="44rem">
+  @if (draft(); as d) {
+    <form id="item-form" class="grid gap-4" (ngSubmit)="save()">
+      <div class="grid gap-4 sm:grid-cols-2">
+        <label class="block text-sm font-medium text-gray-700">
+          Name
+          <input class="form-input mt-1 py-2" name="name" required [ngModel]="d.name" (ngModelChange)="patch({ name: $event })" />
+        </label>
+        <label class="block text-sm font-medium text-gray-700">
+          Category
+          <select class="form-input mt-1 py-2" name="category" [ngModel]="d.category_id" (ngModelChange)="patch({ category_id: $event })">
+            @for (c of menu.categories(); track c.id) {
+              <option [value]="c.id">{{ c.name }}</option>
+            }
+          </select>
+        </label>
+      </div>
+
+      <fieldset>
+        <legend class="text-sm font-medium text-gray-700">Type</legend>
+        <div class="mt-1 flex flex-wrap gap-4">
+          @for (diet of diets; track diet) {
+            <label class="flex items-center gap-2 text-sm">
+              <input type="radio" name="diet" [value]="diet" [checked]="d.diet === diet" (change)="patch({ diet })" />
+              <bp-diet-mark [diet]="diet" /> {{ dietLabel[diet] }}
+            </label>
+          }
+        </div>
+      </fieldset>
+
+      <label class="block text-sm font-medium text-gray-700">
+        Description <span class="font-normal text-gray-400">(optional)</span>
+        <textarea class="form-input mt-1 py-2" rows="2" name="description" [ngModel]="d.description" (ngModelChange)="patch({ description: $event })"></textarea>
+      </label>
+
+      <div class="flex items-center gap-4">
+        @if (d.image_url) {
+          <img [src]="d.image_url" alt="Item photo" class="h-20 w-20 rounded-md object-cover" />
+        } @else {
+          <span class="flex h-20 w-20 items-center justify-center rounded-md bg-gray-100 text-xs text-gray-400">No photo</span>
+        }
+        <div class="flex flex-col gap-1">
+          <label class="btn btn-text cursor-pointer px-3 py-2 text-sm">
+            {{ uploading() ? 'Uploading…' : d.image_url ? 'Change photo' : 'Add photo' }}
+            <input type="file" accept="image/jpeg,image/png,image/webp" class="sr-only" (change)="onPhoto($event)" [disabled]="uploading()" />
+          </label>
+          @if (d.image_url) {
+            <button type="button" class="btn btn-danger-text px-3 py-1 text-sm" (click)="patch({ image_url: null })">Remove photo</button>
+          }
+          <span class="text-xs text-gray-400">JPG, PNG or WebP, up to 2 MB</span>
+        </div>
+      </div>
+
+      <!-- Price or sizes -->
+      <div class="rounded-md border border-gray-200 p-3">
+        @if (!d.variants.length) {
+          <div class="flex flex-wrap items-end gap-3">
+            <label class="block text-sm font-medium text-gray-700">
+              Price (₹)
+              <input class="form-input mt-1 w-36 py-2" type="number" min="0" step="0.5" name="price" [ngModel]="d.price" (ngModelChange)="patch({ price: $event })" />
+            </label>
+            <button type="button" class="btn btn-text px-3 py-2 text-sm" (click)="addVariant()">Sizes (Half / Full, Regular / Large)</button>
+          </div>
+        } @else {
+          <p class="mb-2 text-sm font-medium text-gray-700">Sizes</p>
+          @for (v of d.variants; track $index; let i = $index) {
+            <div class="mb-2 flex items-center gap-2">
+              <input class="form-input py-2" placeholder="Name, e.g. Half" [attr.aria-label]="'Size ' + (i + 1) + ' name'" [name]="'vname' + i" [ngModel]="v.name" (ngModelChange)="setVariant(i, { name: $event })" />
+              <input class="form-input w-32 py-2" type="number" min="0" step="0.5" placeholder="₹" [attr.aria-label]="'Size ' + (i + 1) + ' price'" [name]="'vprice' + i" [ngModel]="v.price" (ngModelChange)="setVariant(i, { price: $event })" />
+              <button type="button" class="btn btn-danger-text px-2 py-2 text-sm" (click)="removeVariant(i)" [attr.aria-label]="'Remove size ' + (i + 1)">✕</button>
+            </div>
+          }
+          <button type="button" class="btn btn-text px-3 py-2 text-sm" (click)="addVariant()">Add size</button>
+        }
+      </div>
+
+      <div class="grid gap-4 sm:grid-cols-2">
+        <label class="block text-sm font-medium text-gray-700">
+          GST
+          <select class="form-input mt-1 py-2" name="tax" [ngModel]="d.tax_rate_id" (ngModelChange)="patch({ tax_rate_id: $event })">
+            <option value="">Business default{{ menu.defaultTax() ? ' (' + menu.defaultTax()!.rate + '%)' : '' }}</option>
+            @for (r of menu.taxRates(); track r.id) {
+              <option [value]="r.id">{{ r.name }}</option>
+            }
+          </select>
+        </label>
+        <label class="flex items-center gap-2 self-end pb-2 text-sm text-gray-700">
+          <input type="checkbox" class="h-4 w-4" name="available" [ngModel]="d.is_available" (ngModelChange)="patch({ is_available: $event })" />
+          Available to order
+        </label>
+      </div>
+
+      @if (menu.addonGroups().length) {
+        <fieldset>
+          <legend class="text-sm font-medium text-gray-700">Add-ons offered with this item</legend>
+          <div class="mt-1 flex flex-wrap gap-x-5 gap-y-2">
+            @for (g of menu.addonGroups(); track g.id) {
+              <label class="flex items-center gap-2 text-sm">
+                <input type="checkbox" class="h-4 w-4" [checked]="d.addon_group_ids.includes(g.id)" (change)="toggleGroup(g.id, $any($event.target).checked)" />
+                {{ g.name }}
+              </label>
+            }
+          </div>
+        </fieldset>
+      }
+
+      @if (formError()) {
+        <p class="rounded-md bg-red-50 p-3 text-sm text-red-800" role="alert">{{ formError() }}</p>
+      }
+    </form>
+  }
+  <div uiModalFooter class="flex flex-wrap items-center justify-end gap-3 rounded-b-md border-t border-gray-100 bg-gray-50 px-6 py-4">
+    @if (problem(); as p) {
+      <span class="mr-auto text-sm text-gray-500">{{ p }}</span>
+    }
+    <button type="button" class="btn border-gray-300 bg-white px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 focus-visible:ring-gray-300" (click)="editing.set(false)">Cancel</button>
+    <button type="submit" form="item-form" class="btn btn-primary px-4 py-2 text-sm" [disabled]="saving() || uploading() || !!problem()">
+      {{ saving() ? 'Saving…' : 'Save item' }}
+    </button>
+  </div>
+</ui-modal>

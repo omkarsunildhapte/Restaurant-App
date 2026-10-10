@@ -1,0 +1,11 @@
+{
+  // The platform's marketing website, served as static files on Cloudflare.
+  // Build first (`node build.mjs`), then `npx wrangler deploy` from this folder.
+  "name": "marketing-site",
+  "compatibility_date": "2026-10-01",
+  "assets": {
+    "directory": "./dist",
+    "not_found_handling": "404-page",
+    "html_handling": "auto-trailing-slash"
+  }
+}

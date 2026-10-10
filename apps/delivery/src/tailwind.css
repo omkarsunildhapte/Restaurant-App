@@ -1,0 +1,20 @@
+/*
+ * Tailwind CSS v4 (kept in its own .css file: Tailwind v4 is not processed through Sass).
+ * Preflight is included. It lives in @layer base, so Ionic's unlayered CSS from global.scss
+ * still wins over it and Ionic components keep their own styling.
+ */
+@import "tailwindcss";
+
+/*
+ * v3 compatibility: v4 changed the default border color from gray-200 to currentColor.
+ * Keep the v3 look for the plain `border` / `border-t-2` utilities used in the templates.
+ */
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentColor);
+  }
+}

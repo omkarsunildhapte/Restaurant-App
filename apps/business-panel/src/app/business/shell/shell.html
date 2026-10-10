@@ -1,0 +1,102 @@
+<div class="flex min-h-screen bg-gray-100 text-gray-800">
+  <!-- Sidebar -->
+  <aside
+    class="fixed inset-y-0 left-0 z-40 flex w-60 flex-col bg-brand-brown text-brand-cream/80 transition-transform md:static md:translate-x-0"
+    [class.-translate-x-full]="!menuOpen()"
+  >
+    <div class="flex items-center gap-3 px-4 pt-5">
+      <span class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-brand-cream p-1">
+        <img src="brand/thaliyo-emblem-256.png" alt="" width="256" height="183" class="h-auto w-full" />
+      </span>
+      <span class="text-xl font-bold tracking-tight text-brand-cream">Thali<span class="text-brand-amber">yo</span></span>
+    </div>
+    <div class="mx-4 mt-4 border-b border-white/10 pb-4">
+      <p class="truncate text-sm font-semibold text-brand-cream">{{ store.current()?.tenant_name }}</p>
+      <p class="mt-0.5 text-xs text-brand-cream/60">
+        {{ store.role() ? roleLabel[store.role()!] : '' }} · <span class="capitalize">{{ store.current()?.plan_id }}</span> plan
+      </p>
+    </div>
+    <nav class="flex flex-1 flex-col gap-1 overflow-y-auto p-3" aria-label="Business panel">
+      @for (item of nav(); track item.path) {
+        <a
+          [routerLink]="item.path"
+          routerLinkActive="bg-brand-saffron! text-brand-brown!"
+          (click)="menuOpen.set(false)"
+          class="rounded-md px-3 py-2.5 text-sm font-medium hover:bg-white/10 hover:text-white focus:outline-hidden focus-visible:ring-2 focus-visible:ring-brand-amber"
+          >{{ item.label }}</a
+        >
+      }
+    </nav>
+    <div class="border-t border-white/10 p-3 text-xs">
+      <p class="truncate px-3 text-brand-cream/60" [title]="email()">{{ email() }}</p>
+      <button type="button" (click)="signOut()" class="mt-2 w-full rounded-md px-3 py-2 text-left text-sm hover:bg-white/10 hover:text-white">
+        Sign out
+      </button>
+    </div>
+  </aside>
+  @if (menuOpen()) {
+    <div class="fixed inset-0 z-30 bg-black/30 md:hidden" (click)="menuOpen.set(false)" aria-hidden="true"></div>
+  }
+
+  <div class="flex min-w-0 flex-1 flex-col">
+    <!-- Top bar -->
+    <header class="flex flex-wrap items-center gap-3 border-b border-gray-200 bg-white px-4 py-3 sm:px-6">
+      <button
+        type="button"
+        class="rounded-md p-2 text-gray-500 hover:bg-gray-100 md:hidden"
+        (click)="menuOpen.set(true)"
+        aria-label="Open menu"
+      >
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="h-6 w-6" aria-hidden="true">
+          <path stroke-linecap="round" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+      </button>
+
+      @if (store.workspaces().length > 1) {
+        <label class="flex items-center gap-2 text-sm">
+          <span class="text-gray-500">Business</span>
+          <select
+            class="rounded-md border border-gray-300 bg-white px-2 py-1.5 text-sm"
+            [value]="store.tenantId()"
+            (change)="switchTenant($any($event.target).value)"
+          >
+            @for (w of store.workspaces(); track w.tenant_id) {
+              <option [value]="w.tenant_id">{{ w.tenant_name }}</option>
+            }
+          </select>
+        </label>
+      }
+
+      @if (store.visibleOutlets().length > 1) {
+        <label class="flex items-center gap-2 text-sm">
+          <span class="text-gray-500">Outlet</span>
+          <select
+            class="rounded-md border border-gray-300 bg-white px-2 py-1.5 text-sm"
+            [value]="store.outletId()"
+            (change)="store.selectOutlet($any($event.target).value)"
+          >
+            @for (o of store.visibleOutlets(); track o.id) {
+              <option [value]="o.id">{{ o.name }}{{ o.is_active ? '' : ' (closed)' }}</option>
+            }
+          </select>
+        </label>
+      } @else if (store.visibleOutlets().length === 1) {
+        <span class="text-sm text-gray-500">Outlet: <span class="font-medium text-gray-700">{{ store.visibleOutlets()[0]!.name }}</span></span>
+      }
+    </header>
+
+    @if (!store.writable()) {
+      <div class="border-b border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900 sm:px-6" role="status">
+        Your free trial has ended, so everything is read-only. Contact us to choose a plan and keep editing.
+      </div>
+    } @else if (trialDaysLeft() !== null && trialDaysLeft()! <= 7) {
+      <div class="border-b border-sky-200 bg-sky-50 px-4 py-3 text-sm text-sky-900 sm:px-6" role="status">
+        Free trial: {{ trialDaysLeft() }} {{ trialDaysLeft() === 1 ? 'day' : 'days' }} left.
+      </div>
+    }
+
+    <main class="min-w-0 flex-1 p-4 sm:p-6">
+      <router-outlet />
+    </main>
+  </div>
+</div>

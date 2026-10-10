@@ -1,0 +1,250 @@
+@if (lead(); as lead) {
+  <div class="mb-6 flex flex-wrap items-start justify-between gap-4">
+    <div class="min-w-0">
+      <a routerLink="/leads" class="text-sm text-ink-500 hover:text-ink-900 dark:text-ink-400 dark:hover:text-white">← Pipeline</a>
+      <h1 class="mt-2 text-2xl font-semibold tracking-tight text-ink-900 dark:text-white">{{ lead.restaurantName }}</h1>
+      <p class="mt-1 text-sm text-ink-500 dark:text-ink-400">
+        {{ typeLabel[lead.restaurantType] }}@if (lead.area) { · {{ lead.area }}} · {{ lead.city }}
+        @if (lead.seats) { · {{ lead.seats }} seats}
+        @if (lead.outlets > 1) { · {{ lead.outlets }} outlets}
+      </p>
+    </div>
+    <div class="flex flex-wrap items-center gap-2">
+      <select
+        [ngModel]="lead.stage"
+        (ngModelChange)="setStage(lead, $event)"
+        aria-label="Stage"
+        class="rounded-lg border-0 px-3 py-2 text-sm font-medium"
+        [class]="stageClass(lead.stage)"
+      >
+        @for (s of stages; track s) {
+          <option [value]="s">{{ stageLabel[s] }}</option>
+        }
+      </select>
+      <a [routerLink]="['/leads', lead.id, 'edit']" class="btn-secondary">Edit</a>
+      @if (auth.isAdmin()) {
+        @if (confirmingDelete()) {
+          <button type="button" (click)="doDelete(lead)" class="rounded-lg bg-rose-600 px-3 py-2 text-sm font-medium text-white hover:bg-rose-700">Delete for good</button>
+          <button type="button" (click)="confirmingDelete.set(false)" class="btn-secondary">Keep</button>
+        } @else {
+          <button type="button" (click)="confirmingDelete.set(true)" class="rounded-lg px-3 py-2 text-sm font-medium text-rose-600 hover:bg-rose-50 dark:text-rose-400 dark:hover:bg-rose-500/10">Delete</button>
+        }
+      }
+    </div>
+  </div>
+
+  @if (store.error()) {
+    <div class="mb-4 rounded-xl border border-rose-200 bg-rose-50 p-4 text-sm font-medium text-rose-800 dark:border-rose-500/30 dark:bg-rose-500/10 dark:text-rose-200" role="alert">{{ store.error() }}</div>
+  }
+
+  <div class="grid gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.3fr)]">
+    <!-- Left: facts -->
+    <div class="space-y-4">
+      <section class="card">
+        <h2 class="text-sm font-semibold text-ink-900 dark:text-white">Owner</h2>
+        <p class="mt-2 text-sm text-ink-700 dark:text-ink-200">{{ lead.ownerName ?? 'Name not known yet' }}</p>
+        <div class="mt-3 flex flex-wrap gap-2">
+          @if (lead.phone) {
+            <a [href]="'tel:+91' + lead.phone" class="btn-primary">Call {{ lead.phone }}</a>
+          }
+          @if (lead.email) {
+            <a [href]="'mailto:' + lead.email" class="btn-secondary">{{ lead.email }}</a>
+          }
+          @if (lead.mapsUrl) {
+            <a [href]="lead.mapsUrl" target="_blank" rel="noopener" class="btn-secondary">Open in Maps</a>
+          }
+        </div>
+        @if (lead.address) {
+          <p class="mt-3 text-xs text-ink-500 dark:text-ink-400">{{ lead.address }}</p>
+        }
+        <div class="mt-3 flex flex-wrap items-center gap-2 border-t border-ink-100 pt-3 text-xs dark:border-ink-800">
+          @if (lead.latitude !== null && lead.longitude !== null) {
+            <a [href]="osmLink(lead.latitude, lead.longitude)" target="_blank" rel="noopener" class="font-medium text-brand-600 dark:text-brand-400">Location on map</a>
+            @if (lead.locationAccuracyM !== null) {
+              <span class="text-ink-400">±{{ lead.locationAccuracyM }} m</span>
+            }
+          } @else {
+            <span class="text-ink-400">No location saved</span>
+          }
+          <button type="button" (click)="saveMyLocation(lead)" [disabled]="locating()" class="ml-auto rounded-md border border-ink-200 px-2.5 py-1 font-medium text-ink-600 hover:bg-ink-50 disabled:opacity-50 dark:border-ink-700 dark:text-ink-300 dark:hover:bg-ink-800">
+            {{ locating() ? 'Getting location…' : 'Save my current location' }}
+          </button>
+        </div>
+        @if (locationError()) {
+          <p class="mt-2 text-xs text-rose-600 dark:text-rose-400" role="alert">{{ locationError() }}</p>
+        }
+      </section>
+
+      <section class="card">
+        <h2 class="text-sm font-semibold text-ink-900 dark:text-white">Sale</h2>
+        <dl class="mt-2 grid grid-cols-2 gap-x-4 gap-y-2 text-sm">
+          <dt class="text-ink-500 dark:text-ink-400">Next follow-up</dt>
+          <dd>
+            @if (followUp(); as f) {
+              <span [class]="f.cls">{{ lead.nextFollowUpOn ? shortDate(lead.nextFollowUpOn) : 'Not set' }}{{ f.state === 'overdue' ? ' · overdue' : f.state === 'today' ? ' · today' : '' }}</span>
+            } @else {
+              <span class="text-ink-400">—</span>
+            }
+          </dd>
+          @if (lead.stage === 'lost') {
+            <dt class="text-ink-500 dark:text-ink-400">Lost because</dt>
+            <dd class="text-rose-600 dark:text-rose-400">{{ lead.lostReason }}</dd>
+          }
+          <dt class="text-ink-500 dark:text-ink-400">Expected plan</dt>
+          <dd class="text-ink-800 dark:text-ink-100">{{ lead.expectedPlan ? planLabel[lead.expectedPlan] : 'Not decided' }}</dd>
+          <dt class="text-ink-500 dark:text-ink-400">Salesperson</dt>
+          <dd class="text-ink-800 dark:text-ink-100">{{ lead.assignedName ?? 'Unassigned' }}</dd>
+          <dt class="text-ink-500 dark:text-ink-400">Source</dt>
+          <dd class="text-ink-800 dark:text-ink-100">{{ sourceLabel[lead.source] }}{{ lead.dealerName ? ' · ' + lead.dealerName : '' }}</dd>
+          <dt class="text-ink-500 dark:text-ink-400">Added</dt>
+          <dd class="text-ink-800 dark:text-ink-100">{{ shortDate(lead.createdAt) }}</dd>
+        </dl>
+      </section>
+
+      <section class="card">
+        <h2 class="text-sm font-semibold text-ink-900 dark:text-white">Qualifying</h2>
+        <dl class="mt-2 grid grid-cols-2 gap-x-4 gap-y-2 text-sm">
+          <dt class="text-ink-500 dark:text-ink-400">Billing today</dt>
+          <dd class="text-ink-800 dark:text-ink-100">{{ billingLabel[lead.currentBilling] }}{{ lead.billingSoftware ? ' · ' + lead.billingSoftware : '' }}</dd>
+          <dt class="text-ink-500 dark:text-ink-400">Zomato / Swiggy</dt>
+          <dd class="text-ink-800 dark:text-ink-100">
+            {{ tri(lead.onAggregators) }}
+            @if (lead.monthlyAggregatorOrders !== null) { · ~{{ lead.monthlyAggregatorOrders }} orders/month}
+          </dd>
+          <dt class="text-ink-500 dark:text-ink-400">Website</dt>
+          <dd class="text-ink-800 dark:text-ink-100">{{ tri(lead.hasWebsite) }}</dd>
+          <dt class="text-ink-500 dark:text-ink-400">Own riders</dt>
+          <dd class="text-ink-800 dark:text-ink-100">{{ tri(lead.hasOwnRiders) }}</dd>
+        </dl>
+        @if (lead.notes) {
+          <p class="mt-3 whitespace-pre-line border-t border-ink-100 pt-3 text-sm text-ink-700 dark:border-ink-800 dark:text-ink-200">{{ lead.notes }}</p>
+        }
+      </section>
+
+      <!-- WhatsApp -->
+      <section class="card">
+        <h2 class="text-sm font-semibold text-ink-900 dark:text-white">WhatsApp</h2>
+        <div class="mt-2 flex flex-wrap gap-1.5">
+          @for (t of templates; track t.key) {
+            <button
+              type="button"
+              (click)="pickTemplate(t.key)"
+              [class]="templateKey() === t.key ? 'rounded-full bg-emerald-600 px-2.5 py-1 text-xs font-medium text-white' : 'rounded-full border border-ink-200 px-2.5 py-1 text-xs text-ink-600 hover:bg-ink-50 dark:border-ink-700 dark:text-ink-300 dark:hover:bg-ink-800'"
+            >
+              {{ t.label }}
+            </button>
+          }
+        </div>
+        <textarea rows="6" [ngModel]="message()" (ngModelChange)="message.set($event)" aria-label="WhatsApp message" class="field"></textarea>
+        @if (waLink(lead); as href) {
+          <a [href]="href" target="_blank" rel="noopener" (click)="sentWhatsApp(lead)" class="mt-2 inline-block rounded-lg bg-emerald-600 px-3 py-2 text-sm font-medium text-white hover:bg-emerald-700">Open in WhatsApp</a>
+        } @else {
+          <p class="mt-2 text-xs text-ink-400">Add a phone number to send on WhatsApp.</p>
+        }
+      </section>
+    </div>
+
+    <!-- Right: log + timeline -->
+    <div class="space-y-4">
+      @if (auth.isSuperAdmin() && (lead.tenantId || lead.stage !== 'lost')) {
+        <app-convert-lead [lead]="lead" (converted)="reloadActivities()" />
+      }
+      <section class="card">
+        <h2 class="text-sm font-semibold text-ink-900 dark:text-white">Log activity</h2>
+        <div class="mt-3 flex flex-wrap gap-1.5">
+          @for (t of activityTypes; track t) {
+            <button
+              type="button"
+              (click)="type.set(t)"
+              [class]="type() === t ? 'rounded-lg bg-ink-900 px-3 py-1.5 text-xs font-medium text-white dark:bg-white dark:text-ink-900' : 'rounded-lg border border-ink-200 px-3 py-1.5 text-xs font-medium text-ink-600 hover:bg-ink-50 dark:border-ink-700 dark:text-ink-300 dark:hover:bg-ink-800'"
+            >
+              {{ activityLabel[t] }}
+            </button>
+          }
+        </div>
+        <div class="mt-3 grid gap-3 sm:grid-cols-2">
+          <div>
+            <label for="outcome" class="field-label">Outcome</label>
+            <select id="outcome" [ngModel]="outcome()" (ngModelChange)="setOutcome($event)" class="field">
+              <option [ngValue]="null">—</option>
+              @for (o of outcomes; track o) {
+                <option [ngValue]="o">{{ outcomeLabel[o] }}</option>
+              }
+            </select>
+          </div>
+          <div>
+            <label for="nextStage" class="field-label">Move to stage</label>
+            <select id="nextStage" [ngModel]="nextStage()" (ngModelChange)="nextStage.set($event)" class="field">
+              <option [ngValue]="null">Keep {{ stageLabel[lead.stage] }}</option>
+              @for (s of stages; track s) {
+                @if (s !== lead.stage) {
+                  <option [ngValue]="s">{{ stageLabel[s] }}</option>
+                }
+              }
+            </select>
+          </div>
+          @if (nextStage() === 'lost') {
+            <div class="sm:col-span-2">
+              <label for="lostReason" class="field-label">Lost reason *</label>
+              <input id="lostReason" list="lost-reasons" [ngModel]="lostReason()" (ngModelChange)="lostReason.set($event)" class="field" />
+              <datalist id="lost-reasons">
+                @for (r of lostReasons; track r) {
+                  <option [value]="r"></option>
+                }
+              </datalist>
+            </div>
+          } @else if (!closing()) {
+            <div>
+              <label for="nextFollowUp" class="field-label">Next follow-up</label>
+              <input id="nextFollowUp" type="date" [ngModel]="nextFollowUp()" (ngModelChange)="nextFollowUp.set($event)" class="field" />
+            </div>
+          }
+          <div class="sm:col-span-2">
+            <label for="note" class="field-label">Note</label>
+            <textarea id="note" rows="3" [ngModel]="note()" (ngModelChange)="note.set($event)" class="field" placeholder="What did they say?"></textarea>
+          </div>
+        </div>
+        @if (logError()) {
+          <p class="mt-2 text-sm text-rose-600 dark:text-rose-400" role="alert">{{ logError() }}</p>
+        }
+        <div class="mt-3 flex justify-end">
+          <button type="button" (click)="log()" [disabled]="logging() || (nextStage() === 'lost' && !lostReason().trim())" class="btn-primary">
+            {{ logging() ? 'Saving…' : 'Log ' + activityLabel[type()].toLowerCase() }}
+          </button>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2 class="text-sm font-semibold text-ink-900 dark:text-white">History</h2>
+        <ol class="mt-3 space-y-3">
+          @for (a of activities(); track a.id) {
+            <li class="group flex gap-3">
+              <span class="mt-0.5 grid size-7 shrink-0 place-items-center rounded-full bg-ink-100 text-[10px] font-semibold uppercase text-ink-600 dark:bg-ink-800 dark:text-ink-300">{{ activityLabel[a.type].slice(0, 2) }}</span>
+              <div class="min-w-0 flex-1">
+                <p class="text-sm text-ink-900 dark:text-white">
+                  <span class="font-medium">{{ activityLabel[a.type] }}</span>
+                  @if (a.outcome) {
+                    <span class="text-ink-500 dark:text-ink-400"> · {{ outcomeLabel[a.outcome] }}</span>
+                  }
+                </p>
+                @if (a.note) {
+                  <p class="mt-0.5 whitespace-pre-line text-sm text-ink-600 dark:text-ink-300">{{ a.note }}</p>
+                }
+                <p class="mt-0.5 text-xs text-ink-400">{{ when(a.createdAt) }}{{ a.createdByName ? ' · ' + a.createdByName : '' }}</p>
+              </div>
+              <button type="button" (click)="removeActivity(a)" class="h-fit rounded px-1.5 py-0.5 text-xs text-ink-400 opacity-0 hover:bg-ink-100 hover:text-rose-600 group-hover:opacity-100 focus:opacity-100 dark:hover:bg-ink-800" aria-label="Delete activity">✕</button>
+            </li>
+          } @empty {
+            <li class="text-sm text-ink-400">Nothing logged yet.</li>
+          }
+        </ol>
+      </section>
+    </div>
+  </div>
+} @else if (loadError()) {
+  <div class="rounded-xl border border-rose-200 bg-rose-50 p-4 text-sm font-medium text-rose-800 dark:border-rose-500/30 dark:bg-rose-500/10 dark:text-rose-200" role="alert">
+    {{ loadError() }} <a routerLink="/leads" class="underline">Back to the pipeline</a>
+  </div>
+} @else {
+  <p class="py-12 text-center text-sm text-ink-400">Loading…</p>
+}

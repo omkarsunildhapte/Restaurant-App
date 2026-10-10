@@ -1,0 +1,763 @@
+{
+  "template": "modern-cafe",
+  "slug": "chai-corner",
+  "restaurant": {
+    "name": "Chai Corner",
+    "shortName": "Chai Corner",
+    "schemaType": "CafeOrCoffeeShop",
+    "cuisines": [
+      "Cafe",
+      "Coffee",
+      "Breakfast",
+      "Continental"
+    ],
+    "priceRange": "₹₹",
+    "currency": "INR",
+    "phone": "+91 20 0000 0000",
+    "whatsapp": "910000000000",
+    "email": "hello@brewandleaf.in",
+    "fssai": "00000000000000",
+    "address": {
+      "line": "12 Garden Lane, Baner, Pune 411045",
+      "short": "12 Garden Lane, Baner",
+      "street": "12 Garden Lane, Baner",
+      "city": "Pune",
+      "state": "Maharashtra",
+      "postalCode": "411045",
+      "country": "IN"
+    },
+    "mapsQuery": "Garden Lane, Baner, Pune",
+    "hours": {
+      "0": [
+        "09:00",
+        "22:00"
+      ],
+      "1": [
+        "08:00",
+        "21:00"
+      ],
+      "2": [
+        "08:00",
+        "21:00"
+      ],
+      "3": [
+        "08:00",
+        "21:00"
+      ],
+      "4": [
+        "08:00",
+        "21:00"
+      ],
+      "5": [
+        "08:00",
+        "22:30"
+      ],
+      "6": [
+        "09:00",
+        "22:30"
+      ]
+    },
+    "social": {
+      "instagram": "https://instagram.com/",
+      "facebook": "https://facebook.com/"
+    }
+  },
+  "theme": {
+    "logo": null,
+    "colors": {
+      "primary": "#9a3412",
+      "dark": "#1c1917",
+      "background": "#fffbf5"
+    },
+    "fonts": {
+      "heading": "Playfair Display",
+      "body": "Poppins",
+      "script": "Kalam"
+    }
+  },
+  "seo": {
+    "url": "https://chaicorner.example/",
+    "lang": "en-IN",
+    "title": "Chai Corner · Chai, snacks and conversation",
+    "description": "Freshly brewed coffee, all-day breakfast and simple, honest lunches in Baner, Pune. See the menu, opening hours and order on WhatsApp.",
+    "image": "assets/img/hero-1400.webp"
+  },
+  "delivery": [
+    {
+      "name": "Swiggy",
+      "url": "https://www.swiggy.com/"
+    },
+    {
+      "name": "Zomato",
+      "url": "https://www.zomato.com/"
+    }
+  ],
+  "announcement": {
+    "enabled": true,
+    "showDelivery": false,
+    "text": "Bring your own cup, get ₹20 off"
+  },
+  "home": {
+    "sections": [
+      "hero",
+      "info",
+      "popular",
+      "faq",
+      "cta"
+    ],
+    "hero": {
+      "eyebrow": "Coffee house · Est. 2019",
+      "title": [
+        "Chai first.",
+        "Everything else later."
+      ],
+      "script": "good coffee, good company",
+      "text": "Freshly brewed coffee, all-day breakfast and simple, honest lunches - made in-house every day, in a calm green corner of Baner.",
+      "emblem": null,
+      "image": {
+        "src": "assets/img/hero-800.webp",
+        "large": "assets/img/hero-1400.webp",
+        "smallWidth": 800,
+        "width": 1400,
+        "height": 933,
+        "alt": "Two lattes with leaf art on a wooden café table"
+      }
+    },
+    "ribbon": [
+      "Fresh coffee",
+      "All-day breakfast",
+      "Homemade bakes",
+      "Good company"
+    ],
+    "welcome": {
+      "eyebrow": "Welcome",
+      "title": "A neighbourhood café that feels like yours.",
+      "script": "pull up a chair, stay a while",
+      "paragraphs": [
+        "Brew & Leaf is a small café for students between classes, people working nearby and families out for the weekend. We roast our coffee to order, bake through the morning and keep the menu short so everything on it is good.",
+        "Come for a quick espresso, stay for lunch, or bring your laptop - there's fast Wi-Fi and plenty of plugs."
+      ],
+      "badge": {
+        "big": "100%",
+        "small": "made in-house, every morning"
+      },
+      "image": {
+        "src": "assets/img/interior-600.webp",
+        "large": "assets/img/interior-1200.webp",
+        "width": 1200,
+        "height": 900,
+        "alt": "Inside the café: wooden tables, plants and the coffee counter"
+      }
+    },
+    "popular": {
+      "eyebrow": "Most loved",
+      "title": "Popular food & drinks",
+      "text": "The plates and cups our regulars order again and again.",
+      "limit": 4
+    },
+    "values": {
+      "eyebrow": "Why people stay",
+      "title": "More than a coffee stop",
+      "items": [
+        {
+          "icon": "leaf",
+          "title": "Fresh, every day",
+          "text": "Breads, sauces and desserts are made in our kitchen each morning."
+        },
+        {
+          "icon": "wifi",
+          "title": "Work-friendly",
+          "text": "Fast Wi-Fi, plug points at most tables and a quiet upstairs corner."
+        },
+        {
+          "icon": "people",
+          "title": "Family welcome",
+          "text": "Kid-friendly plates, high chairs and room for the whole table."
+        },
+        {
+          "icon": "heart",
+          "title": "Fair prices",
+          "text": "Great coffee shouldn't be a treat. Most of our menu is under ₹400."
+        }
+      ]
+    },
+    "reviews": {
+      "sample": true,
+      "eyebrow": "What guests say",
+      "title": "Loved by regulars",
+      "googleQuery": "Brew & Leaf Cafe Baner Pune",
+      "items": [
+        {
+          "name": "Sneha",
+          "note": "Student, nearby college",
+          "text": "The quiet corner upstairs is my go-to between lectures. Good Wi-Fi, a proper latte and nobody rushes you out."
+        },
+        {
+          "name": "Rahul",
+          "note": "Works around the corner",
+          "text": "I grab a cold brew on my way to the office most mornings. Always quick, always the same great taste."
+        },
+        {
+          "name": "Ayesha",
+          "note": "Weekend regular",
+          "text": "Our Sunday breakfast spot now. The kids love the French toast and there's space for the whole family."
+        }
+      ]
+    },
+    "gallery": {
+      "eyebrow": "@brewandleaf",
+      "title": "Fresh from our Instagram",
+      "text": "What came out of the kitchen this week. Tag us when you visit.",
+      "images": [
+        {
+          "src": "assets/img/latte-600.webp"
+        },
+        {
+          "src": "assets/img/brunch-600.webp"
+        },
+        {
+          "src": "assets/img/cheers-600.webp"
+        },
+        {
+          "src": "assets/img/dessert-600.webp"
+        },
+        {
+          "src": "assets/img/mocktails-600.webp"
+        },
+        {
+          "src": "assets/img/cappuccino-600.webp"
+        }
+      ]
+    },
+    "faq": {
+      "eyebrow": "Good to know",
+      "title": "Questions people ask"
+    },
+    "events": {
+      "sample": true,
+      "eyebrow": "Happening here",
+      "title": "Events at the café",
+      "text": "Small, friendly evenings and weekend workshops. Spots are limited - reserve on WhatsApp.",
+      "items": [
+        {
+          "when": "Every Saturday · 11 am",
+          "title": "Latte art for beginners",
+          "text": "Pour your first heart and rosetta with our baristas. 90 minutes, coffee included.",
+          "price": 800,
+          "image": {
+            "src": "assets/img/latte-600.webp"
+          }
+        },
+        {
+          "when": "First Friday · 7 pm",
+          "title": "Open mic night",
+          "text": "Poetry, stand-up and acoustic sets. Sign up at the counter or just come and listen.",
+          "price": "Free entry",
+          "image": {
+            "src": "assets/img/cheers-600.webp"
+          }
+        },
+        {
+          "when": "Last Sunday · 10 am",
+          "title": "Brunch book club",
+          "text": "One book a month, a long table and bottomless filter coffee for the hour.",
+          "price": 300,
+          "image": {
+            "src": "assets/img/brunch-600.webp"
+          }
+        }
+      ]
+    },
+    "cta": {
+      "title": "Hungry already?",
+      "text": "Order ahead on WhatsApp, get it delivered, or come and find a table.",
+      "actions": [
+        "book",
+        "order"
+      ]
+    }
+  },
+  "faq": [
+    {
+      "q": "Do I need to book a table?",
+      "a": "Walk-ins are always welcome. On weekend mornings and evenings it gets busy, so booking guarantees you a table - it takes a minute on our booking page."
+    },
+    {
+      "q": "Is there parking nearby?",
+      "a": "Yes - two-wheeler parking right outside, and a pay-and-park two minutes' walk away."
+    },
+    {
+      "q": "Can I work from the café?",
+      "a": "Of course. We have fast Wi-Fi, plug points at most tables and a quieter upstairs corner. No minimum order."
+    },
+    {
+      "q": "Which dishes are vegetarian?",
+      "a": "Every dish carries a veg, egg or non-veg mark, and vegan, Jain and gluten-free dishes are tagged. Use the filters on the menu page, and tell us about any allergies when you order."
+    },
+    {
+      "q": "Are pets allowed?",
+      "a": "Well-behaved dogs are welcome in our outdoor seating, and we keep a water bowl by the door."
+    },
+    {
+      "q": "Do you take birthday cake or catering orders?",
+      "a": "Yes - order cakes at least 48 hours ahead and catering for up to 60 people. Message us on WhatsApp or use the contact form."
+    }
+  ],
+  "menu": {
+    "description": "Breakfast, lunch, coffee, drinks and desserts at Brew & Leaf Café, Baner. Veg, egg and non-veg dishes marked. Order on WhatsApp.",
+    "searchPlaceholder": "Search dishes - try paneer, chai, eggs",
+    "note": "Allergies or dietary needs? Tell us when you order - most dishes can be made without nuts, gluten or dairy.",
+    "hero": {
+      "eyebrow": "Fresh every day",
+      "title": "Our menu",
+      "text": "Breakfast served all day. Prices include GST.",
+      "image": {
+        "src": "assets/img/menu-hero-800.webp",
+        "large": "assets/img/menu-hero-1400.webp",
+        "smallWidth": 800,
+        "width": 1400,
+        "height": 700,
+        "alt": "A table spread with waffles, eggs, fruit and coffee"
+      }
+    },
+    "cta": {
+      "title": "Found something you like?",
+      "text": "Send us your order on WhatsApp and pick it up without the wait - or get it delivered.",
+      "actions": [
+        "order",
+        "call"
+      ]
+    },
+    "categories": [
+      {
+        "id": "breakfast",
+        "name": "Breakfast",
+        "blurb": "Served all day, because mornings run late.",
+        "image": {
+          "src": "assets/img/frenchtoast-600.webp"
+        },
+        "items": [
+          {
+            "id": "banana-french-toast",
+            "name": "Banana French Toast",
+            "description": "Brioche, caramelised banana, blueberries, maple syrup.",
+            "price": 320,
+            "diet": "egg",
+            "popular": true,
+            "image": {
+              "src": "assets/img/frenchtoast-600.webp"
+            }
+          },
+          {
+            "id": "avocado-egg-toast",
+            "name": "Avocado Egg Toast",
+            "description": "Sourdough, smashed avocado, fried egg, chilli flakes.",
+            "price": 380,
+            "diet": "egg",
+            "popular": true
+          },
+          {
+            "id": "herb-omelette",
+            "name": "Herb Omelette",
+            "description": "Three eggs, chives, spinach and feta, toast on the side.",
+            "price": 280,
+            "diet": "egg"
+          },
+          {
+            "id": "granola-bowl",
+            "name": "Granola Bowl",
+            "description": "House granola, Greek yoghurt, honey, seasonal fruit.",
+            "price": 260,
+            "diet": "veg"
+          },
+          {
+            "id": "berry-overnight-oats",
+            "name": "Berry Overnight Oats",
+            "description": "Rolled oats, oat milk, chia, seasonal berries.",
+            "price": 240,
+            "diet": "veg",
+            "tags": [
+              "vegan"
+            ]
+          },
+          {
+            "id": "big-breakfast-plate",
+            "name": "Big Breakfast Plate",
+            "description": "Eggs your way, chicken sausages, beans, mushrooms, toast.",
+            "price": 450,
+            "diet": "nonveg"
+          }
+        ]
+      },
+      {
+        "id": "lunch",
+        "name": "Lunch",
+        "blurb": "From 12 noon. Light, filling and made to order.",
+        "image": {
+          "src": "assets/img/pizza-600.webp"
+        },
+        "items": [
+          {
+            "id": "garden-flatbread",
+            "name": "Garden Flatbread",
+            "description": "Roasted peppers, onion, mozzarella, fresh herbs.",
+            "price": 360,
+            "diet": "veg",
+            "popular": true,
+            "image": {
+              "src": "assets/img/pizza-600.webp"
+            }
+          },
+          {
+            "id": "paneer-tikka-sandwich",
+            "name": "Paneer Tikka Sandwich",
+            "description": "Grilled paneer tikka, roasted peppers and mint chutney on sourdough.",
+            "price": 320,
+            "diet": "veg",
+            "popular": true
+          },
+          {
+            "id": "chicken-pesto-panini",
+            "name": "Chicken Pesto Panini",
+            "description": "Grilled chicken, basil pesto, sun-dried tomato.",
+            "price": 380,
+            "diet": "nonveg"
+          },
+          {
+            "id": "buddha-bowl",
+            "name": "Buddha Bowl",
+            "description": "Quinoa, chickpeas, roast veg, hummus, tahini dressing.",
+            "price": 420,
+            "diet": "veg",
+            "tags": [
+              "vegan",
+              "gf"
+            ]
+          },
+          {
+            "id": "creamy-mushroom-pasta",
+            "name": "Creamy Mushroom Pasta",
+            "description": "Penne, garlic mushrooms, parmesan cream sauce.",
+            "price": 390,
+            "diet": "veg"
+          },
+          {
+            "id": "soup-of-the-day",
+            "name": "Soup of the Day",
+            "description": "Ask us what is cooking. Served with garlic bread.",
+            "price": 220,
+            "diet": "veg"
+          }
+        ]
+      },
+      {
+        "id": "coffee",
+        "name": "Coffee & chai",
+        "short": "Coffee",
+        "blurb": "Coffee from Chikmagalur and Coorg estates. Oat milk +₹40.",
+        "image": {
+          "src": "assets/img/cappuccino-600.webp"
+        },
+        "items": [
+          {
+            "id": "house-latte",
+            "name": "House Latte",
+            "description": "Double shot of our signature blend, steamed milk.",
+            "price": 220,
+            "diet": "veg",
+            "tags": [
+              "gf"
+            ],
+            "popular": true,
+            "image": {
+              "src": "assets/img/latte-600.webp"
+            }
+          },
+          {
+            "id": "cappuccino",
+            "name": "Cappuccino",
+            "description": "Equal parts espresso, milk and foam.",
+            "price": 200,
+            "diet": "veg",
+            "tags": [
+              "gf"
+            ]
+          },
+          {
+            "id": "filter-coffee",
+            "name": "South Indian Filter Coffee",
+            "description": "Decoction brewed the slow way, frothed with hot milk.",
+            "price": 120,
+            "diet": "veg",
+            "tags": [
+              "gf"
+            ]
+          },
+          {
+            "id": "chai-latte",
+            "name": "Masala Chai Latte",
+            "description": "Spiced chai with fresh ginger and steamed milk. Ask for oat milk.",
+            "price": 180,
+            "diet": "veg",
+            "tags": [
+              "gf"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "cold-drinks",
+        "name": "Cold drinks",
+        "blurb": "Brewed, shaken and poured over ice.",
+        "image": {
+          "src": "assets/img/mocktails-600.webp"
+        },
+        "items": [
+          {
+            "id": "cold-brew-tonic",
+            "name": "Cold Brew Tonic",
+            "description": "18-hour cold brew over tonic and ice.",
+            "price": 260,
+            "diet": "veg",
+            "tags": [
+              "vegan",
+              "gf"
+            ],
+            "popular": true,
+            "image": {
+              "src": "assets/img/iced-600.webp"
+            }
+          },
+          {
+            "id": "sparkling-lemonade",
+            "name": "Sparkling Nimbu Soda",
+            "description": "Fresh lime, mint and soda, sweet or salted.",
+            "price": 160,
+            "diet": "veg",
+            "tags": [
+              "vegan",
+              "jain",
+              "gf"
+            ]
+          },
+          {
+            "id": "berry-mocktail",
+            "name": "Berry Mocktail",
+            "description": "Mixed berries, mint, lime, soda.",
+            "price": 240,
+            "diet": "veg",
+            "tags": [
+              "vegan",
+              "jain",
+              "gf"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "desserts",
+        "name": "Desserts",
+        "blurb": "Baked in-house. Ask what came out of the oven today.",
+        "image": {
+          "src": "assets/img/dessert-600.webp"
+        },
+        "items": [
+          {
+            "id": "strawberry-panna-cotta",
+            "name": "Strawberry Panna Cotta",
+            "description": "Vanilla cream set with agar, fresh strawberry compote.",
+            "price": 260,
+            "diet": "veg",
+            "tags": [
+              "gf"
+            ],
+            "popular": true
+          },
+          {
+            "id": "chocolate-brownie",
+            "name": "Chocolate Brownie",
+            "description": "Warm, fudgy, with a scoop of vanilla ice cream.",
+            "price": 220,
+            "diet": "egg"
+          },
+          {
+            "id": "baked-cheesecake",
+            "name": "Baked Cheesecake",
+            "description": "New York style, biscuit base. Slice of the day.",
+            "price": 280,
+            "diet": "egg"
+          },
+          {
+            "id": "cinnamon-roll",
+            "name": "Eggless Cinnamon Roll",
+            "description": "Baked every morning. Best before noon.",
+            "price": 180,
+            "diet": "veg"
+          }
+        ]
+      }
+    ]
+  },
+  "about": {
+    "description": "How Brew & Leaf Café began in Baner, Pune: small-batch coffee, fresh food made in-house and a café to stay a while.",
+    "hero": {
+      "eyebrow": "About us",
+      "title": "Our story",
+      "text": "It started with one coffee machine, three tables and a simple idea: make the kind of café we always wanted nearby.",
+      "image": {
+        "src": "assets/img/counter-600.webp",
+        "large": "assets/img/counter-1200.webp",
+        "width": 1200,
+        "height": 900,
+        "alt": "The café counter with espresso machine and hanging lights"
+      }
+    },
+    "blocks": [
+      {
+        "eyebrow": "How it began",
+        "script": "since 2019",
+        "title": "From three tables to a neighbourhood favourite.",
+        "paragraphs": [
+          "Brew & Leaf opened in 2019 in a small shop on Garden Lane. We wanted somewhere you could get properly good coffee without the fuss, eat something fresh and honest, and sit for as long as you liked.",
+          "Word spread among students from the nearby colleges and the IT offices around the corner. Families started coming on weekends. Today we're still the same small team, just with a few more tables - and the same coffee machine."
+        ],
+        "badge": {
+          "big": "2019",
+          "small": "first cup poured"
+        },
+        "image": {
+          "src": "assets/img/cheers-600.webp",
+          "large": "assets/img/cheers-1200.webp",
+          "width": 1200,
+          "height": 900,
+          "alt": "Friends raising cups of coffee over a wooden table"
+        }
+      },
+      {
+        "eyebrow": "Our coffee",
+        "title": "Indian estate beans, roasted for flavour.",
+        "paragraphs": [
+          "Our house blend uses beans from small estates in Chikmagalur and Coorg, roasted in small batches every week. Smooth and chocolatey with milk, bright and clean as an espresso.",
+          "Not a coffee person? Ask for our masala chai latte, brewed the slow way with fresh ginger and whole spices."
+        ],
+        "image": {
+          "src": "assets/img/craft-600.webp",
+          "large": "assets/img/craft-1200.webp",
+          "width": 1200,
+          "height": 900,
+          "alt": "Coffee beans, ground coffee and a latte on a wooden board"
+        }
+      }
+    ],
+    "values": {
+      "eyebrow": "What we believe in",
+      "title": "Four simple promises",
+      "items": [
+        {
+          "icon": "leaf",
+          "title": "Fresh, not frozen",
+          "text": "Everything is cooked to order or made in-house that morning. Nothing reheated from a packet."
+        },
+        {
+          "icon": "people",
+          "title": "Local first",
+          "text": "Our milk, bread flour and vegetables come from farms and suppliers around Pune."
+        },
+        {
+          "icon": "heart",
+          "title": "Less waste",
+          "text": "Bring your own cup and get ₹20 off. Leftover bakes go to a local shelter every evening."
+        },
+        {
+          "icon": "cup",
+          "title": "Stay a while",
+          "text": "No rush, no minimum order. A café should be a place to breathe."
+        }
+      ]
+    },
+    "cta": {
+      "title": "Come and say hello.",
+      "text": "We're on Garden Lane in Baner - open every day from 8 am.",
+      "actions": [
+        "contact",
+        "menu"
+      ]
+    }
+  },
+  "contact": {
+    "description": "Find Brew & Leaf Café in Baner, Pune: address, phone, WhatsApp, opening hours and map.",
+    "hero": {
+      "eyebrow": "Get in touch",
+      "title": "Visit or say hello",
+      "text": "Questions, feedback or a birthday cake order - we'd love to hear from you.",
+      "image": {
+        "src": "assets/img/exterior-600.webp",
+        "large": "assets/img/exterior-1200.webp",
+        "width": 1200,
+        "height": 800,
+        "alt": "Street-side café tables on a quiet lane"
+      }
+    },
+    "topics": [
+      "General question",
+      "Table booking for a group",
+      "Cake or catering order",
+      "Feedback"
+    ]
+  },
+  "booking": {
+    "description": "Book a table at Brew & Leaf Café, Baner. Pick a day, time and party size - confirmed on WhatsApp.",
+    "hero": {
+      "eyebrow": "Reservations",
+      "title": "Book a table",
+      "text": "Takes under a minute. We confirm on WhatsApp - walk-ins are always welcome too.",
+      "image": {
+        "src": "assets/img/interior-600.webp",
+        "large": "assets/img/interior-1200.webp",
+        "width": 1200,
+        "height": 900,
+        "alt": "Tables and plants inside the café"
+      }
+    },
+    "maxOnline": 10,
+    "lastBookingBeforeClose": 60,
+    "notice": 30,
+    "durationMinutes": 90,
+    "phonePlaceholder": "+91 98xxx xxxxx",
+    "confirmNote": "We confirm within 30 minutes while we're open.",
+    "occasions": [
+      "Birthday",
+      "Anniversary",
+      "Date",
+      "Work meeting",
+      "Family get-together"
+    ],
+    "seating": [
+      "Indoor",
+      "Outdoor",
+      "Quiet corner (upstairs)"
+    ],
+    "rules": [
+      "We hold your table for 15 minutes.",
+      "Last booking is one hour before closing.",
+      "To change or cancel, just reply on WhatsApp.",
+      "Birthday? We'll add a candle to your dessert."
+    ]
+  },
+  "footer": {
+    "tagline": "Fresh coffee, honest food and a quiet corner to stay a while.",
+    "script": "see you for coffee",
+    "signoff": "Made with care, one cup at a time",
+    "offersList": {
+      "enabled": true,
+      "title": "Get offers before anyone else",
+      "text": "New dishes, events and weekday deals - one message a week on WhatsApp. Leave any time."
+    }
+  },
+  "notFound": {
+    "title": "This cup is empty.",
+    "image": {
+      "src": "assets/img/cappuccino-600.webp"
+    }
+  }
+}

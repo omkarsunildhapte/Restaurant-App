@@ -1,0 +1,113 @@
+<div class="mb-6 flex flex-wrap items-end justify-between gap-4">
+  <div>
+    <h1 class="text-2xl font-semibold tracking-tight text-ink-900 dark:text-white">Dealers and partners</h1>
+    <p class="mt-1 text-sm text-ink-500 dark:text-ink-400">
+      Dealers earn a recurring share of each paying restaurant they bring in. Owed this month (estimated):
+      <span class="font-semibold text-ink-900 dark:text-white">{{ money(totalCommission()) }}</span>
+    </p>
+  </div>
+  @if (auth.isAdmin()) {
+    <button type="button" (click)="add()" class="btn-primary">Add dealer</button>
+  }
+</div>
+
+@if (team.error()) {
+  <div class="mb-4 rounded-xl border border-rose-200 bg-rose-50 p-4 text-sm font-medium text-rose-800 dark:border-rose-500/30 dark:bg-rose-500/10 dark:text-rose-200" role="alert">{{ team.error() }}</div>
+}
+
+@if (editing() !== null) {
+  @let f = form();
+  <form (ngSubmit)="save()" class="card mb-4 grid gap-4 sm:grid-cols-3">
+    <h2 class="text-sm font-semibold text-ink-900 sm:col-span-3 dark:text-white">{{ editing() ? 'Edit dealer' : 'New dealer' }}</h2>
+    <div>
+      <label for="d-name" class="field-label">Name *</label>
+      <input id="d-name" name="name" required [ngModel]="f.name" (ngModelChange)="patch('name', $event)" class="field" />
+    </div>
+    <div>
+      <label for="d-company" class="field-label">Company</label>
+      <input id="d-company" name="company" [ngModel]="f.company" (ngModelChange)="patch('company', $event)" class="field" placeholder="Sai Billing Systems" />
+    </div>
+    <div>
+      <label for="d-phone" class="field-label">Phone</label>
+      <input id="d-phone" name="phone" type="tel" [ngModel]="f.phone" (ngModelChange)="patch('phone', $event)" class="field" />
+    </div>
+    <div>
+      <label for="d-email" class="field-label">Email</label>
+      <input id="d-email" name="email" type="email" [ngModel]="f.email" (ngModelChange)="patch('email', $event)" class="field" />
+    </div>
+    <div>
+      <label for="d-area" class="field-label">Area</label>
+      <input id="d-area" name="area" [ngModel]="f.area" (ngModelChange)="patch('area', $event)" class="field" />
+    </div>
+    <div>
+      <label for="d-commission" class="field-label">Commission %</label>
+      <input id="d-commission" name="commissionPct" type="number" min="0" max="100" step="0.5" [ngModel]="f.commissionPct" (ngModelChange)="patch('commissionPct', $event)" class="field" />
+    </div>
+    <div class="sm:col-span-2">
+      <label for="d-notes" class="field-label">Notes</label>
+      <input id="d-notes" name="notes" [ngModel]="f.notes" (ngModelChange)="patch('notes', $event)" class="field" />
+    </div>
+    <label class="flex items-center gap-2 self-end pb-2 text-sm text-ink-700 dark:text-ink-200">
+      <input type="checkbox" name="isActive" [ngModel]="f.isActive" (ngModelChange)="patch('isActive', $event)" class="size-4 rounded border-ink-300" />
+      Active
+    </label>
+    @if (error()) {
+      <p class="text-sm text-rose-600 sm:col-span-3 dark:text-rose-400" role="alert">{{ error() }}</p>
+    }
+    <div class="flex justify-end gap-2 sm:col-span-3">
+      <button type="button" (click)="editing.set(null)" class="btn-secondary">Cancel</button>
+      <button type="submit" [disabled]="saving() || !f.name.trim()" class="btn-primary">{{ saving() ? 'Saving…' : 'Save' }}</button>
+    </div>
+  </form>
+}
+
+<div class="overflow-x-auto rounded-xl border border-ink-200 bg-white dark:border-ink-800 dark:bg-ink-950">
+  <table class="w-full min-w-[44rem] text-left text-sm">
+    <thead class="border-b border-ink-200 bg-ink-50 text-[11px] uppercase tracking-wide text-ink-500 dark:border-ink-800 dark:bg-ink-900 dark:text-ink-400">
+      <tr>
+        <th class="px-3 py-2.5">Dealer</th>
+        <th class="px-3 py-2.5">Phone</th>
+        <th class="px-3 py-2.5">Area</th>
+        <th class="px-3 py-2.5 text-right">Leads</th>
+        <th class="px-3 py-2.5 text-right">Paying</th>
+        <th class="px-3 py-2.5 text-right">Commission</th>
+        <th class="px-3 py-2.5 text-right">Owed / month</th>
+        <th class="px-3 py-2.5"></th>
+      </tr>
+    </thead>
+    <tbody class="divide-y divide-ink-100 dark:divide-ink-800">
+      @for (d of team.dealers(); track d.id) {
+        <tr [class.opacity-50]="!d.isActive">
+          <td class="px-3 py-2">
+            <p class="font-medium text-ink-900 dark:text-white">{{ d.name }}</p>
+            <p class="text-xs text-ink-500 dark:text-ink-400">{{ d.company ?? '' }}{{ d.isActive ? '' : ' · inactive' }}</p>
+          </td>
+          <td class="px-3 py-2 text-xs">
+            @if (d.phone) {
+              <a [href]="'tel:+91' + d.phone" class="text-brand-600 dark:text-brand-400">{{ d.phone }}</a>
+            } @else {
+              <span class="text-ink-400">—</span>
+            }
+          </td>
+          <td class="px-3 py-2 text-xs text-ink-600 dark:text-ink-300">{{ d.area ?? '—' }}</td>
+          <td class="px-3 py-2 text-right tabular-nums">
+            {{ d.leads }}
+          </td>
+          <td class="px-3 py-2 text-right tabular-nums text-emerald-600 dark:text-emerald-400">{{ d.paying }}</td>
+          <td class="px-3 py-2 text-right tabular-nums text-ink-600 dark:text-ink-300">{{ d.commissionPct }}%</td>
+          <td class="px-3 py-2 text-right font-medium tabular-nums text-ink-900 dark:text-white">{{ money(d.monthlyCommissionInr) }}</td>
+          <td class="px-3 py-2 text-right">
+            @if (auth.isAdmin()) {
+              <button type="button" (click)="edit(d)" class="rounded px-2 py-1 text-xs font-medium text-ink-600 hover:bg-ink-100 dark:text-ink-300 dark:hover:bg-ink-800">Edit</button>
+            }
+          </td>
+        </tr>
+      } @empty {
+        <tr>
+          <td colspan="8" class="px-3 py-10 text-center text-sm text-ink-400">No dealers yet. Billing-machine and printer dealers are the biggest long-term channel.</td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>
+<p class="mt-2 text-xs text-ink-400">Owed = commission % of each paying restaurant's expected plan price. Real amounts come from subscription billing (Phase 4).</p>

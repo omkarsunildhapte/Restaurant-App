@@ -1,0 +1,11 @@
+/* App build. Test doubles under src/utils/testing are spec-only and excluded here. */
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "outDir": "./out-tsc/app",
+    "types": ["node"]
+  },
+  "files": ["src/main.ts", "src/app/icons.ts", "src/main.server.ts", "src/server.ts"],
+  "include": ["src/**/*.d.ts"],
+  "exclude": ["src/utils/testing/**", "src/**/*.spec.ts"]
+}

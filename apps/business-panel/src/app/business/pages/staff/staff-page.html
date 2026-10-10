@@ -1,0 +1,136 @@
+<div class="mb-4 flex flex-wrap items-end justify-between gap-3">
+  <div>
+    <h1 class="text-2xl font-semibold text-gray-900">Staff</h1>
+    <p class="mt-1 text-sm text-gray-500">{{ activeCount() }} active · each person signs in with their own email.</p>
+  </div>
+  @if (ws.canManage()) {
+    <button type="button" class="btn btn-primary px-4 py-2 text-sm" (click)="openInvite()">Invite someone</button>
+  }
+</div>
+
+@if (error()) {
+  <div class="mb-4 rounded-md border border-red-200 bg-red-50 p-4 text-sm text-red-800" role="alert">{{ error() }}</div>
+}
+
+<div class="overflow-x-auto rounded-md bg-white shadow-xs">
+  <table class="w-full min-w-160 text-left text-sm">
+    <thead class="border-b border-gray-200 bg-gray-50 text-xs uppercase tracking-wide text-gray-500">
+      <tr>
+        <th class="px-4 py-3">Person</th>
+        <th class="px-4 py-3">Role</th>
+        <th class="px-4 py-3">Outlet</th>
+        <th class="px-4 py-3">Active</th>
+        <th class="px-4 py-3"><span class="sr-only">Actions</span></th>
+      </tr>
+    </thead>
+    <tbody class="divide-y divide-gray-100">
+      @for (m of members(); track m.id) {
+        <tr [class.opacity-60]="!m.is_active">
+          <td class="px-4 py-3">
+            <p class="font-medium text-gray-900">
+              {{ m.profiles?.full_name || m.profiles?.email }}
+              @if (m.user_id === me()) { <span class="text-xs font-normal text-gray-400">(you)</span> }
+            </p>
+            @if (m.profiles?.full_name) {
+              <p class="text-xs text-gray-500">{{ m.profiles?.email }}</p>
+            }
+          </td>
+          @if (canEdit(m)) {
+            <td class="px-4 py-3">
+              <select class="rounded-md border border-gray-300 px-2 py-1.5 text-sm" [attr.aria-label]="'Role of ' + m.profiles?.email" [ngModel]="m.role" (ngModelChange)="change(m, { role: $event })">
+                @for (r of assignableRoles(); track r) {
+                  <option [value]="r">{{ roleLabel[r] }}</option>
+                }
+              </select>
+            </td>
+            <td class="px-4 py-3">
+              <select class="rounded-md border border-gray-300 px-2 py-1.5 text-sm" [attr.aria-label]="'Outlet of ' + m.profiles?.email" [ngModel]="m.outlet_id ?? ''" (ngModelChange)="change(m, { outlet_id: $event || null })">
+                <option value="">All outlets</option>
+                @for (o of ws.outlets(); track o.id) {
+                  <option [value]="o.id">{{ o.name }}</option>
+                }
+              </select>
+            </td>
+            <td class="px-4 py-3">
+              <input type="checkbox" class="h-4 w-4" [attr.aria-label]="'Active: ' + m.profiles?.email" [checked]="m.is_active" (change)="change(m, { is_active: !m.is_active })" />
+            </td>
+            <td class="px-4 py-3 text-right">
+              <button type="button" class="btn btn-danger-text px-3 py-1 text-sm" (click)="remove(m)">Remove</button>
+            </td>
+          } @else {
+            <td class="px-4 py-3 text-gray-700">{{ roleLabel[m.role] }}</td>
+            <td class="px-4 py-3 text-gray-700">{{ outletName()(m.outlet_id) }}</td>
+            <td class="px-4 py-3 text-gray-700">{{ m.is_active ? 'Yes' : 'Paused' }}</td>
+            <td class="px-4 py-3"></td>
+          }
+        </tr>
+      } @empty {
+        <tr><td colspan="5" class="px-4 py-8 text-center text-gray-500">{{ loading() ? 'Loading…' : 'No one yet.' }}</td></tr>
+      }
+    </tbody>
+  </table>
+</div>
+
+@if (invitations().length) {
+  <h2 class="mb-2 mt-6 text-sm font-semibold uppercase tracking-wide text-gray-500">Waiting to accept</h2>
+  <ul class="divide-y divide-gray-100 rounded-md bg-white shadow-xs">
+    @for (i of invitations(); track i.id) {
+      <li class="flex flex-wrap items-center gap-3 px-4 py-3 text-sm">
+        <span class="min-w-0 flex-1">
+          <span class="font-medium text-gray-900">{{ i.email }}</span>
+          <span class="ml-2 text-gray-500">{{ roleLabel[i.role] }} · {{ outletName()(i.outlet_id) }}</span>
+          @if (expired(i)) {
+            <span class="ml-2 rounded-full bg-amber-100 px-2 py-0.5 text-xs text-amber-800">expired</span>
+          }
+        </span>
+        @if (ws.canManage()) {
+          <button type="button" class="btn btn-text px-3 py-1 text-sm" (click)="resend(i)">{{ expired(i) ? 'Send again' : 'Resend' }}</button>
+          <button type="button" class="btn btn-danger-text px-3 py-1 text-sm" (click)="cancel(i)">Cancel</button>
+        }
+      </li>
+    }
+  </ul>
+}
+
+<ui-modal [(visible)]="inviting" header="Invite someone" width="34rem">
+  <form id="invite-form" class="grid gap-4" (ngSubmit)="invite()">
+    <label class="block text-sm font-medium text-gray-700">
+      Email
+      <input class="form-input mt-1 py-2" type="email" name="email" required [(ngModel)]="email" autocomplete="off" />
+    </label>
+    <label class="block text-sm font-medium text-gray-700">
+      Name <span class="font-normal text-gray-400">(optional)</span>
+      <input class="form-input mt-1 py-2" name="fullName" [(ngModel)]="fullName" autocomplete="off" />
+    </label>
+    <fieldset>
+      <legend class="text-sm font-medium text-gray-700">Role</legend>
+      <div class="mt-1 grid gap-1">
+        @for (r of assignableRoles(); track r) {
+          <label class="flex items-start gap-2 rounded-md px-2 py-1.5 text-sm hover:bg-gray-50">
+            <input type="radio" name="role" class="mt-1" [value]="r" [checked]="role() === r" (change)="role.set(r)" />
+            <span><span class="font-medium text-gray-900">{{ roleLabel[r] }}</span> <span class="text-gray-500">· {{ roleHelp[r] }}</span></span>
+          </label>
+        }
+      </div>
+    </fieldset>
+    @if (ws.outlets().length > 1) {
+      <label class="block text-sm font-medium text-gray-700">
+        Works at
+        <select class="form-input mt-1 py-2" name="outlet" [(ngModel)]="outlet">
+          <option value="">All outlets</option>
+          @for (o of ws.outlets(); track o.id) {
+            <option [value]="o.id">{{ o.name }}</option>
+          }
+        </select>
+      </label>
+    }
+    <p class="text-xs text-gray-500">They get an email with a link to set a password. If they already have an account, they are added straight away.</p>
+    @if (formError()) {
+      <p class="rounded-md bg-red-50 p-3 text-sm text-red-800" role="alert">{{ formError() }}</p>
+    }
+  </form>
+  <div uiModalFooter class="flex flex-wrap items-center justify-end gap-3 rounded-b-md border-t border-gray-100 bg-gray-50 px-6 py-4">
+    <button type="button" class="btn border-gray-300 bg-white px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 focus-visible:ring-gray-300" (click)="inviting.set(false)">Cancel</button>
+    <button type="submit" form="invite-form" class="btn btn-primary px-4 py-2 text-sm" [disabled]="busy()">{{ busy() ? 'Sending…' : 'Send invitation' }}</button>
+  </div>
+</ui-modal>

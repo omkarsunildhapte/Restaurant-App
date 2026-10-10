@@ -1,0 +1,64 @@
+@if(!loader){
+<ui-modal header="New Item" [(visible)]="visible" width="40rem">
+    <form [formGroup]="newItemForm" (ngSubmit)="onSave()">
+        <div class="flex align-items-center gap-3 mb-3 flex-col">
+            <label for="itemName" class="font-semibold w-6rem">Item Name</label>
+            <input type="text" id="itemName" class="form-input flex-auto" formControlName="itemName" autocomplete="off" />
+            @if (isSubmit && newItemForm.controls['itemName'].invalid && newItemForm.controls['itemName'].touched) {
+                <div  class="text-red-600 ">Item Name is required</div>
+            } 
+        </div>
+        <div class="flex align-items-center gap-3 mb-3 flex-col">
+            <label for="itemList" class="font-semibold w-6rem">Item List</label>
+            <ui-multi-select inputId="itemList" [options]="itemOptions()" optionLabel="itemName" formControlName="itemList" placeholder="Select Cities" />
+            @if (isSubmit && newItemForm.controls['itemList'].invalid && newItemForm.controls['itemList'].touched) {
+                <div class="text-red-600 ">At least one item is required</div>
+            }
+        </div>
+        <div class="flex align-items-center gap-3 mb-3 flex-col">
+            <label for="description" class="font-semibold w-6rem">Description</label>
+            <textarea id="description" rows="5" cols="30" class="form-input" formControlName="description"></textarea>
+            @if (isSubmit && newItemForm.controls['description'].invalid && newItemForm.controls['description'].touched) {
+                <div class="text-red-600 ">Item Description is required</div>
+            }
+        </div>
+        <div class="flex align-items-center gap-3 mb-3 flex-col">
+            <label for="price" class="font-semibold w-6rem">Price</label>
+            <input type="number" id="price" step="1" formControlName="price" class="form-input" />
+            @if (isSubmit && newItemForm.controls['price'].invalid && newItemForm.controls['price'].touched){
+                <div  class="text-red-600 ">Price is required</div>
+            }
+        </div>
+        <div class="flex align-items-center gap-3 mb-3 flex-col">
+            <label for="discount" class="font-semibold w-6rem">Discount</label>
+            <input type="number" id="discount" min="0" max="999" step="1" formControlName="discount" class="form-input" />
+        </div>
+        <div class="flex align-items-center gap-3 mb-3 flex-col">
+            <label for="discount" class="font-semibold w-6rem">Food Logo</label>
+            <input type="file" id="logo" (change)="onFileSelected($event,'logoUrl')" accept="image/*"/>
+            @if (newItemForm.get('logoUrl')?.value) {
+                <img [src]="$safeNavigationMigration(newItemForm.get('logoUrl')?.value)" alt="Selected Logo" style="width: 30px;"/>
+            }
+            @if (isSubmit && newItemForm.controls['logoUrl'].invalid && newItemForm.controls['logoUrl'].touched) {
+                <div class="text-red-600 ">Logo Image is required</div>
+            }
+        </div>
+        <div class="flex align-items-center gap-3 mb-3 flex-col">
+            <label for="discount" class="font-semibold w-6rem">Food Logo</label>
+            <input type="file" id="logo" (change)="onFileSelected($event,'bannerImage')" accept="image/*"/>
+            @if (newItemForm.get('bannerImage')?.value) {
+                <img [src]="$safeNavigationMigration(newItemForm.get('bannerImage')?.value)" alt="Selected Logo" style="width: 30px;"/>
+            }
+            @if (isSubmit && newItemForm.controls['bannerImage'].invalid && newItemForm.controls['bannerImage'].touched) {
+                <div class="text-red-600 ">Banner Image is required</div>
+            }
+        </div>
+        <div class="flex justify-content-end gap-2">
+            <button type="button" class="btn btn-secondary" (click)="onCancel()">Cancel</button>
+            <button type="submit" class="btn btn-primary">Save</button>
+        </div>
+    </form>
+</ui-modal>
+} @else{
+    <loading></loading>
+  }

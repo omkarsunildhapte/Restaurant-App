@@ -1,0 +1,128 @@
+<div class="mb-4 flex flex-wrap items-end justify-between gap-3">
+  <div>
+    <h1 class="text-2xl font-semibold text-gray-900">Outlets</h1>
+    <p class="mt-1 text-sm text-gray-500">Each branch has its own tables, staff and bill numbers. The menu is shared.</p>
+  </div>
+  @if (ws.canManage()) {
+    @if (canAdd()) {
+      <button type="button" class="btn btn-primary px-4 py-2 text-sm" (click)="open(null)">Add outlet</button>
+    } @else {
+      <span class="text-sm text-gray-500">More outlets come with the Chain plan.</span>
+    }
+  }
+</div>
+
+@if (error()) {
+  <div class="mb-4 rounded-md border border-red-200 bg-red-50 p-4 text-sm text-red-800" role="alert">{{ error() }}</div>
+}
+
+<ul class="grid gap-4 md:grid-cols-2">
+  @for (o of outlets(); track o.id) {
+    <li class="rounded-md bg-white p-4 shadow-xs" [class.opacity-60]="!o.is_active">
+      <div class="flex items-start justify-between gap-2">
+        <div>
+          <p class="text-lg font-semibold text-gray-900">
+            {{ o.name }}
+            @if (!o.is_active) { <span class="ml-1 text-sm font-normal text-amber-700">closed</span> }
+          </p>
+          <p class="text-sm text-gray-600">{{ o.address }}{{ o.city ? ', ' + o.city : '' }}</p>
+          <p class="mt-1 text-xs text-gray-500">
+            {{ o.phone || 'No phone' }}
+            @if (o.gstin) { · GSTIN {{ o.gstin }} }
+          </p>
+          <p class="mt-1 text-xs">
+            @if (mapLink(o); as link) {
+              <a [href]="link" target="_blank" rel="noopener" class="text-brand-rust hover:underline">On the map ↗</a>
+            } @else {
+              <span class="text-gray-400">Location not set</span>
+            }
+          </p>
+        </div>
+        @if (ws.canManage()) {
+          <button type="button" class="btn btn-text px-3 py-1 text-sm" (click)="open(o)">Edit</button>
+        }
+      </div>
+    </li>
+  } @empty {
+    <li class="rounded-md bg-white p-8 text-center text-sm text-gray-500 shadow-xs md:col-span-2">{{ loading() ? 'Loading…' : 'No outlets yet.' }}</li>
+  }
+</ul>
+
+<ui-modal [(visible)]="editing" [header]="draft()?.id ? 'Edit outlet' : 'Add outlet'" width="38rem">
+  @if (draft(); as d) {
+    <form id="outlet-form" class="grid gap-4" (ngSubmit)="save()">
+      <div class="grid gap-4 sm:grid-cols-2">
+        <label class="block text-sm font-medium text-gray-700">
+          Name
+          <input class="form-input mt-1 py-2" name="name" required [ngModel]="d.name" (ngModelChange)="patch({ name: $event })" placeholder="Baner" />
+        </label>
+        <label class="block text-sm font-medium text-gray-700">
+          Phone
+          <input class="form-input mt-1 py-2" type="tel" name="phone" [ngModel]="d.phone" (ngModelChange)="patch({ phone: $event })" />
+        </label>
+      </div>
+      <label class="block text-sm font-medium text-gray-700">
+        Address
+        <input class="form-input mt-1 py-2" name="address" [ngModel]="d.address" (ngModelChange)="patch({ address: $event })" placeholder="Shop 4, Baner Road" />
+      </label>
+      <div class="grid gap-4 sm:grid-cols-2">
+        <label class="block text-sm font-medium text-gray-700">
+          City
+          <input class="form-input mt-1 py-2" name="city" [ngModel]="d.city" (ngModelChange)="patch({ city: $event })" />
+        </label>
+        <label class="block text-sm font-medium text-gray-700">
+          GSTIN <span class="font-normal text-gray-400">(if different from the business)</span>
+          <input class="form-input mt-1 py-2 uppercase" name="gstin" maxlength="15" [ngModel]="d.gstin" (ngModelChange)="patch({ gstin: $event })" />
+        </label>
+      </div>
+
+      <div class="rounded-md border border-gray-200 p-3">
+        <div class="flex flex-wrap items-center justify-between gap-2">
+          <p class="text-sm text-gray-700">
+            Map location:
+            @if (d.latitude !== null) {
+              <span class="font-medium">{{ d.latitude }}, {{ d.longitude }}</span>
+            } @else {
+              <span class="text-gray-400">not set</span>
+            }
+          </p>
+          <div class="flex gap-1">
+            <button type="button" class="btn btn-text px-3 py-1 text-sm" (click)="findOnMap()" [disabled]="searching()">
+              {{ searching() ? 'Searching…' : 'Find from address' }}
+            </button>
+            @if (d.latitude !== null) {
+              <button type="button" class="btn btn-danger-text px-3 py-1 text-sm" (click)="patch({ latitude: null, longitude: null, osm_place_id: null, geocoded_at: null })">Clear</button>
+            }
+          </div>
+        </div>
+        @if (searchError()) {
+          <p class="mt-2 text-sm text-amber-800">{{ searchError() }}</p>
+        }
+        @if (results().length) {
+          <ul class="mt-2 divide-y divide-gray-100 rounded-md border border-gray-200">
+            @for (r of results(); track r.placeId) {
+              <li>
+                <button type="button" class="w-full px-3 py-2 text-left text-sm hover:bg-brand-cream" (click)="pick(r)">{{ r.displayName }}</button>
+              </li>
+            }
+          </ul>
+          <p class="mt-1 text-xs text-gray-400">{{ attribution() }}</p>
+        }
+      </div>
+
+      <label class="flex items-center gap-2 text-sm text-gray-700">
+        <input type="checkbox" class="h-4 w-4" name="active" [ngModel]="d.is_active" (ngModelChange)="patch({ is_active: $event })" /> Open
+      </label>
+      @if (formError()) {
+        <p class="rounded-md bg-red-50 p-3 text-sm text-red-800" role="alert">{{ formError() }}</p>
+      }
+    </form>
+  }
+  <div uiModalFooter class="flex flex-wrap items-center justify-end gap-3 rounded-b-md border-t border-gray-100 bg-gray-50 px-6 py-4">
+    @if (problem(); as p) {
+      <span class="mr-auto text-sm text-gray-500">{{ p }}</span>
+    }
+    <button type="button" class="btn border-gray-300 bg-white px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 focus-visible:ring-gray-300" (click)="editing.set(false)">Cancel</button>
+    <button type="submit" form="outlet-form" class="btn btn-primary px-4 py-2 text-sm" [disabled]="busy() || !!problem()">{{ busy() ? 'Saving…' : 'Save outlet' }}</button>
+  </div>
+</ui-modal>

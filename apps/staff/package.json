@@ -1,0 +1,46 @@
+{
+  "name": "staff",
+  "version": "0.0.0",
+  "scripts": {
+    "ng": "ng",
+    "start": "ng serve --port 4500",
+    "build": "ng build",
+    "watch": "ng build --watch --configuration development",
+    "test": "ng test",
+    "serve:ssr": "node dist/super-admin/server/server.mjs",
+    "build:local": "ng build --configuration local"
+  },
+  "private": true,
+  "dependencies": {
+    "@angular/common": "^22.0.0",
+    "@angular/compiler": "^22.0.0",
+    "@angular/core": "^22.0.0",
+    "@angular/forms": "^22.0.0",
+    "@angular/platform-browser": "^22.0.0",
+    "@angular/platform-server": "^22.0.0",
+    "@angular/router": "^22.0.0",
+    "@angular/service-worker": "^22.0.0",
+    "@angular/ssr": "^22.2.2",
+    "@supabase/supabase-js": "^2.117.3",
+    "@tailwindcss/postcss": "^4.3.3",
+    "express": "^5.1.0",
+    "postcss": "^8.5.28",
+    "rxjs": "~7.8.0",
+    "tailwindcss": "^4.3.3",
+    "tslib": "^2.3.0"
+  },
+  "devDependencies": {
+    "@angular/build": "^22.0.7",
+    "@angular/cli": "^22.0.7",
+    "@angular/compiler-cli": "^22.0.0",
+    "@types/express": "^5.0.1",
+    "@types/node": "^22.12.0",
+    "jsdom": "^28.0.0",
+    "typescript": "~6.0.2",
+    "vitest": "^4.0.8"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "description": "Staff app: waiter ordering, kitchen display (KDS) and POS billing."
+}

@@ -1,0 +1,81 @@
+<div class="background-pic">
+  <ion-header>
+    <ion-toolbar>
+      <ion-icon name="chevron-back-outline" aria-hidden="true" slot="start"></ion-icon>
+      <ion-title>Location</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  <ion-content>
+    <ion-card>
+      <ion-card-header>
+        <div class="flex justify-center">
+          <img src="icon/locationMap.svg" style="width: 40%;" />
+        </div>
+        <ion-card-title>
+          Get Location
+        </ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-item>
+          <div class="showValues" (click)="useMyLocation()">
+            <ion-icon slot="start" name="location"></ion-icon>
+            <span>
+              {{ isLocating ? 'Getting your location...' : 'Use my location' }}
+            </span>
+          </div>
+        </ion-item>
+        <ion-item>
+          <ion-input placeholder="Search your location" [(ngModel)]="addressQuery" (keyup.enter)="searchAddress()"></ion-input>
+          <ion-button slot="end" fill="clear" (click)="searchAddress()" [disabled]="isSearching" aria-label="Search address">
+            <ion-icon name="search" slot="icon-only"></ion-icon>
+          </ion-button>
+        </ion-item>
+        @if (message) {
+          <p class="error-message">{{ message }}</p>
+        }
+        @if (results.length) {
+          <ion-list>
+            @for (r of results; track trackByPlace($index, r)) {
+              <ion-item button (click)="selectResult(r)">
+                <ion-label class="ion-text-wrap">{{ r.displayName }}</ion-label>
+              </ion-item>
+            }
+          </ion-list>
+        }
+        @if (results.length) {
+          <p class="text-xs" style="opacity: 0.7">{{ attribution }}</p>
+        }
+
+        <ion-item>
+          <ion-input label="Address" labelPlacement="stacked" placeholder="Enter Your location" [(ngModel)]="address.line"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-input label="Street" labelPlacement="stacked" [(ngModel)]="address.road"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-input label="Area" labelPlacement="stacked" [(ngModel)]="address.suburb"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-input label="City" labelPlacement="stacked" [(ngModel)]="address.city"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-input label="State" labelPlacement="stacked" [(ngModel)]="address.state"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-input label="Postcode" labelPlacement="stacked" [(ngModel)]="address.postcode"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-input label="Country" labelPlacement="stacked" [(ngModel)]="address.country"></ion-input>
+        </ion-item>
+        @if (showAttribution) {
+          <p class="text-xs" style="opacity: 0.7">{{ attribution }}</p>
+        }
+
+        <div class="bottom-section">
+          <ion-button type="submit" (click)="routerLink.navigateUrl('/main',undefined)">{{userData?.location ? 'Update
+          Location': 'Add Location'}}</ion-button>
+        </div>
+      </ion-card-content>
+    </ion-card>
+  </ion-content>
+</div>

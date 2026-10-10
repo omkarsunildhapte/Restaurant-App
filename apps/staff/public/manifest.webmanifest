@@ -1,0 +1,31 @@
+{
+  "name": "Thaliyo Staff",
+  "short_name": "Thaliyo",
+  "display": "standalone",
+  "scope": "./",
+  "start_url": "./",
+  "icons": [
+    {
+      "src": "brand/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "brand/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "brand/icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "description": "Thaliyo: waiter ordering, kitchen display and POS billing.",
+  "theme_color": "#E8891F",
+  "background_color": "#FFF6EA",
+  "orientation": "any"
+}

@@ -1,0 +1,77 @@
+@import 'tailwindcss';
+
+/* Thaliyo brand colours (see brand/README.md). Text on saffron is brown: white on saffron fails contrast. */
+@theme {
+  --color-brand-brown: #421d0e;
+  --color-brand-saffron: #e8891f;
+  --color-brand-amber: #f09e20;
+  --color-brand-orange: #cf6d1c;
+  --color-brand-rust: #a85512;
+  --color-brand-cream: #fff6ea;
+  --color-brand-soft: #fce3c2;
+  --color-brand-leaf: #84a625;
+}
+
+
+/*
+  The default border color has changed to `currentcolor` in Tailwind CSS v4,
+  so these compatibility styles keep everything looking as it did with v3.
+  To remove them, add an explicit border color utility to any element that
+  depends on the default.
+*/
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentcolor);
+  }
+
+  html,
+  body {
+    height: 100%;
+  }
+
+  body {
+    margin: 0;
+    font-family: Roboto, 'Helvetica Neue', sans-serif;
+  }
+}
+
+.active {
+  color: red;
+}
+
+/* Shared UI primitives: buttons and form fields (see src/app/shared/ui for components). */
+@utility btn {
+  @apply inline-flex items-center justify-center gap-2 rounded-md border border-transparent px-5 py-3 text-base leading-none font-medium transition-colors focus:outline-hidden focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60;
+}
+
+@utility btn-primary {
+  @apply border-brand-saffron bg-brand-saffron text-brand-brown font-semibold hover:border-brand-amber hover:bg-brand-amber focus-visible:ring-brand-amber;
+}
+
+@utility btn-secondary {
+  @apply border-slate-500 bg-slate-500 text-white hover:border-slate-600 hover:bg-slate-600 focus-visible:ring-slate-300;
+}
+
+@utility btn-text {
+  @apply bg-transparent text-brand-rust hover:bg-brand-cream focus-visible:ring-brand-amber;
+}
+
+@utility btn-danger-text {
+  @apply bg-transparent text-red-500 hover:bg-red-50 focus-visible:ring-red-300;
+}
+
+@utility btn-icon {
+  @apply h-12 w-12 px-0 py-0;
+}
+
+@utility form-input {
+  @apply w-full rounded-md border border-gray-300 bg-white px-3 py-3 text-base text-gray-700 transition-colors placeholder:text-gray-400 hover:border-brand-saffron focus:border-brand-saffron focus:ring-4 focus:ring-brand-soft focus:outline-hidden disabled:cursor-not-allowed disabled:bg-gray-100 disabled:opacity-60;
+
+  &.ng-invalid.ng-dirty {
+    @apply border-red-500;
+  }
+}

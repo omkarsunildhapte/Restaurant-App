@@ -1,0 +1,119 @@
+<h1 class="mb-4 text-2xl font-semibold text-gray-900">Settings</h1>
+
+@if (error()) {
+  <div class="mb-4 rounded-md border border-red-200 bg-red-50 p-4 text-sm text-red-800" role="alert">{{ error() }}</div>
+}
+
+<div class="grid gap-6 lg:grid-cols-3">
+  <section class="rounded-md bg-white p-5 shadow-xs lg:col-span-2">
+    <h2 class="text-lg font-semibold text-gray-900">Business details</h2>
+    <p class="mt-1 text-sm text-gray-500">Printed on bills. Web address: <span class="font-medium text-gray-700">{{ slug() }}</span> (ask us to change it).</p>
+
+    @if (details(); as d) {
+      <form id="details-form" class="mt-4 grid gap-4 sm:grid-cols-2" (ngSubmit)="save()">
+        <label class="block text-sm font-medium text-gray-700">
+          Name shown to customers
+          <input class="form-input mt-1 py-2" name="name" required [ngModel]="d.name" (ngModelChange)="patch({ name: $event })" />
+        </label>
+        <label class="block text-sm font-medium text-gray-700">
+          Legal name <span class="font-normal text-gray-400">(on GST invoices)</span>
+          <input class="form-input mt-1 py-2" name="legal" [ngModel]="d.legal_name" (ngModelChange)="patch({ legal_name: $event })" />
+        </label>
+        <label class="block text-sm font-medium text-gray-700">
+          GSTIN
+          <input class="form-input mt-1 py-2 uppercase" name="gstin" maxlength="15" [ngModel]="d.gstin" (ngModelChange)="patch({ gstin: $event })" placeholder="27AABFB1234C1Z5" />
+        </label>
+        <label class="block text-sm font-medium text-gray-700">
+          FSSAI licence number
+          <input class="form-input mt-1 py-2" name="fssai" inputmode="numeric" maxlength="14" [ngModel]="d.fssai_number" (ngModelChange)="patch({ fssai_number: $event })" />
+        </label>
+        <label class="block text-sm font-medium text-gray-700">
+          Phone
+          <input class="form-input mt-1 py-2" type="tel" name="phone" [ngModel]="d.phone" (ngModelChange)="patch({ phone: $event })" />
+        </label>
+        <label class="block text-sm font-medium text-gray-700">
+          Email
+          <input class="form-input mt-1 py-2" type="email" name="email" [ngModel]="d.email" (ngModelChange)="patch({ email: $event })" />
+        </label>
+        <label class="block text-sm font-medium text-gray-700 sm:col-span-2">
+          Address
+          <textarea class="form-input mt-1 py-2" rows="2" name="address" [ngModel]="d.address" (ngModelChange)="patch({ address: $event })"></textarea>
+        </label>
+        <fieldset class="sm:col-span-2">
+          <legend class="text-sm font-medium text-gray-700">Menu prices</legend>
+          <div class="mt-1 grid gap-1 text-sm">
+            <label class="flex items-center gap-2">
+              <input type="radio" name="inclusive" [checked]="!d.prices_include_tax" (change)="patch({ prices_include_tax: false })" />
+              GST is added on top of menu prices (₹100 item → ₹105 bill at 5%)
+            </label>
+            <label class="flex items-center gap-2">
+              <input type="radio" name="inclusive" [checked]="d.prices_include_tax" (change)="patch({ prices_include_tax: true })" />
+              Menu prices already include GST (₹100 item → ₹100 bill)
+            </label>
+          </div>
+        </fieldset>
+        <fieldset class="sm:col-span-2">
+          <legend class="text-sm font-medium text-gray-700">Bills</legend>
+          <label class="mt-1 flex items-center gap-2 text-sm">
+            <input type="checkbox" class="h-4 w-4" name="roundOff" [ngModel]="d.round_off" (ngModelChange)="patch({ round_off: $event })" />
+            Round the bill total to the nearest rupee (₹354.20 → ₹354; GST is still worked out exactly)
+          </label>
+        </fieldset>
+        <label class="block text-sm font-medium text-gray-700">
+          Packaging charge for takeaway (₹ per order)
+          <input class="form-input mt-1 py-2" type="number" min="0" step="1" inputmode="decimal" name="packaging" [ngModel]="d.packaging_charge" (ngModelChange)="patch({ packaging_charge: $event })" />
+          <span class="mt-1 block text-xs font-normal text-gray-500">The counter adds it to takeaway bills. 0 = none.</span>
+        </label>
+      </form>
+      <div class="mt-4 flex items-center justify-end gap-3">
+        @if (problem(); as p) {
+          <span class="mr-auto text-sm text-gray-500">{{ p }}</span>
+        }
+        @if (ws.canManage()) {
+          <button type="submit" form="details-form" class="btn btn-primary px-4 py-2 text-sm" [disabled]="saving() || !!problem()">
+            {{ saving() ? 'Saving…' : 'Save details' }}
+          </button>
+        }
+      </div>
+    } @else if (!error()) {
+      <p class="mt-4 text-sm text-gray-400">Loading…</p>
+    }
+  </section>
+
+  <section class="rounded-md bg-white p-5 shadow-xs">
+    <h2 class="text-lg font-semibold text-gray-900">GST rates</h2>
+    <p class="mt-1 text-sm text-gray-500">Restaurants usually charge 5%. The default applies to items without their own rate.</p>
+    <ul class="mt-3 divide-y divide-gray-100">
+      @for (r of rates(); track r.id) {
+        <li class="flex items-center gap-2 py-2 text-sm">
+          <span class="flex-1">
+            <span class="font-medium text-gray-900">{{ r.name }}</span>
+            <span class="ml-1 text-gray-500">{{ r.rate }}%</span>
+            @if (r.is_default) {
+              <span class="ml-1 rounded-full bg-brand-soft px-2 py-0.5 text-xs text-brand-brown">default</span>
+            }
+          </span>
+          @if (ws.canEditMenu()) {
+            @if (!r.is_default) {
+              <button type="button" class="btn btn-text px-2 py-1 text-xs" (click)="makeDefault(r)">Make default</button>
+              <button type="button" class="btn btn-danger-text px-2 py-1 text-xs" (click)="removeRate(r)" [attr.aria-label]="'Delete ' + r.name">Delete</button>
+            }
+          }
+        </li>
+      }
+    </ul>
+    @if (ws.canEditMenu()) {
+      <form class="mt-3 flex flex-wrap items-end gap-2" (ngSubmit)="addRate()">
+        <label class="block min-w-0 flex-1 text-sm font-medium text-gray-700">
+          Name
+          <input class="form-input mt-1 py-2" name="rateName" [(ngModel)]="rateName" placeholder="GST 12%" />
+        </label>
+        <label class="block w-24 text-sm font-medium text-gray-700">
+          %
+          <input class="form-input mt-1 py-2" type="number" min="0" max="28" step="0.01" name="rateValue" [(ngModel)]="rateValue" />
+        </label>
+        <button type="submit" class="btn btn-text px-3 py-2 text-sm" [disabled]="rateBusy()">Add</button>
+      </form>
+    }
+  </section>
+</div>

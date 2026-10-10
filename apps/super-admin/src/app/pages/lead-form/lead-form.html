@@ -1,0 +1,233 @@
+<div class="mx-auto max-w-4xl">
+  <div class="mb-6">
+    <a [routerLink]="id() ? ['/leads', id()] : '/leads'" class="text-sm text-ink-500 hover:text-ink-900 dark:text-ink-400 dark:hover:text-white">← Back</a>
+    <h1 class="mt-2 text-2xl font-semibold tracking-tight text-ink-900 dark:text-white">{{ id() ? 'Edit lead' : 'New lead' }}</h1>
+  </div>
+
+  @if (loadError() || store.error()) {
+    <div class="mb-4 rounded-xl border border-rose-200 bg-rose-50 p-4 text-sm font-medium text-rose-800 dark:border-rose-500/30 dark:bg-rose-500/10 dark:text-rose-200" role="alert">
+      {{ loadError() ?? store.error() }}
+    </div>
+  }
+
+  @let m = model();
+  <form (ngSubmit)="save()" class="space-y-4">
+    <!-- Restaurant -->
+    <fieldset class="card grid gap-4 sm:grid-cols-2">
+      <legend class="sr-only">Restaurant</legend>
+      <h2 class="text-sm font-semibold text-ink-900 sm:col-span-2 dark:text-white">Restaurant</h2>
+      <div class="sm:col-span-2">
+        <label for="restaurantName" class="field-label">Restaurant name *</label>
+        <input id="restaurantName" name="restaurantName" required [ngModel]="m.restaurantName" (ngModelChange)="set('restaurantName', $event)" class="field" placeholder="Brew & Leaf Café" />
+      </div>
+      <div>
+        <label for="restaurantType" class="field-label">Type</label>
+        <select id="restaurantType" name="restaurantType" [ngModel]="m.restaurantType" (ngModelChange)="set('restaurantType', $event)" class="field">
+          @for (t of types; track t) {
+            <option [value]="t">{{ typeLabel[t] }}</option>
+          }
+        </select>
+      </div>
+      <div class="grid grid-cols-2 gap-3">
+        <div>
+          <label for="seats" class="field-label">Seats</label>
+          <input id="seats" name="seats" type="number" min="0" [ngModel]="m.seats" (ngModelChange)="numberOrNull('seats', $event)" class="field" />
+        </div>
+        <div>
+          <label for="outlets" class="field-label">Outlets</label>
+          <input id="outlets" name="outlets" type="number" min="1" [ngModel]="m.outlets" (ngModelChange)="set('outlets', +$event || 1)" class="field" />
+        </div>
+      </div>
+      <div>
+        <label for="area" class="field-label">Area</label>
+        <input id="area" name="area" list="area-options" [ngModel]="m.area" (ngModelChange)="text('area', $event)" class="field" placeholder="Baner" />
+        <datalist id="area-options">
+          @for (a of areas; track a) {
+            <option [value]="a"></option>
+          }
+        </datalist>
+      </div>
+      <div>
+        <label for="city" class="field-label">City</label>
+        <input id="city" name="city" [ngModel]="m.city" (ngModelChange)="set('city', $event)" class="field" />
+      </div>
+      <div class="sm:col-span-2">
+        <label for="address" class="field-label">Address</label>
+        <input id="address" name="address" [ngModel]="m.address" (ngModelChange)="text('address', $event)" class="field" />
+      </div>
+      <div class="sm:col-span-2">
+        <span class="field-label">Location</span>
+        <div class="mt-1.5 flex flex-wrap items-center gap-2">
+          <button type="button" (click)="useMyLocation()" [disabled]="locating()" class="btn-secondary">
+            {{ locating() ? 'Getting location…' : m.latitude !== null ? 'Update to my current location' : 'Use my current location' }}
+          </button>
+          @if (m.latitude !== null && m.longitude !== null) {
+            <a [href]="osmLink(m.latitude, m.longitude)" target="_blank" rel="noopener" class="text-sm text-brand-600 dark:text-brand-400">
+              {{ m.latitude }}, {{ m.longitude }}
+            </a>
+            @if (m.locationAccuracyM !== null) {
+              <span class="text-xs" [class]="m.locationAccuracyM > 100 ? 'text-amber-600 dark:text-amber-400' : 'text-ink-500 dark:text-ink-400'">
+                ±{{ m.locationAccuracyM }} m{{ m.locationAccuracyM > 100 ? ' · not precise, try again outdoors' : '' }}
+              </span>
+            }
+            <button type="button" (click)="clearLocation()" class="text-xs text-ink-500 hover:text-rose-600 dark:text-ink-400">Clear</button>
+          }
+        </div>
+        <p class="mt-1 text-xs text-ink-500 dark:text-ink-400">Tap while standing at the restaurant.</p>
+        @if (locationError()) {
+          <p class="mt-1 text-sm text-rose-600 dark:text-rose-400" role="alert">{{ locationError() }}</p>
+        }
+      </div>
+      <div class="sm:col-span-2">
+        <label for="mapsUrl" class="field-label">Google Maps listing link <span class="font-normal text-ink-400">(their listing, optional)</span></label>
+        <input id="mapsUrl" name="mapsUrl" type="url" [ngModel]="m.mapsUrl" (ngModelChange)="text('mapsUrl', $event)" class="field" placeholder="https://maps.app.goo.gl/…" />
+      </div>
+    </fieldset>
+
+    <!-- Contact -->
+    <fieldset class="card grid gap-4 sm:grid-cols-2">
+      <legend class="sr-only">Owner contact</legend>
+      <h2 class="text-sm font-semibold text-ink-900 sm:col-span-2 dark:text-white">Owner contact</h2>
+      <div>
+        <label for="ownerName" class="field-label">Owner name</label>
+        <input id="ownerName" name="ownerName" [ngModel]="m.ownerName" (ngModelChange)="text('ownerName', $event)" class="field" />
+      </div>
+      <div>
+        <label for="email" class="field-label">Email</label>
+        <input id="email" name="email" type="email" [ngModel]="m.email" (ngModelChange)="text('email', $event)" class="field" />
+      </div>
+      <div>
+        <label for="phone" class="field-label">Phone</label>
+        <input id="phone" name="phone" type="tel" inputmode="tel" [ngModel]="m.phone" (ngModelChange)="text('phone', $event)" class="field" placeholder="98220 12345" />
+      </div>
+      <div>
+        <label for="whatsapp" class="field-label">WhatsApp <span class="font-normal text-ink-400">(if different)</span></label>
+        <input id="whatsapp" name="whatsapp" type="tel" inputmode="tel" [ngModel]="m.whatsapp" (ngModelChange)="text('whatsapp', $event)" class="field" />
+      </div>
+    </fieldset>
+
+    <!-- Qualifying -->
+    <fieldset class="card grid gap-4 sm:grid-cols-2">
+      <legend class="sr-only">Qualifying</legend>
+      <div class="sm:col-span-2">
+        <h2 class="text-sm font-semibold text-ink-900 dark:text-white">Qualifying</h2>
+        <p class="text-xs text-ink-500 dark:text-ink-400">Ask these on the first call or visit. Leave "Not asked" until you know.</p>
+      </div>
+      <div>
+        <label for="currentBilling" class="field-label">Current billing</label>
+        <select id="currentBilling" name="currentBilling" [ngModel]="m.currentBilling" (ngModelChange)="set('currentBilling', $event)" class="field">
+          @for (b of billing; track b) {
+            <option [value]="b">{{ billingLabel[b] }}</option>
+          }
+        </select>
+      </div>
+      @if (m.currentBilling === 'other_software') {
+        <div>
+          <label for="billingSoftware" class="field-label">Which software?</label>
+          <input id="billingSoftware" name="billingSoftware" [ngModel]="m.billingSoftware" (ngModelChange)="text('billingSoftware', $event)" class="field" placeholder="Posist, Restroworks…" />
+        </div>
+      } @else {
+        <div class="hidden sm:block"></div>
+      }
+      <div>
+        <label for="onAggregators" class="field-label">On Zomato / Swiggy?</label>
+        <select id="onAggregators" name="onAggregators" [ngModel]="m.onAggregators" (ngModelChange)="set('onAggregators', $event)" class="field">
+          @for (o of tri; track o.label) {
+            <option [ngValue]="o.value">{{ o.label }}</option>
+          }
+        </select>
+      </div>
+      <div>
+        <label for="monthlyAggregatorOrders" class="field-label">Aggregator orders / month</label>
+        <input id="monthlyAggregatorOrders" name="monthlyAggregatorOrders" type="number" min="0" [ngModel]="m.monthlyAggregatorOrders" (ngModelChange)="numberOrNull('monthlyAggregatorOrders', $event)" class="field" placeholder="Estimate" />
+      </div>
+      <div>
+        <label for="hasWebsite" class="field-label">Has a website?</label>
+        <select id="hasWebsite" name="hasWebsite" [ngModel]="m.hasWebsite" (ngModelChange)="set('hasWebsite', $event)" class="field">
+          @for (o of tri; track o.label) {
+            <option [ngValue]="o.value">{{ o.label }}</option>
+          }
+        </select>
+      </div>
+      <div>
+        <label for="hasOwnRiders" class="field-label">Own delivery riders?</label>
+        <select id="hasOwnRiders" name="hasOwnRiders" [ngModel]="m.hasOwnRiders" (ngModelChange)="set('hasOwnRiders', $event)" class="field">
+          @for (o of tri; track o.label) {
+            <option [ngValue]="o.value">{{ o.label }}</option>
+          }
+        </select>
+      </div>
+    </fieldset>
+
+    <!-- Sale -->
+    <fieldset class="card grid gap-4 sm:grid-cols-2">
+      <legend class="sr-only">Sale</legend>
+      <h2 class="text-sm font-semibold text-ink-900 sm:col-span-2 dark:text-white">Sale</h2>
+      <div>
+        <label for="stage" class="field-label">Stage</label>
+        <select id="stage" name="stage" [ngModel]="m.stage" (ngModelChange)="set('stage', $event)" class="field">
+          @for (s of stages; track s) {
+            <option [value]="s">{{ stageLabel[s] }}</option>
+          }
+        </select>
+      </div>
+      @if (m.stage === 'lost') {
+        <div>
+          <label for="lostReason" class="field-label">Lost reason *</label>
+          <input id="lostReason" name="lostReason" required [ngModel]="m.lostReason" (ngModelChange)="text('lostReason', $event)" class="field" />
+        </div>
+      } @else {
+        <div>
+          <label for="nextFollowUpOn" class="field-label">Next follow-up</label>
+          <input id="nextFollowUpOn" name="nextFollowUpOn" type="date" [ngModel]="m.nextFollowUpOn" (ngModelChange)="text('nextFollowUpOn', $event)" class="field" />
+        </div>
+      }
+      <div>
+        <label for="expectedPlan" class="field-label">Expected plan</label>
+        <select id="expectedPlan" name="expectedPlan" [ngModel]="m.expectedPlan" (ngModelChange)="set('expectedPlan', $event)" class="field">
+          <option [ngValue]="null">Not decided</option>
+          @for (p of plans; track p) {
+            <option [ngValue]="p">{{ planLabel[p] }}</option>
+          }
+        </select>
+      </div>
+      <div>
+        <label for="assignedTo" class="field-label">Salesperson</label>
+        <select id="assignedTo" name="assignedTo" [ngModel]="m.assignedTo" (ngModelChange)="set('assignedTo', $event)" class="field">
+          <option [ngValue]="null">Unassigned</option>
+          @for (u of team.activeUsers(); track u.id) {
+            <option [ngValue]="u.id">{{ u.name }}</option>
+          }
+        </select>
+      </div>
+      <div>
+        <label for="source" class="field-label">Source</label>
+        <select id="source" name="source" [ngModel]="m.source" (ngModelChange)="set('source', $event)" class="field">
+          @for (s of sources; track s) {
+            <option [value]="s">{{ sourceLabel[s] }}</option>
+          }
+        </select>
+      </div>
+      <div>
+        <label for="dealerId" class="field-label">Dealer / partner</label>
+        <select id="dealerId" name="dealerId" [ngModel]="m.dealerId" (ngModelChange)="set('dealerId', $event)" class="field">
+          <option [ngValue]="null">None</option>
+          @for (d of team.activeDealers(); track d.id) {
+            <option [ngValue]="d.id">{{ d.name }}{{ d.company ? ' · ' + d.company : '' }}</option>
+          }
+        </select>
+      </div>
+      <div class="sm:col-span-2">
+        <label for="notes" class="field-label">Notes</label>
+        <textarea id="notes" name="notes" rows="4" [ngModel]="m.notes" (ngModelChange)="text('notes', $event)" class="field"></textarea>
+      </div>
+    </fieldset>
+
+    <div class="flex justify-end gap-2 pb-6">
+      <a [routerLink]="id() ? ['/leads', id()] : '/leads'" class="btn-secondary">Cancel</a>
+      <button type="submit" class="btn-primary" [disabled]="store.saving() || !m.restaurantName.trim() || (m.stage === 'lost' && !m.lostReason)">
+        {{ store.saving() ? 'Saving…' : id() ? 'Save changes' : 'Add lead' }}
+      </button>
+    </div>
+  </form>
+</div>

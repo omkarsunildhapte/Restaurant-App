@@ -1,0 +1,277 @@
+<div class="mb-4 flex flex-wrap items-end justify-between gap-3">
+  <div>
+    <h1 class="text-2xl font-semibold text-gray-900">Salaries</h1>
+    <p class="mt-1 text-sm text-gray-500">Only owners see this page.</p>
+  </div>
+  <button type="button" class="btn btn-primary px-5 py-2.5 text-sm" (click)="openEmployee(null)" [disabled]="!ws.writable()">Add staff member</button>
+</div>
+
+@if (error()) {
+  <div class="mb-4 rounded-md border border-red-200 bg-red-50 p-4 text-sm text-red-800" role="alert">{{ error() }}</div>
+}
+
+<div class="rounded-md bg-white px-4 shadow-xs">
+  <ui-tabs [(activeIndex)]="tab">
+    <ui-tab-panel header="Month">
+      <div class="mb-4 flex flex-wrap items-center gap-2">
+        <button type="button" class="btn border-gray-300 bg-white px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-100" (click)="shiftMonth(-1)" aria-label="Previous month">‹</button>
+        <input class="form-input w-44 py-1.5 text-sm" type="month" aria-label="Month" [ngModel]="month()" (ngModelChange)="month.set($event); load()" />
+        <button type="button" class="btn border-gray-300 bg-white px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-100" (click)="shiftMonth(1)" aria-label="Next month">›</button>
+        <span class="ml-auto text-sm text-gray-600">
+          Due {{ rupees(totals().due) }} · Paid {{ rupees(totals().paid + totals().advances) }} ·
+          <span class="font-semibold text-gray-900">Still to pay {{ rupees(totals().balance) }}</span>
+        </span>
+        <button type="button" class="btn btn-text px-3 py-1.5 text-sm" (click)="exportMonth()" [disabled]="!rows().length">Download CSV</button>
+      </div>
+
+      <div class="overflow-x-auto">
+        <table class="w-full min-w-[52rem] text-left text-sm">
+          <thead class="border-b border-gray-200 text-xs uppercase tracking-wide text-gray-500">
+            <tr>
+              <th class="py-2.5 pr-3">Staff</th>
+              <th class="py-2.5 pr-3">Pay</th>
+              <th class="py-2.5 pr-3 text-right">Due</th>
+              <th class="py-2.5 pr-3 text-right">Bonus</th>
+              <th class="py-2.5 pr-3 text-right">Deductions</th>
+              <th class="py-2.5 pr-3 text-right">Advances</th>
+              <th class="py-2.5 pr-3 text-right">Paid</th>
+              <th class="py-2.5 pr-3 text-right">Balance</th>
+              <th class="py-2.5"><span class="sr-only">Actions</span></th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-100">
+            @for (r of rows(); track r.employee_id) {
+              <tr [class.opacity-60]="!r.is_active">
+                <td class="py-2.5 pr-3">
+                  <button type="button" class="font-medium text-gray-900 hover:underline" (click)="openHistory(r)">{{ r.full_name }}</button>
+                  <p class="text-xs text-gray-500">{{ r.job_title || '' }}{{ r.is_active ? '' : ' · left' }}</p>
+                </td>
+                <td class="py-2.5 pr-3 text-gray-600">{{ payText(r) }}</td>
+                <td class="py-2.5 pr-3 text-right">{{ r.pay_type === 'monthly' ? rupees(r.due) : 'by days' }}</td>
+                <td class="py-2.5 pr-3 text-right text-gray-600">{{ r.bonus > 0 ? rupees(r.bonus) : '—' }}</td>
+                <td class="py-2.5 pr-3 text-right text-gray-600">{{ r.deductions > 0 ? '−' + rupees(r.deductions) : '—' }}</td>
+                <td class="py-2.5 pr-3 text-right text-gray-600">{{ r.advances > 0 ? rupees(r.advances) : '—' }}</td>
+                <td class="py-2.5 pr-3 text-right text-gray-600">{{ r.paid > 0 ? rupees(r.paid) : '—' }}</td>
+                <td class="py-2.5 pr-3 text-right font-semibold" [class]="r.balance > 0 ? 'text-amber-700' : r.balance < 0 ? 'text-red-700' : 'text-green-700'">
+                  {{ r.balance < 0 ? 'Overpaid ' + rupees(-r.balance) : rupees(r.balance) }}
+                </td>
+                <td class="py-2.5 text-right">
+                  @if (ws.writable()) {
+                    <span class="inline-flex gap-1">
+                      <button type="button" class="btn btn-primary px-3 py-1 text-xs" (click)="openEntry(r, 'salary')">Pay</button>
+                      <button type="button" class="btn btn-text px-2 py-1 text-xs" (click)="openEntry(r, 'advance')">Advance</button>
+                      <button type="button" class="btn btn-text px-2 py-1 text-xs" (click)="openEntry(r, 'bonus')">Other</button>
+                    </span>
+                  }
+                </td>
+              </tr>
+            } @empty {
+              <tr>
+                <td colspan="9" class="py-10 text-center text-gray-500">
+                  {{ loading() ? 'Loading…' : 'No staff yet. Add them with "Add staff member".' }}
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+      <p class="mt-3 text-xs text-gray-500">
+        Balance = monthly pay + bonus − deductions − advances − paid. Staff paid by the day or hour have no fixed due; enter what you pay.
+        Cash payments come off that counter's expected cash at day close.
+      </p>
+    </ui-tab-panel>
+
+    <ui-tab-panel header="Staff">
+      <ul class="divide-y divide-gray-100">
+        @for (e of staff(); track e.id) {
+          <li class="flex flex-wrap items-center gap-3 py-3 text-sm" [class.opacity-60]="!e.is_active">
+            <div class="min-w-0 flex-1">
+              <p class="font-medium text-gray-900">{{ e.full_name }} <span class="font-normal text-gray-500">{{ e.job_title ? '· ' + e.job_title : '' }}</span></p>
+              <p class="text-xs text-gray-500">
+                {{ e.employee_pay_rates[0] ? payText(e.employee_pay_rates[0]) : 'No pay set' }} · {{ outletName()(e.outlet_id) }}
+                {{ e.phone ? '· ' + e.phone : '' }}{{ e.is_active ? '' : ' · left' }}
+              </p>
+            </div>
+            @if (ws.writable()) {
+              <button type="button" class="btn btn-text px-3 py-1 text-sm" (click)="openEmployee(e)">Edit</button>
+            }
+          </li>
+        } @empty {
+          <li class="py-10 text-center text-sm text-gray-500">{{ loading() ? 'Loading…' : 'No staff yet.' }}</li>
+        }
+      </ul>
+    </ui-tab-panel>
+  </ui-tabs>
+</div>
+
+<!-- Pay / advance / bonus / deduction -->
+<ui-modal [(visible)]="entryOpen" [header]="entryFor() ? entryFor()!.full_name + ' · ' + monthLabel() : ''" width="30rem">
+  <form id="entry-form" class="grid gap-4" (ngSubmit)="saveEntry()">
+    <fieldset>
+      <legend class="text-sm font-medium text-gray-700">What</legend>
+      <div class="mt-1 flex flex-wrap gap-2">
+        @for (k of kinds; track k) {
+          <button type="button" (click)="eKind.set(k)" [attr.aria-pressed]="eKind() === k"
+            [class]="eKind() === k ? 'rounded-md border-2 border-brand-saffron bg-brand-soft px-3 py-1.5 text-sm font-medium text-brand-brown' : 'rounded-md border border-gray-300 bg-white px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-50'">
+            {{ kindLabel[k] }}
+          </button>
+        }
+      </div>
+    </fieldset>
+    <div class="grid grid-cols-2 gap-4">
+      <label class="block text-sm font-medium text-gray-700">
+        Amount (₹)
+        <input class="form-input mt-1 py-2" type="number" min="0" step="1" inputmode="decimal" name="amount" [(ngModel)]="eAmount" />
+      </label>
+      <label class="block text-sm font-medium text-gray-700">
+        Date
+        <input class="form-input mt-1 py-2" type="date" name="date" [(ngModel)]="eDate" />
+      </label>
+    </div>
+    @if (eKind() !== 'deduction') {
+      <fieldset>
+        <legend class="text-sm font-medium text-gray-700">Paid by</legend>
+        <div class="mt-1 flex flex-wrap gap-2">
+          @for (m of payModes; track m) {
+            <button type="button" (click)="eMode.set(m)" [attr.aria-pressed]="eMode() === m"
+              [class]="eMode() === m ? 'rounded-md border-2 border-brand-saffron bg-brand-soft px-4 py-1.5 text-sm font-medium text-brand-brown' : 'rounded-md border border-gray-300 bg-white px-4 py-1.5 text-sm text-gray-700 hover:bg-gray-50'">
+              {{ m === 'upi' ? 'UPI' : m === 'bank' ? 'Bank' : 'Cash' }}
+            </button>
+          }
+        </div>
+      </fieldset>
+      @if (eMode() === 'cash' && ws.outlets().length > 1) {
+        <label class="block text-sm font-medium text-gray-700">
+          Cash from the counter at
+          <select class="form-input mt-1 py-2" name="outlet" [(ngModel)]="eOutlet">
+            @for (o of ws.outlets(); track o.id) {
+              <option [value]="o.id">{{ o.name }}</option>
+            }
+          </select>
+        </label>
+      }
+    } @else {
+      <p class="text-xs text-gray-500">A deduction lowers what is owed (e.g. a breakage or an unpaid leave day); no money moves.</p>
+    }
+    <label class="block text-sm font-medium text-gray-700">
+      Note <span class="font-normal text-gray-400">(optional)</span>
+      <input class="form-input mt-1 py-2" name="note" [(ngModel)]="eNote" />
+    </label>
+    @if (formError()) {
+      <p class="rounded-md bg-red-50 p-3 text-sm text-red-800" role="alert">{{ formError() }}</p>
+    }
+  </form>
+  <div uiModalFooter class="flex flex-wrap items-center justify-end gap-3 rounded-b-md border-t border-gray-100 bg-gray-50 px-6 py-4">
+    <button type="button" class="btn border-gray-300 bg-white px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 focus-visible:ring-gray-300" (click)="entryOpen.set(false)">Cancel</button>
+    <button type="submit" form="entry-form" class="btn btn-primary px-4 py-2 text-sm" [disabled]="busy()">{{ busy() ? 'Saving…' : 'Save' }}</button>
+  </div>
+</ui-modal>
+
+<!-- History -->
+<ui-modal [visible]="historyFor() !== null" (visibleChange)="onHistoryVisible($event)" [header]="historyFor()?.full_name ?? ''" width="34rem">
+  <ul class="divide-y divide-gray-100">
+    @for (e of history(); track e.id) {
+      <li class="flex items-center gap-3 py-2 text-sm">
+        <span class="min-w-0 flex-1">
+          <span class="font-medium text-gray-900">{{ kindLabel[e.kind] }}</span>
+          <span class="text-gray-500"> · {{ entryDate(e.entry_date) }} · for {{ monthOf(e.period_month) }}{{ e.payment_mode ? ' · ' + e.payment_mode.toUpperCase() : '' }}</span>
+          @if (e.note) { <span class="block text-xs text-gray-500">{{ e.note }}</span> }
+        </span>
+        <span class="font-medium" [class]="e.kind === 'deduction' ? 'text-red-700' : 'text-gray-900'">{{ e.kind === 'deduction' ? '−' : '' }}{{ rupees(e.amount) }}</span>
+        @if (ws.writable()) {
+          <button type="button" class="btn btn-danger-text px-2 py-1 text-xs" (click)="deleteEntry(e)" [attr.aria-label]="'Delete ' + kindLabel[e.kind]">✕</button>
+        }
+      </li>
+    } @empty {
+      <li class="py-6 text-center text-sm text-gray-500">Nothing recorded yet.</li>
+    }
+  </ul>
+  <div uiModalFooter class="flex flex-wrap items-center justify-end gap-3 rounded-b-md border-t border-gray-100 bg-gray-50 px-6 py-4">
+    <button type="button" class="btn border-gray-300 bg-white px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 focus-visible:ring-gray-300" (click)="historyFor.set(null)">Close</button>
+  </div>
+</ui-modal>
+
+<!-- Staff member -->
+<ui-modal [(visible)]="empOpen" [header]="empId() ? 'Edit staff member' : 'Add staff member'" width="40rem">
+  <form id="emp-form" class="grid gap-4" (ngSubmit)="saveEmployee()">
+    <div class="grid gap-4 sm:grid-cols-2">
+      <label class="block text-sm font-medium text-gray-700">
+        Name
+        <input class="form-input mt-1 py-2" name="name" required [(ngModel)]="empName" />
+      </label>
+      <label class="block text-sm font-medium text-gray-700">
+        Job <span class="font-normal text-gray-400">(optional)</span>
+        <input class="form-input mt-1 py-2" name="job" [(ngModel)]="empJob" placeholder="Chef, Helper, Waiter" />
+      </label>
+      <label class="block text-sm font-medium text-gray-700">
+        Phone <span class="font-normal text-gray-400">(optional)</span>
+        <input class="form-input mt-1 py-2" type="tel" name="phone" [(ngModel)]="empPhone" />
+      </label>
+      @if (ws.outlets().length > 1) {
+        <label class="block text-sm font-medium text-gray-700">
+          Works at
+          <select class="form-input mt-1 py-2" name="outlet" [(ngModel)]="empOutlet">
+            <option value="">All outlets</option>
+            @for (o of ws.outlets(); track o.id) {
+              <option [value]="o.id">{{ o.name }}</option>
+            }
+          </select>
+        </label>
+      }
+      <label class="block text-sm font-medium text-gray-700">
+        Joined on <span class="font-normal text-gray-400">(optional)</span>
+        <input class="form-input mt-1 py-2" type="date" name="joined" [(ngModel)]="empJoined" />
+      </label>
+      <label class="block text-sm font-medium text-gray-700">
+        UPI id or bank account <span class="font-normal text-gray-400">(optional)</span>
+        <input class="form-input mt-1 py-2" name="payNote" [(ngModel)]="empPayNote" placeholder="ramesh@upi" />
+      </label>
+    </div>
+
+    <div class="rounded-md border border-gray-200 p-3">
+      <p class="text-sm font-medium text-gray-700">Pay</p>
+      <div class="mt-2 grid gap-3 sm:grid-cols-3">
+        <select class="form-input py-2" name="payType" aria-label="Paid" [(ngModel)]="empPayType">
+          <option value="monthly">Per month</option>
+          <option value="daily">Per day</option>
+          <option value="hourly">Per hour</option>
+        </select>
+        <input class="form-input py-2" type="number" min="0" step="1" inputmode="decimal" name="rate" aria-label="Rate in rupees" placeholder="₹" [(ngModel)]="empRate" />
+        <label class="block text-xs text-gray-500">
+          From
+          <input class="form-input mt-0.5 py-1.5 text-sm" type="date" name="rateFrom" [(ngModel)]="empRateFrom" />
+        </label>
+      </div>
+      @if (empRates().length > 1) {
+        <p class="mt-2 text-xs text-gray-500">
+          Earlier:
+          @for (r of empRates().slice(1); track r.id; let last = $last) {
+            {{ payText(r) }} from {{ entryDate(r.effective_from) }}{{ last ? '' : '; ' }}
+          }
+        </p>
+      }
+      <p class="mt-1 text-xs text-gray-500">A raise from a new date keeps the old pay for earlier months.</p>
+    </div>
+
+    @if (empId()) {
+      <div class="grid gap-4 sm:grid-cols-2">
+        <label class="flex items-center gap-2 text-sm text-gray-700">
+          <input type="checkbox" class="h-4 w-4" name="active" [(ngModel)]="empActive" /> Still working here
+        </label>
+        @if (!empActive()) {
+          <label class="block text-sm font-medium text-gray-700">
+            Left on
+            <input class="form-input mt-1 py-2" type="date" name="left" [(ngModel)]="empLeft" />
+          </label>
+        }
+      </div>
+    }
+    @if (formError()) {
+      <p class="rounded-md bg-red-50 p-3 text-sm text-red-800" role="alert">{{ formError() }}</p>
+    }
+  </form>
+  <div uiModalFooter class="flex flex-wrap items-center justify-end gap-3 rounded-b-md border-t border-gray-100 bg-gray-50 px-6 py-4">
+    <button type="button" class="btn border-gray-300 bg-white px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 focus-visible:ring-gray-300" (click)="empOpen.set(false)">Cancel</button>
+    <button type="submit" form="emp-form" class="btn btn-primary px-4 py-2 text-sm" [disabled]="busy()">{{ busy() ? 'Saving…' : 'Save' }}</button>
+  </div>
+</ui-modal>

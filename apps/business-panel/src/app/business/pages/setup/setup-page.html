@@ -1,0 +1,256 @@
+<div class="mx-auto max-w-3xl">
+  <h1 class="text-2xl font-semibold text-gray-900">Set up {{ ws.current()?.tenant_name }}</h1>
+  <p class="mt-1 text-sm text-gray-500">About 10 minutes. Skip anything and finish it later from the menu on the left.</p>
+
+  <ol class="mt-5 flex flex-wrap gap-2 text-sm" aria-label="Setup steps">
+    @for (s of steps; track s; let i = $index) {
+      <li>
+        <button
+          type="button"
+          (click)="step.set(i)"
+          [attr.aria-current]="step() === i ? 'step' : null"
+          [class]="
+            step() === i
+              ? 'rounded-full bg-brand-saffron px-3 py-1 font-medium text-brand-brown'
+              : i < step()
+                ? 'rounded-full bg-brand-soft px-3 py-1 text-brand-brown'
+                : 'rounded-full bg-white px-3 py-1 text-gray-500'
+          "
+        >
+          {{ i + 1 }}. {{ s }}
+        </button>
+      </li>
+    }
+  </ol>
+
+  <section class="mt-4 rounded-md bg-white p-5 shadow-xs">
+    @switch (step()) {
+      @case (0) {
+        <h2 class="text-lg font-semibold text-gray-900">Your business</h2>
+        <p class="mt-1 text-sm text-gray-500">These details go on every bill.</p>
+        @if (details(); as d) {
+          <div class="mt-4 grid gap-4 sm:grid-cols-2">
+            <label class="block text-sm font-medium text-gray-700">
+              Restaurant name
+              <input class="form-input mt-1 py-2" name="name" [ngModel]="d.name" (ngModelChange)="patchDetails({ name: $event })" />
+            </label>
+            <label class="block text-sm font-medium text-gray-700">
+              Legal name <span class="font-normal text-gray-400">(optional)</span>
+              <input class="form-input mt-1 py-2" name="legal" [ngModel]="d.legal_name" (ngModelChange)="patchDetails({ legal_name: $event })" />
+            </label>
+            <label class="block text-sm font-medium text-gray-700">
+              GSTIN <span class="font-normal text-gray-400">(if registered)</span>
+              <input class="form-input mt-1 py-2 uppercase" name="gstin" maxlength="15" [ngModel]="d.gstin" (ngModelChange)="patchDetails({ gstin: $event })" />
+            </label>
+            <label class="block text-sm font-medium text-gray-700">
+              FSSAI licence number
+              <input class="form-input mt-1 py-2" name="fssai" inputmode="numeric" maxlength="14" [ngModel]="d.fssai_number" (ngModelChange)="patchDetails({ fssai_number: $event })" />
+            </label>
+            <label class="block text-sm font-medium text-gray-700 sm:col-span-2">
+              Address
+              <input class="form-input mt-1 py-2" name="address" [ngModel]="d.address" (ngModelChange)="patchDetails({ address: $event })" />
+            </label>
+            <fieldset class="sm:col-span-2">
+              <legend class="text-sm font-medium text-gray-700">Do your menu prices include GST?</legend>
+              <div class="mt-1 flex flex-wrap gap-5 text-sm">
+                <label class="flex items-center gap-2"><input type="radio" name="incl" [checked]="!d.prices_include_tax" (change)="patchDetails({ prices_include_tax: false })" /> No, add GST on the bill</label>
+                <label class="flex items-center gap-2"><input type="radio" name="incl" [checked]="d.prices_include_tax" (change)="patchDetails({ prices_include_tax: true })" /> Yes, prices include GST</label>
+              </div>
+            </fieldset>
+          </div>
+        }
+      }
+
+      @case (1) {
+        <h2 class="text-lg font-semibold text-gray-900">Your outlet{{ outlet() ? ': ' + outlet()!.name : '' }}</h2>
+        <p class="mt-1 text-sm text-gray-500">Where customers find you. The map location is used for deliveries later.</p>
+        <div class="mt-4 grid gap-4 sm:grid-cols-2">
+          <label class="block text-sm font-medium text-gray-700 sm:col-span-2">
+            Address
+            <input class="form-input mt-1 py-2" name="oaddr" [(ngModel)]="outletAddress" />
+          </label>
+          <label class="block text-sm font-medium text-gray-700">
+            City
+            <input class="form-input mt-1 py-2" name="ocity" [(ngModel)]="outletCity" />
+          </label>
+          <label class="block text-sm font-medium text-gray-700">
+            Phone
+            <input class="form-input mt-1 py-2" type="tel" name="ophone" [(ngModel)]="outletPhone" />
+          </label>
+        </div>
+        <div class="mt-4 flex flex-wrap items-center gap-2 text-sm">
+          <button type="button" class="btn btn-text px-3 py-2 text-sm" (click)="findLocation()" [disabled]="busy()">Find on the map</button>
+          @if (location(); as l) {
+            <span class="text-green-700">✓ {{ l.displayName }}</span>
+          }
+        </div>
+        @if (matches().length) {
+          <ul class="mt-2 divide-y divide-gray-100 rounded-md border border-gray-200">
+            @for (m of matches(); track m.placeId) {
+              <li><button type="button" class="w-full px-3 py-2 text-left text-sm hover:bg-brand-cream" (click)="location.set(m); matches.set([])">{{ m.displayName }}</button></li>
+            }
+          </ul>
+        }
+      }
+
+      @case (2) {
+        <h2 class="text-lg font-semibold text-gray-900">Your menu</h2>
+        <p class="mt-1 text-sm text-gray-500">
+          {{ itemCount() ? itemCount() + ' items so far. Add more here, or later under Menu (with photos, sizes and add-ons).' : 'Type a few items, or upload your whole menu as a spreadsheet.' }}
+        </p>
+        <div class="mt-3 flex rounded-md border border-gray-300 p-0.5 text-sm sm:w-fit" role="group" aria-label="How to add the menu">
+          <button type="button" (click)="menuMode.set('type')" [attr.aria-pressed]="menuMode() === 'type'" [class]="menuMode() === 'type' ? 'rounded-sm bg-gray-800 px-3 py-1 text-white' : 'rounded-sm px-3 py-1 text-gray-600'">Type it in</button>
+          <button type="button" (click)="menuMode.set('file')" [attr.aria-pressed]="menuMode() === 'file'" [class]="menuMode() === 'file' ? 'rounded-sm bg-gray-800 px-3 py-1 text-white' : 'rounded-sm px-3 py-1 text-gray-600'">Upload a spreadsheet</button>
+          <button type="button" (click)="menuMode.set('petpooja')" [attr.aria-pressed]="menuMode() === 'petpooja'" [class]="menuMode() === 'petpooja' ? 'rounded-sm bg-gray-800 px-3 py-1 text-white' : 'rounded-sm px-3 py-1 text-gray-600'">Import from Petpooja</button>
+        </div>
+
+        @if (menuMode() === 'type') {
+          <datalist id="setup-categories">
+            @for (q of quick(); track $index) {
+              @if (q.category) { <option [value]="q.category"></option> }
+            }
+          </datalist>
+          @for (q of quick(); track $index; let i = $index) {
+            <div class="mt-2 grid grid-cols-2 gap-2 sm:grid-cols-[1fr_1.4fr_6rem_7rem]">
+              <input class="form-input py-2 text-sm" placeholder="Category" list="setup-categories" [attr.aria-label]="'Row ' + (i + 1) + ' category'" [ngModel]="q.category" (ngModelChange)="setQuick(i, { category: $event })" />
+              <input class="form-input py-2 text-sm" placeholder="Item name" [attr.aria-label]="'Row ' + (i + 1) + ' item'" [ngModel]="q.name" (ngModelChange)="setQuick(i, { name: $event })" />
+              <input class="form-input py-2 text-sm" type="number" min="0" placeholder="₹" [attr.aria-label]="'Row ' + (i + 1) + ' price'" [ngModel]="q.price" (ngModelChange)="setQuick(i, { price: $event })" />
+              <select class="form-input py-2 text-sm" [attr.aria-label]="'Row ' + (i + 1) + ' type'" [ngModel]="q.diet" (ngModelChange)="setQuick(i, { diet: $event })">
+                <option value="veg">Veg</option>
+                <option value="egg">Egg</option>
+                <option value="non_veg">Non-veg</option>
+              </select>
+            </div>
+          }
+          <button type="button" class="btn btn-text mt-2 px-3 py-2 text-sm" (click)="addQuick()">Add row</button>
+          <p class="mt-1 text-xs text-gray-500">{{ quickReady().length }} complete rows will be added.</p>
+        } @else if (menuMode() === 'petpooja') {
+          <div class="mt-3 text-sm text-gray-600">
+            <p>Moving from Petpooja? Export your menu from Petpooja, open it in Excel and save it as <strong>CSV</strong>, then choose it here.
+              Items, sizes (Half / Full), veg / non-veg / egg and GST come across; add photos and add-ons afterwards.</p>
+          </div>
+          <label class="btn btn-text mt-3 cursor-pointer px-3 py-2 text-sm">
+            Choose Petpooja CSV
+            <input type="file" accept=".csv,text/csv,.xls,.xlsx" class="sr-only" (change)="onPetpooja($event)" />
+          </label>
+          @if (petpooja(); as pp) {
+            @if (pp.items.length) {
+              <p class="mt-2 text-sm text-green-700">
+                {{ pp.items.length }} items in {{ petpoojaCategories() }} categories{{ petpoojaSizes() ? ', with ' + petpoojaSizes() + ' sizes' : '' }}, ready to import.
+              </p>
+              <div class="mt-2 max-h-56 overflow-y-auto rounded-md border border-gray-200">
+                <table class="w-full text-left text-xs">
+                  <thead class="sticky top-0 bg-gray-50 uppercase tracking-wide text-gray-500">
+                    <tr><th class="px-2 py-1.5">Category</th><th class="px-2 py-1.5">Item</th><th class="px-2 py-1.5">Price / sizes</th><th class="px-2 py-1.5">Type</th><th class="px-2 py-1.5">GST</th></tr>
+                  </thead>
+                  <tbody class="divide-y divide-gray-100">
+                    @for (i of pp.items; track $index) {
+                      <tr>
+                        <td class="px-2 py-1.5 text-gray-600">{{ i.category }}</td>
+                        <td class="px-2 py-1.5 text-gray-900">{{ i.name }}</td>
+                        <td class="px-2 py-1.5 text-gray-600">
+                          @if (i.variants.length) {
+                            @for (v of i.variants; track v.name; let last = $last) { {{ v.name }} ₹{{ v.price }}{{ last ? '' : ' · ' }} }
+                          } @else {
+                            ₹{{ i.price }}
+                          }
+                        </td>
+                        <td class="px-2 py-1.5 text-gray-600">{{ i.diet === 'non_veg' ? 'Non-veg' : i.diet === 'egg' ? 'Egg' : 'Veg' }}</td>
+                        <td class="px-2 py-1.5 text-gray-600">{{ i.gst === null ? 'default' : i.gst + '%' }}</td>
+                      </tr>
+                    }
+                  </tbody>
+                </table>
+              </div>
+              <p class="mt-1 text-xs text-gray-400">Read columns: {{ pp.recognised.join(', ') }}</p>
+            }
+            @if (pp.problems.length) {
+              <ul class="mt-2 max-h-40 list-disc overflow-y-auto rounded-md bg-amber-50 p-3 pl-7 text-sm text-amber-900">
+                @for (p of pp.problems; track $index) { <li>{{ p }}</li> }
+              </ul>
+              @if (pp.items.length) {
+                <p class="mt-1 text-xs text-gray-500">Rows with problems are left out; add them later under Menu.</p>
+              }
+            }
+          }
+        } @else {
+          <div class="mt-3 text-sm text-gray-600">
+            <p>Columns: <code class="rounded-sm bg-gray-100 px-1">category, name, price</code> and optionally <code class="rounded-sm bg-gray-100 px-1">type</code> (veg / egg / non-veg), <code class="rounded-sm bg-gray-100 px-1">gst</code> (%), <code class="rounded-sm bg-gray-100 px-1">description</code>.
+              In Excel or Google Sheets use File → Save as / Download → CSV.</p>
+            <a [href]="csvTemplateHref" download="menu-template.csv" class="mt-2 inline-block text-brand-rust hover:underline">Download an example file</a>
+          </div>
+          <label class="btn btn-text mt-3 cursor-pointer px-3 py-2 text-sm">
+            Choose CSV file
+            <input type="file" accept=".csv,text/csv" class="sr-only" (change)="onCsv($event)" />
+          </label>
+          @if (csv(); as c) {
+            <p class="mt-2 text-sm" [class]="c.rows.length ? 'text-green-700' : 'text-gray-600'">{{ c.rows.length }} items ready to add.</p>
+            @if (c.problems.length) {
+              <ul class="mt-2 max-h-40 list-disc overflow-y-auto rounded-md bg-amber-50 p-3 pl-7 text-sm text-amber-900">
+                @for (p of c.problems; track $index) { <li>{{ p }}</li> }
+              </ul>
+              <p class="mt-1 text-xs text-gray-500">Rows with problems are left out. Fix the file and choose it again, or add them later.</p>
+            }
+          }
+        }
+      }
+
+      @case (3) {
+        <h2 class="text-lg font-semibold text-gray-900">Tables</h2>
+        <p class="mt-1 text-sm text-gray-500">{{ tableCount() ? tableCount() + ' tables so far.' : 'Number your dining tables. You can rename them or add areas (Patio, Rooftop) later.' }}</p>
+        <div class="mt-4 grid max-w-md grid-cols-3 gap-3">
+          <label class="block text-sm font-medium text-gray-700">From T<input class="form-input mt-1 py-2" type="number" min="0" name="tfrom" [(ngModel)]="tableFrom" /></label>
+          <label class="block text-sm font-medium text-gray-700">To T<input class="form-input mt-1 py-2" type="number" min="0" name="tto" [(ngModel)]="tableTo" /></label>
+          <label class="block text-sm font-medium text-gray-700">Seats<input class="form-input mt-1 py-2" type="number" min="1" max="50" name="tseats" [(ngModel)]="tableSeats" /></label>
+        </div>
+        <p class="mt-2 text-xs text-gray-500">Takeaway-only? Skip this step.</p>
+      }
+
+      @case (4) {
+        <h2 class="text-lg font-semibold text-gray-900">Your team</h2>
+        <p class="mt-1 text-sm text-gray-500">Each person gets an email to set their own password. Leave rows empty to skip.</p>
+        @for (inv of invites(); track $index; let i = $index) {
+          <div class="mt-2 flex gap-2">
+            <input class="form-input flex-1 py-2 text-sm" type="email" placeholder="name@example.com" [attr.aria-label]="'Invite ' + (i + 1) + ' email'" [ngModel]="inv.email" (ngModelChange)="setInvite(i, { email: $event })" />
+            <select class="form-input w-36 py-2 text-sm" [attr.aria-label]="'Invite ' + (i + 1) + ' role'" [ngModel]="inv.role" (ngModelChange)="setInvite(i, { role: $event })">
+              @for (r of staffRoles; track r) { <option [value]="r">{{ roleLabel[r] }}</option> }
+            </select>
+          </div>
+        }
+        <button type="button" class="btn btn-text mt-2 px-3 py-2 text-sm" (click)="addInvite()">Add person</button>
+      }
+
+      @default {
+        <h2 class="text-lg font-semibold text-gray-900">Printer and devices</h2>
+        <p class="mt-1 text-sm text-gray-500">Billing and the kitchen screen come next. Have these ready for setup day:</p>
+        <ul class="mt-3 space-y-2 text-sm text-gray-700">
+          <li>☐ A thermal receipt printer, 58 mm or 80 mm, USB or network (for bills)</li>
+          <li>☐ A second printer, or a tablet or TV in the kitchen (for orders, KOTs)</li>
+          <li>☐ Wi-Fi that reaches the counter and the kitchen</li>
+          <li>☐ Your UPI QR code (static QR from your bank or UPI app)</li>
+          <li>☐ An Android phone or tablet for each waiter, if you take orders at the table</li>
+        </ul>
+        <p class="mt-4 text-sm text-gray-600">
+          Done for now: {{ itemCount() }} menu items, {{ tableCount() }} tables, {{ staffCount() }} team members.
+        </p>
+      }
+    }
+
+    @if (error()) {
+      <p class="mt-4 rounded-md bg-red-50 p-3 text-sm text-red-800" role="alert">{{ error() }}</p>
+    }
+
+    <div class="mt-6 flex flex-wrap items-center justify-between gap-2 border-t border-gray-100 pt-4">
+      <button type="button" class="btn btn-text px-4 py-2 text-sm" (click)="back()" [disabled]="step() === 0 || busy()">Back</button>
+      <div class="flex gap-2">
+        @if (step() < steps.length - 1) {
+          <button type="button" class="btn btn-text px-4 py-2 text-sm" (click)="skip()" [disabled]="busy()">Skip</button>
+        }
+        <button type="button" class="btn btn-primary px-4 py-2 text-sm" (click)="next()" [disabled]="busy() || !ws.canManage()">
+          {{ busy() ? 'Saving…' : step() === steps.length - 1 ? 'Go to dashboard' : 'Save and continue' }}
+        </button>
+      </div>
+    </div>
+  </section>
+  <p class="mt-3 text-center text-xs text-gray-400"><a routerLink="/business/dashboard" class="hover:underline">Leave setup</a></p>
+</div>

@@ -1,0 +1,12 @@
+.tab-back{
+    background-color:var(--color-primary) ;
+    color: white;
+}
+.tab-bottom{
+    border-top-right-radius: 29px;
+    border-top-left-radius: 29px;
+}
+.active{
+    background: white;
+    color: var(--color-dark);
+}

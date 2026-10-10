@@ -1,0 +1,94 @@
+<div class="mx-auto max-w-5xl">
+  <div class="mb-6">
+    <h1 class="text-2xl font-semibold tracking-tight text-ink-900 dark:text-white">Import leads</h1>
+    <p class="mt-1 text-sm text-ink-500 dark:text-ink-400">
+      Upload a CSV of restaurants, for example the Google Sheet of 100 Pune cafés (File → Download → CSV).
+      Duplicates (same mobile number, or same name in the same area) are skipped.
+    </p>
+  </div>
+
+  <section class="card space-y-4">
+    <div class="grid gap-4 sm:grid-cols-3">
+      <div>
+        <label for="file" class="field-label">CSV file</label>
+        <input id="file" type="file" accept=".csv,text/csv" (change)="onFile($event)" class="field file:mr-3 file:rounded-md file:border-0 file:bg-ink-100 file:px-2 file:py-1 file:text-xs dark:file:bg-ink-800 dark:file:text-ink-200" />
+      </div>
+      <div>
+        <label for="source" class="field-label">Source</label>
+        <select id="source" [ngModel]="source()" (ngModelChange)="source.set($event)" class="field">
+          @for (s of sources; track s) {
+            <option [value]="s">{{ sourceLabel[s] }}</option>
+          }
+        </select>
+      </div>
+      <div>
+        <label for="defaultArea" class="field-label">Area for rows without one</label>
+        <input id="defaultArea" [ngModel]="defaultArea()" (ngModelChange)="defaultArea.set($event)" class="field" placeholder="Baner" />
+      </div>
+    </div>
+
+    <p class="text-xs text-ink-500 dark:text-ink-400">
+      Recognised columns: <span class="font-mono">name, owner, phone, whatsapp, email, area, city, address, maps, type, seats, notes</span>
+      (and common variants such as "Restaurant name", "Mobile", "Locality", "Google Maps", "Category").
+    </p>
+
+    @if (error()) {
+      <p class="text-sm font-medium text-rose-600 dark:text-rose-400" role="alert">{{ error() }}</p>
+    }
+
+    @if (headers().length) {
+      @if (!hasName()) {
+        <p class="rounded-lg bg-amber-50 px-3 py-2 text-sm text-amber-800 dark:bg-amber-500/10 dark:text-amber-300">
+          No restaurant-name column found. Rename the column with the restaurant's name to "name".
+        </p>
+      }
+      <div class="overflow-x-auto rounded-lg border border-ink-200 dark:border-ink-800">
+        <table class="w-full text-left text-xs">
+          <thead class="bg-ink-50 dark:bg-ink-900">
+            <tr>
+              @for (h of headers(); track $index) {
+                <th class="px-3 py-2">
+                  <span class="block font-semibold text-ink-700 dark:text-ink-200">{{ h }}</span>
+                  <span class="block font-normal" [class]="mapping()[$index] ? 'text-emerald-600 dark:text-emerald-400' : 'text-ink-400'">
+                    {{ mapping()[$index] ? '→ ' + mapping()[$index] : 'ignored' }}
+                  </span>
+                </th>
+              }
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-ink-100 dark:divide-ink-800">
+            @for (cells of table().slice(1, 6); track $index) {
+              <tr>
+                @for (c of cells; track $index) {
+                  <td class="max-w-48 truncate px-3 py-1.5 text-ink-600 dark:text-ink-300">{{ c }}</td>
+                }
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+      <div class="flex items-center justify-between gap-3">
+        <p class="text-sm text-ink-600 dark:text-ink-300">{{ rows().length }} row(s) in {{ fileName() }}{{ rows().length > 5 ? ' · first 5 shown' : '' }}</p>
+        <button type="button" (click)="submit()" [disabled]="busy() || !hasName() || !rows().length" class="btn-primary">
+          {{ busy() ? 'Importing…' : 'Import ' + rows().length + ' lead(s)' }}
+        </button>
+      </div>
+    }
+  </section>
+
+  @if (result(); as r) {
+    <section class="card mt-4">
+      <h2 class="text-sm font-semibold text-ink-900 dark:text-white">
+        {{ r.created }} imported · {{ r.skipped.length }} skipped
+      </h2>
+      @if (r.skipped.length) {
+        <ul class="mt-2 max-h-64 space-y-1 overflow-y-auto text-xs text-ink-600 dark:text-ink-300">
+          @for (s of r.skipped; track s.row) {
+            <li>Row {{ s.row + 1 }} in the file: {{ s.reason }}</li>
+          }
+        </ul>
+      }
+      <a routerLink="/leads" class="mt-3 inline-block text-sm font-medium text-brand-600 dark:text-brand-400">Open the pipeline →</a>
+    </section>
+  }
+</div>

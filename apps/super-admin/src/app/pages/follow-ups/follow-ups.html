@@ -1,0 +1,50 @@
+<div class="mb-6 flex flex-wrap items-end justify-between gap-4">
+  <div>
+    <h1 class="text-2xl font-semibold tracking-tight text-ink-900 dark:text-white">Follow-ups</h1>
+    <p class="mt-1 text-sm text-ink-500 dark:text-ink-400">Who to call or visit today. Open a lead to log what happened and set the next date.</p>
+  </div>
+  <label class="flex items-center gap-2 text-sm text-ink-700 dark:text-ink-200">
+    <input type="checkbox" [ngModel]="mineOnly()" (ngModelChange)="mineOnly.set($event)" class="size-4 rounded border-ink-300" />
+    Only my leads
+  </label>
+</div>
+
+@if (store.error()) {
+  <div class="mb-4 rounded-xl border border-rose-200 bg-rose-50 p-4 text-sm font-medium text-rose-800 dark:border-rose-500/30 dark:bg-rose-500/10 dark:text-rose-200" role="alert">{{ store.error() }}</div>
+}
+
+<div class="space-y-6">
+  @for (group of groups(); track group.key) {
+    <section>
+      <h2 class="mb-2 text-sm font-semibold" [class]="group.cls">{{ group.title }} · {{ group.leads.length }}</h2>
+      @if (group.leads.length) {
+        <ul class="divide-y divide-ink-100 overflow-hidden rounded-xl border border-ink-200 bg-white dark:divide-ink-800 dark:border-ink-800 dark:bg-ink-950">
+          @for (lead of group.leads; track lead.id) {
+            <li class="flex flex-wrap items-center gap-3 px-4 py-3">
+              <a [routerLink]="['/leads', lead.id]" class="min-w-0 flex-1">
+                <p class="truncate text-sm font-semibold text-ink-900 dark:text-white">{{ lead.restaurantName }}</p>
+                <p class="truncate text-xs text-ink-500 dark:text-ink-400">
+                  {{ lead.ownerName ?? 'Owner not known' }} · {{ lead.area ?? 'No area' }}
+                  @if (group.key === 'overdue') { · due {{ shortDate(lead.nextFollowUpOn) }}}
+                  @if (lead.assignedName) { · {{ lead.assignedName }}}
+                </p>
+              </a>
+              <span class="rounded-md px-2 py-0.5 text-[11px] font-medium" [class]="stageClass(lead.stage)">{{ stageLabel[lead.stage] }}</span>
+              <div class="flex items-center gap-1.5">
+                @if (lead.phone) {
+                  <a [href]="'tel:+91' + lead.phone" class="rounded-md bg-brand-600 px-2.5 py-1 text-xs font-medium text-white hover:bg-brand-700">Call</a>
+                }
+                <button type="button" (click)="snooze(lead, 1)" class="rounded-md border border-ink-200 px-2.5 py-1 text-xs text-ink-600 hover:bg-ink-50 dark:border-ink-700 dark:text-ink-300 dark:hover:bg-ink-800">Tomorrow</button>
+                <button type="button" (click)="snooze(lead, 7)" class="rounded-md border border-ink-200 px-2.5 py-1 text-xs text-ink-600 hover:bg-ink-50 dark:border-ink-700 dark:text-ink-300 dark:hover:bg-ink-800">+1 week</button>
+              </div>
+            </li>
+          }
+        </ul>
+      } @else {
+        <p class="rounded-xl border border-dashed border-ink-200 px-4 py-5 text-center text-sm text-ink-400 dark:border-ink-800">
+          {{ store.loaded() ? 'Nothing here.' : 'Loading…' }}
+        </p>
+      }
+    </section>
+  }
+</div>

@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+  <body style="margin:0;padding:0;background:#FFF6EA;font-family:Arial,Helvetica,sans-serif;color:#421D0E;">
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#FFF6EA;padding:32px 16px;">
+      <tr>
+        <td align="center">
+          <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:480px;background:#ffffff;border-radius:12px;padding:32px;">
+            <tr>
+              <td style="font-size:30px;font-weight:bold;letter-spacing:-0.5px;">Thali<span style="color:#E8891F;">yo</span></td>
+            </tr>
+            <tr>
+              <td style="font-size:11px;letter-spacing:2px;color:#84A625;padding-bottom:24px;">RESTAURANT &amp; CAFE MANAGEMENT</td>
+            </tr>
+            <tr>
+              <td style="font-size:18px;font-weight:bold;padding-bottom:8px;">
+                Welcome{{ if .Data.full_name }}, {{ .Data.full_name }}{{ end }}
+              </td>
+            </tr>
+            <tr>
+              <td style="font-size:15px;line-height:22px;padding-bottom:24px;">
+                You've been invited to Thaliyo. Choose a password to finish setting up your account; you'll use it to sign in from then on.
+              </td>
+            </tr>
+            <tr>
+              <td align="left" style="padding-bottom:24px;">
+                <a href="{{ .ConfirmationURL }}"
+                   style="display:inline-block;background:#E8891F;color:#421D0E;text-decoration:none;font-weight:bold;font-size:15px;padding:12px 24px;border-radius:8px;">
+                  Set my password
+                </a>
+              </td>
+            </tr>
+            <tr>
+              <td style="font-size:12px;line-height:18px;color:#7a5a4a;">
+                This link works once and expires in 24 hours. If you weren't expecting it, you can ignore this email.
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>

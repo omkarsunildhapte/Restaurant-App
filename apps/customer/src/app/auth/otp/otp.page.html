@@ -1,0 +1,30 @@
+<div class="background-pic">
+  <ion-content>
+    <ion-card>
+      <ion-card-header>
+        <div class="flex justify-center">
+          <img src="brand/thaliyo-logo-600.webp" alt="Thaliyo" width="600" height="465" style="width: 60%; height: auto;" />
+        </div>
+        <ion-card-title>
+          Verify Number
+        </ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <form [formGroup]="otpForm" (ngSubmit)="onSubmit()">
+          <ion-item>
+            <ion-icon name="mail"></ion-icon>
+            <ion-input placeholder="Enter Your Otp" formControlName="otp"></ion-input>
+          </ion-item>
+          @if (isSubmit && otpForm.controls['otp'].touched && otpForm.controls['otp'].errors?.['required']) {
+            <div class="error-message">
+              Otp is required.
+            </div>
+          }
+          <div class="bottom-section">
+            <ion-button type="submit">Add Number</ion-button>
+          </div>
+        </form>
+      </ion-card-content>
+    </ion-card>
+  </ion-content>
+</div>

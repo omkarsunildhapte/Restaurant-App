@@ -1,0 +1,14 @@
+{
+  // Demo deployment of the café site (fictional brand) + its walkthrough videos.
+  // Rebuild dist/ from the site files, then run `npx wrangler deploy` from this folder.
+  "name": "brew-and-leaf-demo",
+  "main": "worker.js",
+  "compatibility_date": "2026-10-01",
+  "assets": {
+    "directory": "./dist",
+    "binding": "ASSETS",
+    "not_found_handling": "404-page",
+    // Only video requests go through worker.js (for byte-range / iPhone playback).
+    "run_worker_first": ["/videos/*"]
+  }
+}

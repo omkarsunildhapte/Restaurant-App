@@ -1,0 +1,28 @@
+# Build output and local caches of the website templates (rebuilt before deploy; dist/ holds large walkthrough videos)
+templates/*/dist/
+templates/*/.wrangler/
+.wrangler/
+
+node_modules/
+.angular/
+www/
+.env
+.env.*
+!.env.example
+
+# Python (backend/marketing)
+.venv/
+__pycache__/
+*.pyc
+
+# Super Admin app build output
+apps/super-admin/dist/
+apps/super-admin/.angular/
+*.log
+
+# Marketing website build output
+apps/marketing-site/dist/
+
+# Staff app build output
+apps/staff/dist/
+apps/staff/.angular/
