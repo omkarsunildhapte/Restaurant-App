@@ -173,6 +173,15 @@ Sources: [Porter API integrations](https://porter.in/api-integrations) · [Borzo
 
 ## 7. Own-rider app (`deilvey/` → `apps/delivery/`)
 
+### Progress (2026-10-10)
+
+- **Data layer wired** (`apps/delivery/src/services/`): `rider-workspace` (the business from `my_workspaces()`, role `delivery`), `orders` (job list via `my_deliveries()`, accept/reject, steps, deliver with OTP/photo and cash, fail), `tracking` (the newest accepted, unfinished job, with pickup and drop positions from migration 0013), `rider` (own `riders` row: profile, vehicle, UPI; online/offline; position reports). Unit, e2e, SSR and mobile builds pass.
+- **Rider screens wired:** online/offline switch (location must work first; blocked until verified, with the reason), Accept/Reject on offers, the delivery screen (pickup and drop with Navigate (`geo:`) and Call links, next step, hand-over with OTP and cash collected, could-not-deliver with a reason), position every 10 s on a job / 60 s idle, job list refreshed over Realtime, and offline on sign-out. Covered by unit tests and an end-to-end run of a whole delivery.
+- **Invite-only riders** (user decision): the restaurant invites a rider (role `delivery`); the e-mail lands on the rider app's `/welcome`, where they set a password and go on to their details. No self sign-up; the login screen says access is by invitation.
+- **Rider details and documents** (migration 0014): date of birth, address, city, father's name, blood group and national ID in `rider_details`, readable only by the rider and Super Admin (never restaurant staff); the national ID comes back masked (last 4). Document photos are shrunk on the phone and stored in the private `rider-documents` bucket under the rider's own folder, shown through short-lived signed URLs.
+- **Position reports** go out only after the rider has moved 15 m (at most every 10 s on a job, 60 s otherwise), with a 90 s heartbeat for a rider who is standing still.
+- **Open:** proof-of-delivery photo (the bucket exists; the hand-over form takes OTP only today); a picker for riders who work for two restaurants; the owner's live map (tile provider to choose).
+
 ### What exists today and what changes
 
 | Today | Change |
@@ -292,5 +301,8 @@ Partner talks (§6) can still start in **Phase 4**, but no partner code is writt
 ## Update log
 
 ### 2026-10-10
+- Invite-only riders (`/welcome`), rider-only details and private document photos (migration 0014), movement-based position reports.
+- Rider screens: online switch, accept/reject, steps, OTP and cash hand-over, could-not-deliver.
+- Rider app data layer wired to the delivery functions; migration 0013 adds the outlet position to `my_deliveries()` for the pickup leg.
 - Own delivery first: Phase 5 split into 5a (own riders, weeks 15–17, manual assign only) and 5b (partners, dispatch rules, auto-offer, weeks 18–19).
 - Created this design: unified job statuses, data model, dispatch modes and fallback, partner adapter interface, partner shortlist with public API info, rider app changes from the current `deilvey/` code, POS/panel screens, COD and proof of delivery, week-by-week build order.
