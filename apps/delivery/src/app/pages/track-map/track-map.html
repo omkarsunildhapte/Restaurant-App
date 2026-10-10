@@ -18,26 +18,104 @@
         <ion-card>
           <ion-card-content class="flex flex-col">
             @if (current(); as job) {
-              <div class="flex">
-                <div class="w-3/12">
-                  <div class="h-10 w-10 rounded-full bg-gray-300 flex items-center justify-center">
-                    <span class="text-lg font-bold text-gray-600">{{ initial() }}</span>
+              @switch (panel()) {
+                @case ('details') {
+                  <p class="job-head" data-testid="track-job">#{{ job.orderNo }} · {{ statusLabels[job.status] }}</p>
+
+                  <div class="leg">
+                    <p class="leg-title">Pickup · {{ job.outletName }}</p>
+                    @if (job.outletAddress) { <p>{{ job.outletAddress }}</p> }
+                    <div class="leg-links">
+                      @if (links().pickup; as href) { <a [href]="href" data-testid="nav-pickup">Navigate</a> }
+                      @if (links().outlet; as href) { <a [href]="href">Call restaurant</a> }
+                    </div>
                   </div>
-                </div>
-                <div class="w-9/12">
-                  <p class="text-base font-semibold">{{ job.customerName }}</p>
-                  <p>
-                    <span>Delivery</span> · <span>{{ job.customerPhone }}</span>
-                  </p>
-                </div>
-              </div>
-              <div class="flex flex-col w-full p-4">
-                <div class="flex w-full gap-3 items-center">
-                  <ion-icon class="text-base" name="location-outline" aria-hidden="true"></ion-icon>
-                  <span class="text-bold text-base">Location</span>
-                </div>
-                <p class="pt-3">{{ job.deliveryAddress }}</p>
-              </div>
+
+                  <div class="flex mt-3">
+                    <div class="w-3/12">
+                      <div class="h-10 w-10 rounded-full bg-gray-300 flex items-center justify-center">
+                        <span class="text-lg font-bold text-gray-600">{{ initial() }}</span>
+                      </div>
+                    </div>
+                    <div class="w-9/12">
+                      <p class="text-base font-semibold">{{ job.customerName }}</p>
+                      <p>
+                        <span>Delivery</span> · <span>{{ job.customerPhone }}</span>
+                      </p>
+                    </div>
+                  </div>
+                  <div class="flex flex-col w-full p-4">
+                    <div class="flex w-full gap-3 items-center">
+                      <ion-icon class="text-base" name="location-outline" aria-hidden="true"></ion-icon>
+                      <span class="text-bold text-base">Location</span>
+                    </div>
+                    <p class="pt-3">{{ job.deliveryAddress }}</p>
+                    @if (job.notes) { <p class="note">{{ job.notes }}</p> }
+                    <div class="leg-links">
+                      @if (links().drop; as href) { <a [href]="href" data-testid="nav-drop">Navigate</a> }
+                      @if (links().customer; as href) { <a [href]="href" data-testid="call-customer">Call customer</a> }
+                    </div>
+                  </div>
+
+                  <ul class="items">
+                    @for (item of job.items; track $index) {
+                      <li>{{ item.quantity }} × {{ item.name }}{{ item.variant ? ' (' + item.variant + ')' : '' }}</li>
+                    }
+                  </ul>
+                  @if (job.codAmount > 0) {
+                    <p class="cod" data-testid="track-cod">Collect {{ job.codAmount | currency: 'INR' }} in cash</p>
+                  }
+
+                  <div class="actions">
+                    @if (nextStep(); as next) {
+                      <ion-button expand="block" data-testid="track-next" [disabled]="stepping()" (click)="advance()">{{ next.label }}</ion-button>
+                    }
+                    @if (canDeliver()) {
+                      <ion-button expand="block" color="success" data-testid="track-deliver" (click)="openDeliver()">Delivered</ion-button>
+                    }
+                    @if (canFail()) {
+                      <ion-button expand="block" fill="clear" color="danger" data-testid="track-fail" (click)="openFail()">Could not deliver</ion-button>
+                    }
+                  </div>
+                }
+                @case ('deliver') {
+                  <form [formRoot]="deliverForm" novalidate data-testid="deliver-form">
+                    <p class="job-head">Hand over #{{ job.orderNo }}</p>
+                    <p class="hint">Ask the customer for the 4-digit OTP the restaurant gave them.</p>
+                    <ion-item>
+                      <ion-input label="OTP" labelPlacement="stacked" inputmode="numeric" maxlength="4" autocomplete="one-time-code" data-testid="deliver-otp" [formField]="deliverForm.otp"></ion-input>
+                    </ion-item>
+                    <app-field-errors [show]="deliverForm.otp().touched()" [errors]="deliverForm.otp().errors()" />
+                    @if (job.codAmount > 0) {
+                      <ion-item>
+                        <ion-input label="Cash collected (₹)" labelPlacement="stacked" inputmode="decimal" data-testid="deliver-cash" [formField]="deliverForm.cash"></ion-input>
+                      </ion-item>
+                      <app-field-errors [show]="deliverForm.cash().touched()" [errors]="deliverForm.cash().errors()" />
+                    }
+                    <div class="actions">
+                      <ion-button type="submit" expand="block" color="success" data-testid="deliver-submit">Confirm delivery</ion-button>
+                      <ion-button expand="block" fill="clear" (click)="closePanel()">Back</ion-button>
+                    </div>
+                  </form>
+                }
+                @case ('fail') {
+                  <form [formRoot]="failForm" novalidate data-testid="fail-form">
+                    <p class="job-head">Could not deliver #{{ job.orderNo }}</p>
+                    <ion-item>
+                      <ion-select label="What went wrong?" labelPlacement="stacked" data-testid="fail-reason" [formField]="failForm.reason">
+                        @for (option of page.FAIL_REASONS; track option.value) {
+                          <ion-select-option [value]="option.value">{{ option.label }}</ion-select-option>
+                        }
+                      </ion-select>
+                    </ion-item>
+                    <app-field-errors [show]="failForm.reason().touched()" [errors]="failForm.reason().errors()" />
+                    <div class="actions">
+                      <ion-button type="submit" expand="block" color="danger" data-testid="fail-submit">Return order to restaurant</ion-button>
+                      <ion-button expand="block" fill="clear" (click)="closePanel()">Back</ion-button>
+                    </div>
+                  </form>
+                }
+              }
             } @else {
               <p class="empty-state" data-testid="track-empty">
                 {{ delivery.isLoading() ? 'Loading…' : 'No active delivery right now.' }}
@@ -48,4 +126,7 @@
       </div>
     }
   </div>
+  @if (deliverForm().submitting() || failForm().submitting()) {
+    <app-loader />
+  }
 </ion-content>

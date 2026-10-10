@@ -3,6 +3,9 @@ import { DeliveryStatus, OrderSegment, OrderSegmentTab } from '@appTypes/order.t
 /** Statuses after which a job is over (it moves to History). */
 export const FINISHED_STATUSES: readonly DeliveryStatus[] = ['delivered', 'failed', 'cancelled'];
 
+/** A job sent to the rider, waiting for accept or reject. */
+export const OFFER_STATUS: DeliveryStatus = 'offered';
+
 /** Accepted and on the way: what the track-map page follows. */
 export const IN_PROGRESS_STATUSES: readonly DeliveryStatus[] = ['assigned', 'at_pickup', 'picked_up', 'at_drop'];
 
@@ -26,4 +29,6 @@ export const ORDER_PAGE = {
     failed: 'Failed',
     cancelled: 'Cancelled',
   } satisfies Record<DeliveryStatus, string>,
+  ALERT_TITLE: 'Order',
+  REJECT_REASON: 'Rejected by rider',
 } as const;

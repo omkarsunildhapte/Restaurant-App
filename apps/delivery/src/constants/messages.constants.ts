@@ -25,6 +25,11 @@ export const VALIDATION_MESSAGES = {
   VEHICLE_NUMBER_REQUIRED: 'Vehicle number is required.',
   UPI_REQUIRED: 'UPI ID is required.',
   UPI_INVALID: 'Enter a valid UPI ID (name@bank).',
+  OTP_REQUIRED: "Enter the customer's 4-digit OTP.",
+  OTP_PATTERN: 'The OTP has 4 digits.',
+  CASH_REQUIRED: 'Enter the cash you collected.',
+  CASH_PATTERN: 'Enter an amount like 230 or 230.50.',
+  FAIL_REASON_REQUIRED: 'Choose what went wrong.',
 } as const;
 
 /** Error copy (alerts and thrown errors). */

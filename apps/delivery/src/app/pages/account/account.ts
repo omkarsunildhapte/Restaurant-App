@@ -13,6 +13,7 @@ import { IonTitle } from '@ionic/angular/ion-title';
 import { IonToolbar } from '@ionic/angular/ion-toolbar';
 import { AuthService } from '@services/auth/auth.service';
 import { NavigationService } from '@services/navigation/navigation.service';
+import { ShiftService } from '@services/shift/shift.service';
 import { ACCOUNT_PAGE } from '@constants/account.constants';
 import { APP_ROUTE_LINKS } from '@constants/routes.constants';
 
@@ -26,12 +27,18 @@ import { APP_ROUTE_LINKS } from '@constants/routes.constants';
 export class Account {
   private readonly auth = inject(AuthService);
   private readonly navigation = inject(NavigationService);
+  private readonly shift = inject(ShiftService);
 
   readonly page = ACCOUNT_PAGE;
   readonly displayName = computed(() => this.auth.displayName() || this.auth.email());
   readonly initial = computed(() => this.displayName().charAt(0).toUpperCase() || ACCOUNT_PAGE.FALLBACK_INITIAL);
 
+  /** Goes offline first, so the restaurant does not count on a signed-out rider. */
   async logout(): Promise<void> {
+    if (this.shift.online()) {
+      await this.shift.goOffline();
+    }
+    this.shift.stop();
     await this.auth.logout();
     await this.navigation.root(APP_ROUTE_LINKS.LOGIN);
   }

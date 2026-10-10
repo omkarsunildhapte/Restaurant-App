@@ -88,3 +88,6 @@ export interface PersonalInfoField {
   kind: PersonalInfoFieldKind;
   placeholder: string;
 }
+
+/** Why the rider cannot go online right now, or null when they can. */
+export type OnlineBlock = 'not-verified' | 'rejected' | 'blocked' | null;

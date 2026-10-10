@@ -50,3 +50,53 @@ ion-header {
   text-align: center;
   color: #666;
 }
+
+.job-head {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.leg {
+  padding: 8px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.leg-title {
+  font-weight: 600;
+}
+
+.leg-links {
+  display: flex;
+  gap: 16px;
+  padding-top: 6px;
+}
+
+.leg-links a {
+  color: var(--ion-color-primary);
+  font-weight: 500;
+}
+
+.note,
+.hint {
+  color: #8a5a00;
+  font-size: 14px;
+  padding-top: 4px;
+}
+
+.items {
+  padding: 0 16px;
+  font-size: 14px;
+}
+
+.cod {
+  margin: 8px 0;
+  font-weight: 600;
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding-top: 8px;
+}

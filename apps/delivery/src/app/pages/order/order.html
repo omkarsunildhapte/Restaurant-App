@@ -4,9 +4,24 @@
       <ion-back-button [defaultHref]="backLink"></ion-back-button>
     </ion-buttons>
     <ion-title>Order</ion-title>
+    <ion-toggle
+      slot="end"
+      class="online-toggle"
+      data-testid="online-toggle"
+      [checked]="shift.online()"
+      [disabled]="shift.busy() || !!shift.block()"
+      (ionChange)="onOnlineChange($event)"
+      >{{ shift.online() ? 'Online' : 'Offline' }}</ion-toggle
+    >
   </ion-toolbar>
 </ion-header>
 <ion-content>
+  @if (blockMessage(); as message) {
+    <p class="notice notice-warn" data-testid="online-block">{{ message }}</p>
+  }
+  @if (shift.error(); as message) {
+    <p class="notice notice-error" role="alert" data-testid="shift-error">{{ message }}</p>
+  }
   <ion-card class="mains">
     <ion-card-content>
       <ion-segment [value]="segment()" (ionChange)="onSegmentChange($event)">
@@ -18,37 +33,42 @@
       </ion-segment>
       <ion-list class="pt-2">
         @for (order of list(); track order.id) {
-          <ion-item class="border rounded-md">
+          <ion-item class="border rounded-md" [attr.data-testid]="'job-' + order.id">
             <div class="flex flex-col w-full">
               <div class="flex justify-between relative mt-4 w-full">
                 <div class="flex flex-col w-6/12">
                   <span class="text-base">Order No.</span>
-                  <p>#{{ order.id }}</p>
+                  <p>#{{ order.orderNo }} · {{ order.outletName }}</p>
                 </div>
                 <div class="w-6/12 text-end">
-                  <span
-                    class="bg-blue-100 text-blue-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-sm"
-                    >{{ page.STATUS_LABELS[order.status] }}</span
-                  >
+                  <span class="bg-blue-100 text-blue-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-sm">{{ page.STATUS_LABELS[order.status] }}</span>
                 </div>
               </div>
               <div class="border-t-2 flex flex-col my-4 w-full">
                 <div class="flex flex-col w-full p-4">
                   <div class="flex w-full gap-3 items-center">
-                    <ion-icon
-                      class="text-base"
-                      name="location-outline"
-                      aria-hidden="true"
-                    ></ion-icon>
+                    <ion-icon class="text-base" name="location-outline" aria-hidden="true"></ion-icon>
                     <span class="text-bold text-base">Location</span>
                   </div>
-                  <p class="pt-3">{{ order.deliveryAddress }}</p>
+                  <p class="pt-3">{{ order.deliveryAddress || '—' }}</p>
                 </div>
-                <div class="flex w-full gap-3 items-center p-4">
-                  <ion-icon class="text-base" name="cash-outline" aria-hidden="true"></ion-icon>
-                  <span class="text-bold text-base">Cash to collect</span>
-                  <span class="text-bold text-lg">{{ order.codAmount | currency: 'INR' }}</span>
-                </div>
+                @if (order.codAmount > 0) {
+                  <div class="flex w-full gap-3 items-center p-4">
+                    <ion-icon class="text-base" name="cash-outline" aria-hidden="true"></ion-icon>
+                    <span class="text-bold text-base">Cash to collect</span>
+                    <span class="text-bold text-lg">{{ order.codAmount | currency: 'INR' }}</span>
+                  </div>
+                }
+                @if (isOffer(order)) {
+                  <div class="job-actions">
+                    <ion-button fill="outline" color="medium" data-testid="job-reject" [disabled]="acting() === order.id" (click)="reject(order)">Reject</ion-button>
+                    <ion-button data-testid="job-accept" [disabled]="acting() === order.id" (click)="accept(order)">Accept</ion-button>
+                  </div>
+                } @else if (isInProgress(order)) {
+                  <div class="job-actions">
+                    <ion-button expand="block" data-testid="job-open" [routerLink]="trackLink">Open delivery</ion-button>
+                  </div>
+                }
               </div>
             </div>
           </ion-item>
