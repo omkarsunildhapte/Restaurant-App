@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, linkedSignal, resource } from '@angular/core';
 import { FormRoot, form, required } from '@angular/forms/signals';
 import { IonBackButton } from '@ionic/angular/ion-back-button';
 import { IonButton } from '@ionic/angular/ion-button';
@@ -24,7 +24,8 @@ import { VALIDATION_MESSAGES } from '@constants/messages.constants';
 /**
  * Onboarding step 2: profile photo, driving licence and national ID images (data URLs).
  * The file inputs are not bound with FormField (Signal Forms has no file control); each change
- * writes the image into its field. Saving is a Phase 5 stub. Images are sensitive: never log them.
+ * writes the image into its field. Saved photos load back as short-lived signed URLs; only newly
+ * picked ones are uploaded (shrunk, to the rider's private folder). Images are sensitive: never log them.
  */
 @Component({
   selector: 'app-personal-document',
@@ -41,7 +42,15 @@ export class PersonalDocument {
   readonly page = PERSONAL_DOCUMENT_PAGE;
   readonly backLink = APP_ROUTE_LINKS.PERSONAL_INFORMATION;
 
-  private readonly model = signal<RiderDocuments>({ profile: '', drivingLicence: '', nationalId: '' });
+  /** Photos saved before, as signed URLs ('' where none). */
+  readonly saved = resource({
+    params: () => this.auth.userId() ?? undefined,
+    loader: ({ params }) => this.riders.getDocuments(params),
+    defaultValue: null,
+  });
+
+  /** Form model: resets to the saved photos whenever they (re)load. */
+  private readonly model = linkedSignal<RiderDocuments>(() => (this.saved.hasValue() ? this.saved.value() : null) ?? { profile: '', drivingLicence: '', nationalId: '' });
   readonly documentForm = form(
     this.model,
     (path) => {

@@ -45,15 +45,13 @@ describe('AuthService', () => {
     await expect(service.login('a@b.test', 'pw')).rejects.toThrowError(ERROR_MESSAGES.LOGIN_FAILED);
   });
 
-  it('registers with the display name in user metadata', async () => {
-    supabase.auth.signUp.mockResolvedValue({ data: { session: null }, error: null });
-    await expect(service.register('Rider', 'a@b.test', 'secret1')).resolves.toBeNull();
-    expect(supabase.auth.signUp).toHaveBeenCalledWith({ email: 'a@b.test', password: 'secret1', options: { data: { display_name: 'Rider' } } });
-
-    supabase.auth.signUp.mockResolvedValue({ data: { session: null }, error: { message: 'User already registered', code: 'user_already_exists' } });
-    const error = await service.register('Rider', 'a@b.test', 'secret1').catch((e: unknown) => e);
-    expect(service.isEmailInUse(error)).toBe(true);
-    expect(service.isEmailInUse(new AuthServiceError('x', 'other'))).toBe(false);
+  it('sets the password of the invited person and reports failures', async () => {
+    await service.updatePassword('a-good-password');
+    expect(supabase.auth.updateUser).toHaveBeenCalledWith({ password: 'a-good-password' });
+    supabase.auth.updateUser.mockResolvedValue({ data: { user: null }, error: { message: 'Password should be at least 8 characters.', code: 'weak_password' } });
+    await expect(service.updatePassword('short')).rejects.toBeInstanceOf(AuthServiceError);
+    supabase.auth.updateUser.mockResolvedValue({ data: { user: null }, error: { message: '' } });
+    await expect(service.updatePassword('x')).rejects.toThrowError(ERROR_MESSAGES.PASSWORD_UPDATE_FAILED);
   });
 
   it('sends the reset e-mail back to /login and reports failures', async () => {

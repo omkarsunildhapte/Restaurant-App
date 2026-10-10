@@ -20,7 +20,7 @@
             </label>
             <input
               type="file"
-              accept="image/*"
+              [accept]="page.ACCEPT"
               hidden
               [id]="document.inputId"
               [attr.data-testid]="'document-' + document.key"

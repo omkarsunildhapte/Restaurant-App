@@ -63,7 +63,7 @@ export function riderRow(overrides: Partial<RiderRow> = {}): RiderRow {
 
 /** One recorded supabase-js call. */
 export interface RecordedCall {
-  kind: 'rpc' | 'select' | 'insert' | 'update';
+  kind: 'rpc' | 'select' | 'insert' | 'update' | 'upload';
   name: string;
   args?: unknown;
   filters: [string, unknown][];
@@ -71,11 +71,13 @@ export interface RecordedCall {
 
 /**
  * A supabase-js client stand-in for data services: `.rpc()` and the `.from()` chains the app
- * uses, answering from `answers` (keyed by RPC or table name) and recording every call.
+ * uses, answering from `answers` (keyed by RPC or table name, or `<kind>:<table>` for one kind of
+ * call, e.g. `insert:riders`) and recording every call.
  */
 export function fakeDataClient(answers: Record<string, { data: unknown; error: { message: string } | null }>) {
   const calls: RecordedCall[] = [];
   const answer = (name: string) => answers[name] ?? { data: null, error: null };
+  const answerFor = (call: RecordedCall) => answers[`${call.kind}:${call.name}`] ?? answer(call.name);
   const chain = (call: RecordedCall) => {
     const builder = {
       select: () => builder,
@@ -83,9 +85,9 @@ export function fakeDataClient(answers: Record<string, { data: unknown; error: {
         call.filters.push([column, value]);
         return builder;
       },
-      maybeSingle: async () => answer(call.name),
-      single: async () => answer(call.name),
-      then: (resolve: (value: unknown) => unknown) => Promise.resolve(answer(call.name)).then(resolve),
+      maybeSingle: async () => answerFor(call),
+      single: async () => answerFor(call),
+      then: (resolve: (value: unknown) => unknown) => Promise.resolve(answerFor(call)).then(resolve),
     };
     return builder;
   };
@@ -111,6 +113,15 @@ export function fakeDataClient(answers: Record<string, { data: unknown; error: {
         return chain(call);
       },
     })),
+    storage: {
+      from: (bucket: string) => ({
+        upload: vi.fn(async (path: string, file: Blob, options: unknown) => {
+          calls.push({ kind: 'upload', name: bucket, args: { path, type: file.type, options }, filters: [] });
+          return answers[`upload:${bucket}`] ?? { data: { path }, error: null };
+        }),
+        createSignedUrl: vi.fn(async (path: string) => ({ data: { signedUrl: `https://signed.test/${path}` }, error: null })),
+      }),
+    },
   };
   return { client, calls, supabase: { client, configError: null, require: () => client } };
 }

@@ -1,29 +1,37 @@
-import { Injectable, inject } from '@angular/core';
+import { DOCUMENT, Injectable, inject } from '@angular/core';
 import { SupabaseService } from '@services/supabase/supabase.service';
 import { RiderWorkspaceService } from '@services/rider-workspace/rider-workspace.service';
-import { RiderBankDetails, RiderDocuments, RiderPersonalInfo, RiderProfile, RiderRow, RiderVehicle } from '@appTypes/rider.types';
+import { RiderBankDetails, RiderDetailsRow, RiderDocumentKey, RiderDocuments, RiderPersonalInfo, RiderProfile, RiderRow, RiderVehicle, SavedPersonalInfo } from '@appTypes/rider.types';
 import { MapPoint } from '@appTypes/order.types';
-import { NotImplementedError } from '@utils/errors/errors.util';
 import { unwrap } from '@utils/supabase-result/supabase-result.util';
-import { RIDER_COLUMNS, SUPABASE_RPC, SUPABASE_TABLES } from '@constants/supabase.constants';
+import { isDataUrl, shrinkImage } from '@utils/image/image.util';
+import { lastFour } from '@utils/mask/mask.util';
+import { RIDER_COLUMNS, RIDER_DETAILS_COLUMNS, RIDER_DOCUMENTS, SUPABASE_RPC, SUPABASE_TABLES } from '@constants/supabase.constants';
+import { DOCUMENT_IMAGE, RIDER_DOCUMENT_FILES } from '@constants/personal-document.constants';
 import { ERROR_MESSAGES } from '@constants/messages.constants';
-import { PERSONAL_DOCUMENT_PAGE } from '@constants/personal-document.constants';
 
-type RiderPatch = Partial<Pick<RiderRow, 'full_name' | 'phone' | 'licence_number' | 'vehicle_type' | 'vehicle_number' | 'upi_id'>>;
+type RiderPatch = Partial<Pick<RiderRow, 'full_name' | 'phone' | 'licence_number' | 'vehicle_type' | 'vehicle_number' | 'upi_id' | 'photo_url' | 'licence_url' | 'id_proof_url'>>;
+type DetailsPatch = Partial<Omit<RiderDetailsRow, 'rider_id' | 'tenant_id' | 'updated_at'>>;
 
 /**
- * The rider's own `riders` row for the business they ride for (RiderWorkspaceService), and going
- * online and reporting position (migration 0005).
+ * The rider's own records for the business they ride for (RiderWorkspaceService), plus going
+ * online and reporting position (migrations 0005, 0014):
  *
- * A rider is invited by a restaurant (a `delivery` membership); the first save of personal
- * information creates the row, and Super Admin then verifies it. RLS lets a rider read and
- * change only their own row and only the detail columns; verification is never written here.
- * Document images and payout details are sensitive: never log them.
+ * - `riders`: name, phone, licence number, vehicle, UPI and the paths of the document photos.
+ *   Restaurant staff see this row (they assign jobs to it).
+ * - `rider_details`: date of birth, address, city, father's name, blood group and national ID.
+ *   Only the rider and Super Admin can read it; the national ID is read back as its last 4 only.
+ * - Storage bucket `rider-documents`: the photos, under "<tenant_id>/<user_id>/", shown through
+ *   short-lived signed URLs.
+ *
+ * The first save of personal information creates the `riders` row; Super Admin then verifies it.
+ * Document images, payout and ID details are sensitive: never log them.
  */
 @Injectable({ providedIn: 'root' })
 export class RiderService {
   private readonly supabase = inject(SupabaseService);
   private readonly workspace = inject(RiderWorkspaceService);
+  private readonly document = inject(DOCUMENT);
 
   /** The rider's profile, or null before the first personal-information save. */
   async getProfile(uid: string): Promise<RiderProfile | null> {
@@ -31,25 +39,97 @@ export class RiderService {
     return row ? toProfile(row) : null;
   }
 
+  /** What the personal-information form showed when last saved (national ID as its last 4 only). */
+  async getPersonalInfo(uid: string): Promise<SavedPersonalInfo | null> {
+    const row = await this.findRow(uid);
+    if (!row) {
+      return null;
+    }
+    const details = await this.findDetails(row.id);
+    const [firstName = '', ...rest] = row.full_name.trim().split(/\s+/);
+    const info: RiderPersonalInfo = {
+      firstName,
+      lastName: rest.join(' '),
+      fathersName: details?.fathers_name ?? '',
+      dateOfBirth: details?.date_of_birth ?? '',
+      mobileNumber: row.phone,
+      bloodGroup: details?.blood_group ?? '',
+      city: details?.city ?? '',
+      address: details?.address ?? '',
+      deliveryLicenseId: row.licence_number ?? '',
+      nationalId: '',
+    };
+    return { info, nationalIdLast4: lastFour(details?.national_id ?? null) };
+  }
+
   /**
-   * Name, phone and licence number go to the `riders` row (created on the first save). The other
-   * form fields have no column yet and are not stored; see docs/DELIVERY.md (rider details).
+   * Name, phone and licence number go to `riders` (created on the first save); the rest to the
+   * rider-only `rider_details`. An empty national ID keeps the one saved before.
    */
   async savePersonalInfo(uid: string, info: RiderPersonalInfo): Promise<void> {
-    const patch: RiderPatch = { full_name: `${info.firstName} ${info.lastName}`.trim(), phone: info.mobileNumber.trim(), licence_number: info.deliveryLicenseId.trim() || null };
     const { tenantId } = await this.workspace.current();
+    const riderPatch: RiderPatch = { full_name: `${info.firstName} ${info.lastName}`.trim(), phone: info.mobileNumber.trim(), licence_number: info.deliveryLicenseId.trim() || null };
     const existing = await this.findRow(uid);
-    const table = this.supabase.require().from(SUPABASE_TABLES.RIDERS);
+    const riders = this.supabase.require().from(SUPABASE_TABLES.RIDERS);
+    let riderId = existing?.id;
     if (existing) {
-      unwrap(await table.update(patch).eq('id', existing.id));
+      unwrap(await riders.update(riderPatch).eq('id', existing.id));
     } else {
-      unwrap(await table.insert({ ...patch, tenant_id: tenantId, user_id: uid }));
+      riderId = unwrap<Pick<RiderRow, 'id'>>(await riders.insert({ ...riderPatch, tenant_id: tenantId, user_id: uid }).select('id').single())?.id;
+    }
+    if (!riderId) {
+      throw new Error(ERROR_MESSAGES.DATA_FAILED);
+    }
+    const detailsPatch: DetailsPatch = {
+      date_of_birth: info.dateOfBirth || null,
+      address: info.address.trim() || null,
+      city: info.city.trim() || null,
+      fathers_name: info.fathersName.trim() || null,
+      blood_group: info.bloodGroup || null,
+      ...(info.nationalId.trim() ? { national_id: info.nationalId.trim() } : {}),
+    };
+    const details = this.supabase.require().from(SUPABASE_TABLES.RIDER_DETAILS);
+    if (await this.findDetails(riderId)) {
+      unwrap(await details.update(detailsPatch).eq('rider_id', riderId));
+    } else {
+      unwrap(await details.insert({ ...detailsPatch, rider_id: riderId, tenant_id: tenantId }));
     }
   }
 
-  // TODO(Phase 5): private Storage bucket with a per-rider path (migration 0014), then photo_url, licence_url, id_proof_url
-  async saveDocuments(_uid: string, _documents: RiderDocuments): Promise<void> {
-    throw new NotImplementedError(PERSONAL_DOCUMENT_PAGE.SAVE_OPERATION);
+  /** The saved photos as short-lived signed URLs ('' for one not uploaded yet). */
+  async getDocuments(uid: string): Promise<RiderDocuments | null> {
+    const row = await this.findRow(uid);
+    if (!row) {
+      return null;
+    }
+    const keys = Object.keys(RIDER_DOCUMENT_FILES) as RiderDocumentKey[];
+    const urls = await Promise.all(keys.map((key) => this.signedUrl(row[RIDER_DOCUMENT_FILES[key].column])));
+    return { profile: urls[0] ?? '', drivingLicence: urls[1] ?? '', nationalId: urls[2] ?? '' };
+  }
+
+  /** Uploads newly picked photos (shrunk to JPEG) to the rider's own folder and records their paths. */
+  async saveDocuments(uid: string, documents: RiderDocuments): Promise<void> {
+    const { tenantId } = await this.workspace.current();
+    const row = await this.findRow(uid);
+    if (!row) {
+      throw new Error(ERROR_MESSAGES.PROFILE_FIRST);
+    }
+    const patch: RiderPatch = {};
+    for (const key of Object.keys(RIDER_DOCUMENT_FILES) as RiderDocumentKey[]) {
+      const value = documents[key];
+      if (!value || !isDataUrl(value)) {
+        continue;
+      }
+      const file = RIDER_DOCUMENT_FILES[key];
+      const path = `${tenantId}/${uid}/${file.name}.${DOCUMENT_IMAGE.OUTPUT_EXTENSION}`;
+      const blob = await shrinkImage(value, this.document);
+      const upload = await this.supabase.require().storage.from(RIDER_DOCUMENTS.BUCKET).upload(path, blob, { upsert: true, contentType: blob.type || DOCUMENT_IMAGE.OUTPUT_MIME, cacheControl: RIDER_DOCUMENTS.CACHE_CONTROL });
+      unwrap(upload);
+      patch[file.column] = path;
+    }
+    if (Object.keys(patch).length) {
+      unwrap(await this.supabase.require().from(SUPABASE_TABLES.RIDERS).update(patch).eq('id', row.id));
+    }
   }
 
   async getVehicle(uid: string): Promise<RiderVehicle | null> {
@@ -88,6 +168,18 @@ export class RiderService {
   private async findRow(uid: string): Promise<RiderRow | null> {
     const { tenantId } = await this.workspace.current();
     return unwrap<RiderRow>(await this.supabase.require().from(SUPABASE_TABLES.RIDERS).select(RIDER_COLUMNS).eq('tenant_id', tenantId).eq('user_id', uid).maybeSingle());
+  }
+
+  private async findDetails(riderId: string): Promise<RiderDetailsRow | null> {
+    return unwrap<RiderDetailsRow>(await this.supabase.require().from(SUPABASE_TABLES.RIDER_DETAILS).select(RIDER_DETAILS_COLUMNS).eq('rider_id', riderId).maybeSingle());
+  }
+
+  private async signedUrl(path: string | null): Promise<string> {
+    if (!path) {
+      return '';
+    }
+    const signed = unwrap(await this.supabase.require().storage.from(RIDER_DOCUMENTS.BUCKET).createSignedUrl(path, RIDER_DOCUMENTS.SIGNED_URL_SECONDS));
+    return signed?.signedUrl ?? '';
   }
 
   /** Changes detail columns of an existing row; personal information has to come first. */

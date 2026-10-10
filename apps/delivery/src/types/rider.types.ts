@@ -52,6 +52,21 @@ export interface RiderDocuments {
 /** Key of one document image. */
 export type RiderDocumentKey = keyof RiderDocuments;
 
+/** The riders column holding a document's Storage path, and its file name in the rider's folder. */
+export interface RiderDocumentFile {
+  column: 'photo_url' | 'licence_url' | 'id_proof_url';
+  name: string;
+}
+
+/** A `rider_details` row (migration 0014): rider-only personal details. */
+export type RiderDetailsRow = Database['public']['Tables']['rider_details']['Row'];
+
+/** Saved personal information; the national ID comes back only as its last 4 digits. */
+export interface SavedPersonalInfo {
+  info: RiderPersonalInfo;
+  nationalIdLast4: string | null;
+}
+
 /** One upload card on the personal-document page. */
 export interface RiderDocumentField {
   key: RiderDocumentKey;

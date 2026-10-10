@@ -57,6 +57,9 @@
             [show]="personalForm[field.key]().touched()"
             [errors]="personalForm[field.key]().errors()"
           />
+          @if (field.key === 'nationalId' && savedIdLast4(); as last4) {
+            <p class="saved-hint" data-testid="national-id-saved">Saved: •••• {{ last4 }}. Leave empty to keep it.</p>
+          }
         }
         <div class="bottom-section">
           <ion-button type="submit" data-testid="personal-submit">Register</ion-button>

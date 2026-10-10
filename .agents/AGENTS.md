@@ -83,7 +83,7 @@ e2e/                             Playwright specs + fixtures
 ```
 
 - Angular 20+ file naming: `login.ts` / `login.html` / `login.css` / `login.spec.ts`, class `Login` — no `.component` / `.page` suffix.
-- **One folder per component, service and util**, holding its files and its `.spec.ts` (Rule 20).
+- **One folder per component, service and util**, holding its files and its `.spec.ts` (Rule 20). Check with `npm run check:components` at the repo root (`scripts/check-components.mjs`); it fails on any component missing its `.html`, `.css` or `.spec.ts`, or using an inline `template`/`styles`.
 - **Constants grouping:** a screen's copy, labels and columns live in one grouped object in `constants/<screen>.constants.ts` (e.g. `MENU_PAGE`, `STAFF_INVITE_MODAL`), with member names dropping the object's own prefix. Keep a name as a standalone export only when another file imports it too. Builder/formatter functions stay loose.
 
 ## Routing
@@ -101,5 +101,4 @@ Tracked, accepted, and **not** a licence to write new code the same way. Log any
 
 - `apps/business-panel`: Prettier formats `.html`, `.css` and `.json` only (`npm run format`). It is not run on `.ts`, because it would wrap Rule 2's single-line imports; TypeScript style is checked by ESLint.
 - `apps/customer`: data calls are stubs (`// TODO(Phase 8)`) until its Supabase tables are wired.
-- `apps/delivery`: rider documents (`RiderService.saveDocuments`) are a stub until the private storage bucket (migration 0014) exists; personal information saves name, phone and licence only until the extra fields are decided.
 - `apps/delivery`: initial bundle is 830 kB (warning budget 500 kB) because supabase-js is eager through the root guard and interceptor; fix by loading AuthService/Supabase lazily (`injectAsync`).

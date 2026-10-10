@@ -34,17 +34,17 @@ export type Database = {
         };
         Relationships: [
           {
-            foreignKeyName: 'addon_groups_tenant_id_fkey';
-            columns: ['tenant_id'];
+            foreignKeyName: "addon_groups_tenant_id_fkey";
+            columns: ["tenant_id"];
             isOneToOne: false;
-            referencedRelation: 'tenants';
-            referencedColumns: ['id'];
+            referencedRelation: "tenants";
+            referencedColumns: ["id"];
           },
         ];
       };
       addons: {
         Row: {
-          diet: Database['public']['Enums']['diet_type'];
+          diet: Database["public"]["Enums"]["diet_type"];
           group_id: string;
           id: string;
           is_available: boolean;
@@ -55,7 +55,7 @@ export type Database = {
         };
         ComputedFields: never;
         Insert: {
-          diet?: Database['public']['Enums']['diet_type'];
+          diet?: Database["public"]["Enums"]["diet_type"];
           group_id: string;
           id?: string;
           is_available?: boolean;
@@ -65,7 +65,7 @@ export type Database = {
           tenant_id: string;
         };
         Update: {
-          diet?: Database['public']['Enums']['diet_type'];
+          diet?: Database["public"]["Enums"]["diet_type"];
           group_id?: string;
           id?: string;
           is_available?: boolean;
@@ -76,18 +76,18 @@ export type Database = {
         };
         Relationships: [
           {
-            foreignKeyName: 'addons_tenant_id_fkey';
-            columns: ['tenant_id'];
+            foreignKeyName: "addons_tenant_id_fkey";
+            columns: ["tenant_id"];
             isOneToOne: false;
-            referencedRelation: 'tenants';
-            referencedColumns: ['id'];
+            referencedRelation: "tenants";
+            referencedColumns: ["id"];
           },
           {
-            foreignKeyName: 'addons_tenant_id_group_id_fkey';
-            columns: ['tenant_id', 'group_id'];
+            foreignKeyName: "addons_tenant_id_group_id_fkey";
+            columns: ["tenant_id", "group_id"];
             isOneToOne: false;
-            referencedRelation: 'addon_groups';
-            referencedColumns: ['tenant_id', 'id'];
+            referencedRelation: "addon_groups";
+            referencedColumns: ["tenant_id", "id"];
           },
         ];
       };
@@ -98,7 +98,7 @@ export type Database = {
           created_at: string;
           created_by: string | null;
           id: string;
-          method: Database['public']['Enums']['payment_mode'];
+          method: Database["public"]["Enums"]["payment_mode"];
           outlet_id: string;
           reference: string | null;
           tenant_id: string;
@@ -110,7 +110,7 @@ export type Database = {
           created_at?: string;
           created_by?: string | null;
           id?: string;
-          method: Database['public']['Enums']['payment_mode'];
+          method: Database["public"]["Enums"]["payment_mode"];
           outlet_id: string;
           reference?: string | null;
           tenant_id: string;
@@ -121,39 +121,39 @@ export type Database = {
           created_at?: string;
           created_by?: string | null;
           id?: string;
-          method?: Database['public']['Enums']['payment_mode'];
+          method?: Database["public"]["Enums"]["payment_mode"];
           outlet_id?: string;
           reference?: string | null;
           tenant_id?: string;
         };
         Relationships: [
           {
-            foreignKeyName: 'bill_payments_created_by_fkey';
-            columns: ['created_by'];
+            foreignKeyName: "bill_payments_created_by_fkey";
+            columns: ["created_by"];
             isOneToOne: false;
-            referencedRelation: 'profiles';
-            referencedColumns: ['id'];
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
           },
           {
-            foreignKeyName: 'bill_payments_tenant_id_bill_id_fkey';
-            columns: ['tenant_id', 'bill_id'];
+            foreignKeyName: "bill_payments_tenant_id_bill_id_fkey";
+            columns: ["tenant_id", "bill_id"];
             isOneToOne: false;
-            referencedRelation: 'bills';
-            referencedColumns: ['tenant_id', 'id'];
+            referencedRelation: "bills";
+            referencedColumns: ["tenant_id", "id"];
           },
           {
-            foreignKeyName: 'bill_payments_tenant_id_fkey';
-            columns: ['tenant_id'];
+            foreignKeyName: "bill_payments_tenant_id_fkey";
+            columns: ["tenant_id"];
             isOneToOne: false;
-            referencedRelation: 'tenants';
-            referencedColumns: ['id'];
+            referencedRelation: "tenants";
+            referencedColumns: ["id"];
           },
           {
-            foreignKeyName: 'bill_payments_tenant_id_outlet_id_fkey';
-            columns: ['tenant_id', 'outlet_id'];
+            foreignKeyName: "bill_payments_tenant_id_outlet_id_fkey";
+            columns: ["tenant_id", "outlet_id"];
             isOneToOne: false;
-            referencedRelation: 'outlets';
-            referencedColumns: ['tenant_id', 'id'];
+            referencedRelation: "outlets";
+            referencedColumns: ["tenant_id", "id"];
           },
         ];
       };
@@ -179,18 +179,18 @@ export type Database = {
         };
         Relationships: [
           {
-            foreignKeyName: 'bill_series_tenant_id_fkey';
-            columns: ['tenant_id'];
+            foreignKeyName: "bill_series_tenant_id_fkey";
+            columns: ["tenant_id"];
             isOneToOne: false;
-            referencedRelation: 'tenants';
-            referencedColumns: ['id'];
+            referencedRelation: "tenants";
+            referencedColumns: ["id"];
           },
           {
-            foreignKeyName: 'bill_series_tenant_id_outlet_id_fkey';
-            columns: ['tenant_id', 'outlet_id'];
+            foreignKeyName: "bill_series_tenant_id_outlet_id_fkey";
+            columns: ["tenant_id", "outlet_id"];
             isOneToOne: false;
-            referencedRelation: 'outlets';
-            referencedColumns: ['tenant_id', 'id'];
+            referencedRelation: "outlets";
+            referencedColumns: ["tenant_id", "id"];
           },
         ];
       };
@@ -209,7 +209,7 @@ export type Database = {
           order_id: string;
           outlet_id: string;
           paid_at: string;
-          payment_mode: Database['public']['Enums']['payment_mode'];
+          payment_mode: Database["public"]["Enums"]["payment_mode"];
           round_off: number;
           sgst: number;
           subtotal: number;
@@ -233,7 +233,7 @@ export type Database = {
           order_id: string;
           outlet_id: string;
           paid_at?: string;
-          payment_mode: Database['public']['Enums']['payment_mode'];
+          payment_mode: Database["public"]["Enums"]["payment_mode"];
           round_off?: number;
           sgst?: number;
           subtotal?: number;
@@ -256,7 +256,7 @@ export type Database = {
           order_id?: string;
           outlet_id?: string;
           paid_at?: string;
-          payment_mode?: Database['public']['Enums']['payment_mode'];
+          payment_mode?: Database["public"]["Enums"]["payment_mode"];
           round_off?: number;
           sgst?: number;
           subtotal?: number;
@@ -267,39 +267,39 @@ export type Database = {
         };
         Relationships: [
           {
-            foreignKeyName: 'bills_created_by_fkey';
-            columns: ['created_by'];
+            foreignKeyName: "bills_created_by_fkey";
+            columns: ["created_by"];
             isOneToOne: false;
-            referencedRelation: 'profiles';
-            referencedColumns: ['id'];
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
           },
           {
-            foreignKeyName: 'bills_day_session_fk';
-            columns: ['tenant_id', 'day_session_id'];
+            foreignKeyName: "bills_day_session_fk";
+            columns: ["tenant_id", "day_session_id"];
             isOneToOne: false;
-            referencedRelation: 'day_sessions';
-            referencedColumns: ['tenant_id', 'id'];
+            referencedRelation: "day_sessions";
+            referencedColumns: ["tenant_id", "id"];
           },
           {
-            foreignKeyName: 'bills_tenant_id_fkey';
-            columns: ['tenant_id'];
+            foreignKeyName: "bills_tenant_id_fkey";
+            columns: ["tenant_id"];
             isOneToOne: false;
-            referencedRelation: 'tenants';
-            referencedColumns: ['id'];
+            referencedRelation: "tenants";
+            referencedColumns: ["id"];
           },
           {
-            foreignKeyName: 'bills_tenant_id_order_id_fkey';
-            columns: ['tenant_id', 'order_id'];
+            foreignKeyName: "bills_tenant_id_order_id_fkey";
+            columns: ["tenant_id", "order_id"];
             isOneToOne: false;
-            referencedRelation: 'orders';
-            referencedColumns: ['tenant_id', 'id'];
+            referencedRelation: "orders";
+            referencedColumns: ["tenant_id", "id"];
           },
           {
-            foreignKeyName: 'bills_tenant_id_outlet_id_fkey';
-            columns: ['tenant_id', 'outlet_id'];
+            foreignKeyName: "bills_tenant_id_outlet_id_fkey";
+            columns: ["tenant_id", "outlet_id"];
             isOneToOne: false;
-            referencedRelation: 'outlets';
-            referencedColumns: ['tenant_id', 'id'];
+            referencedRelation: "outlets";
+            referencedColumns: ["tenant_id", "id"];
           },
         ];
       };
@@ -334,25 +334,25 @@ export type Database = {
         };
         Relationships: [
           {
-            foreignKeyName: 'cash_outs_created_by_fkey';
-            columns: ['created_by'];
+            foreignKeyName: "cash_outs_created_by_fkey";
+            columns: ["created_by"];
             isOneToOne: false;
-            referencedRelation: 'profiles';
-            referencedColumns: ['id'];
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
           },
           {
-            foreignKeyName: 'cash_outs_tenant_id_fkey';
-            columns: ['tenant_id'];
+            foreignKeyName: "cash_outs_tenant_id_fkey";
+            columns: ["tenant_id"];
             isOneToOne: false;
-            referencedRelation: 'tenants';
-            referencedColumns: ['id'];
+            referencedRelation: "tenants";
+            referencedColumns: ["id"];
           },
           {
-            foreignKeyName: 'cash_outs_tenant_id_outlet_id_fkey';
-            columns: ['tenant_id', 'outlet_id'];
+            foreignKeyName: "cash_outs_tenant_id_outlet_id_fkey";
+            columns: ["tenant_id", "outlet_id"];
             isOneToOne: false;
-            referencedRelation: 'outlets';
-            referencedColumns: ['tenant_id', 'id'];
+            referencedRelation: "outlets";
+            referencedColumns: ["tenant_id", "id"];
           },
         ];
       };
@@ -399,32 +399,32 @@ export type Database = {
         };
         Relationships: [
           {
-            foreignKeyName: 'cod_settlements_settled_by_fkey';
-            columns: ['settled_by'];
+            foreignKeyName: "cod_settlements_settled_by_fkey";
+            columns: ["settled_by"];
             isOneToOne: false;
-            referencedRelation: 'profiles';
-            referencedColumns: ['id'];
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
           },
           {
-            foreignKeyName: 'cod_settlements_tenant_id_fkey';
-            columns: ['tenant_id'];
+            foreignKeyName: "cod_settlements_tenant_id_fkey";
+            columns: ["tenant_id"];
             isOneToOne: false;
-            referencedRelation: 'tenants';
-            referencedColumns: ['id'];
+            referencedRelation: "tenants";
+            referencedColumns: ["id"];
           },
           {
-            foreignKeyName: 'cod_settlements_tenant_id_outlet_id_fkey';
-            columns: ['tenant_id', 'outlet_id'];
+            foreignKeyName: "cod_settlements_tenant_id_outlet_id_fkey";
+            columns: ["tenant_id", "outlet_id"];
             isOneToOne: false;
-            referencedRelation: 'outlets';
-            referencedColumns: ['tenant_id', 'id'];
+            referencedRelation: "outlets";
+            referencedColumns: ["tenant_id", "id"];
           },
           {
-            foreignKeyName: 'cod_settlements_tenant_id_rider_id_fkey';
-            columns: ['tenant_id', 'rider_id'];
+            foreignKeyName: "cod_settlements_tenant_id_rider_id_fkey";
+            columns: ["tenant_id", "rider_id"];
             isOneToOne: false;
-            referencedRelation: 'riders';
-            referencedColumns: ['tenant_id', 'id'];
+            referencedRelation: "riders";
+            referencedColumns: ["tenant_id", "id"];
           },
         ];
       };
@@ -456,32 +456,32 @@ export type Database = {
         };
         Relationships: [
           {
-            foreignKeyName: 'combo_items_tenant_id_combo_id_fkey';
-            columns: ['tenant_id', 'combo_id'];
+            foreignKeyName: "combo_items_tenant_id_combo_id_fkey";
+            columns: ["tenant_id", "combo_id"];
             isOneToOne: false;
-            referencedRelation: 'combos';
-            referencedColumns: ['tenant_id', 'id'];
+            referencedRelation: "combos";
+            referencedColumns: ["tenant_id", "id"];
           },
           {
-            foreignKeyName: 'combo_items_tenant_id_fkey';
-            columns: ['tenant_id'];
+            foreignKeyName: "combo_items_tenant_id_fkey";
+            columns: ["tenant_id"];
             isOneToOne: false;
-            referencedRelation: 'tenants';
-            referencedColumns: ['id'];
+            referencedRelation: "tenants";
+            referencedColumns: ["id"];
           },
           {
-            foreignKeyName: 'combo_items_tenant_id_item_id_fkey';
-            columns: ['tenant_id', 'item_id'];
+            foreignKeyName: "combo_items_tenant_id_item_id_fkey";
+            columns: ["tenant_id", "item_id"];
             isOneToOne: false;
-            referencedRelation: 'menu_items';
-            referencedColumns: ['tenant_id', 'id'];
+            referencedRelation: "menu_items";
+            referencedColumns: ["tenant_id", "id"];
           },
           {
-            foreignKeyName: 'combo_items_tenant_id_variant_id_fkey';
-            columns: ['tenant_id', 'variant_id'];
+            foreignKeyName: "combo_items_tenant_id_variant_id_fkey";
+            columns: ["tenant_id", "variant_id"];
             isOneToOne: false;
-            referencedRelation: 'item_variants';
-            referencedColumns: ['tenant_id', 'id'];
+            referencedRelation: "item_variants";
+            referencedColumns: ["tenant_id", "id"];
           },
         ];
       };
@@ -525,18 +525,18 @@ export type Database = {
         };
         Relationships: [
           {
-            foreignKeyName: 'combos_tenant_id_fkey';
-            columns: ['tenant_id'];
+            foreignKeyName: "combos_tenant_id_fkey";
+            columns: ["tenant_id"];
             isOneToOne: false;
-            referencedRelation: 'tenants';
-            referencedColumns: ['id'];
+            referencedRelation: "tenants";
+            referencedColumns: ["id"];
           },
           {
-            foreignKeyName: 'combos_tenant_id_tax_rate_id_fkey';
-            columns: ['tenant_id', 'tax_rate_id'];
+            foreignKeyName: "combos_tenant_id_tax_rate_id_fkey";
+            columns: ["tenant_id", "tax_rate_id"];
             isOneToOne: false;
-            referencedRelation: 'tax_rates';
-            referencedColumns: ['tenant_id', 'id'];
+            referencedRelation: "tax_rates";
+            referencedColumns: ["tenant_id", "id"];
           },
         ];
       };
@@ -592,32 +592,32 @@ export type Database = {
         };
         Relationships: [
           {
-            foreignKeyName: 'day_sessions_closed_by_fkey';
-            columns: ['closed_by'];
+            foreignKeyName: "day_sessions_closed_by_fkey";
+            columns: ["closed_by"];
             isOneToOne: false;
-            referencedRelation: 'profiles';
-            referencedColumns: ['id'];
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
           },
           {
-            foreignKeyName: 'day_sessions_opened_by_fkey';
-            columns: ['opened_by'];
+            foreignKeyName: "day_sessions_opened_by_fkey";
+            columns: ["opened_by"];
             isOneToOne: false;
-            referencedRelation: 'profiles';
-            referencedColumns: ['id'];
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
           },
           {
-            foreignKeyName: 'day_sessions_tenant_id_fkey';
-            columns: ['tenant_id'];
+            foreignKeyName: "day_sessions_tenant_id_fkey";
+            columns: ["tenant_id"];
             isOneToOne: false;
-            referencedRelation: 'tenants';
-            referencedColumns: ['id'];
+            referencedRelation: "tenants";
+            referencedColumns: ["id"];
           },
           {
-            foreignKeyName: 'day_sessions_tenant_id_outlet_id_fkey';
-            columns: ['tenant_id', 'outlet_id'];
+            foreignKeyName: "day_sessions_tenant_id_outlet_id_fkey";
+            columns: ["tenant_id", "outlet_id"];
             isOneToOne: false;
-            referencedRelation: 'outlets';
-            referencedColumns: ['tenant_id', 'id'];
+            referencedRelation: "outlets";
+            referencedColumns: ["tenant_id", "id"];
           },
         ];
       };
@@ -630,7 +630,7 @@ export type Database = {
           lat: number | null;
           lng: number | null;
           note: string | null;
-          status: Database['public']['Enums']['delivery_status'];
+          status: Database["public"]["Enums"]["delivery_status"];
           tenant_id: string;
         };
         ComputedFields: never;
@@ -642,7 +642,7 @@ export type Database = {
           lat?: number | null;
           lng?: number | null;
           note?: string | null;
-          status: Database['public']['Enums']['delivery_status'];
+          status: Database["public"]["Enums"]["delivery_status"];
           tenant_id: string;
         };
         Update: {
@@ -653,30 +653,30 @@ export type Database = {
           lat?: number | null;
           lng?: number | null;
           note?: string | null;
-          status?: Database['public']['Enums']['delivery_status'];
+          status?: Database["public"]["Enums"]["delivery_status"];
           tenant_id?: string;
         };
         Relationships: [
           {
-            foreignKeyName: 'delivery_events_actor_id_fkey';
-            columns: ['actor_id'];
+            foreignKeyName: "delivery_events_actor_id_fkey";
+            columns: ["actor_id"];
             isOneToOne: false;
-            referencedRelation: 'profiles';
-            referencedColumns: ['id'];
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
           },
           {
-            foreignKeyName: 'delivery_events_tenant_id_fkey';
-            columns: ['tenant_id'];
+            foreignKeyName: "delivery_events_tenant_id_fkey";
+            columns: ["tenant_id"];
             isOneToOne: false;
-            referencedRelation: 'tenants';
-            referencedColumns: ['id'];
+            referencedRelation: "tenants";
+            referencedColumns: ["id"];
           },
           {
-            foreignKeyName: 'delivery_events_tenant_id_job_id_fkey';
-            columns: ['tenant_id', 'job_id'];
+            foreignKeyName: "delivery_events_tenant_id_job_id_fkey";
+            columns: ["tenant_id", "job_id"];
             isOneToOne: false;
-            referencedRelation: 'delivery_jobs';
-            referencedColumns: ['tenant_id', 'id'];
+            referencedRelation: "delivery_jobs";
+            referencedColumns: ["tenant_id", "id"];
           },
         ];
       };
@@ -698,7 +698,7 @@ export type Database = {
           proof_photo_url: string | null;
           reason: string | null;
           rider_id: string;
-          status: Database['public']['Enums']['delivery_status'];
+          status: Database["public"]["Enums"]["delivery_status"];
           tenant_id: string;
           updated_at: string;
         };
@@ -720,7 +720,7 @@ export type Database = {
           proof_photo_url?: string | null;
           reason?: string | null;
           rider_id: string;
-          status?: Database['public']['Enums']['delivery_status'];
+          status?: Database["public"]["Enums"]["delivery_status"];
           tenant_id: string;
           updated_at?: string;
         };
@@ -741,45 +741,45 @@ export type Database = {
           proof_photo_url?: string | null;
           reason?: string | null;
           rider_id?: string;
-          status?: Database['public']['Enums']['delivery_status'];
+          status?: Database["public"]["Enums"]["delivery_status"];
           tenant_id?: string;
           updated_at?: string;
         };
         Relationships: [
           {
-            foreignKeyName: 'delivery_jobs_assigned_by_fkey';
-            columns: ['assigned_by'];
+            foreignKeyName: "delivery_jobs_assigned_by_fkey";
+            columns: ["assigned_by"];
             isOneToOne: false;
-            referencedRelation: 'profiles';
-            referencedColumns: ['id'];
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
           },
           {
-            foreignKeyName: 'delivery_jobs_tenant_id_fkey';
-            columns: ['tenant_id'];
+            foreignKeyName: "delivery_jobs_tenant_id_fkey";
+            columns: ["tenant_id"];
             isOneToOne: false;
-            referencedRelation: 'tenants';
-            referencedColumns: ['id'];
+            referencedRelation: "tenants";
+            referencedColumns: ["id"];
           },
           {
-            foreignKeyName: 'delivery_jobs_tenant_id_order_id_fkey';
-            columns: ['tenant_id', 'order_id'];
+            foreignKeyName: "delivery_jobs_tenant_id_order_id_fkey";
+            columns: ["tenant_id", "order_id"];
             isOneToOne: false;
-            referencedRelation: 'orders';
-            referencedColumns: ['tenant_id', 'id'];
+            referencedRelation: "orders";
+            referencedColumns: ["tenant_id", "id"];
           },
           {
-            foreignKeyName: 'delivery_jobs_tenant_id_outlet_id_fkey';
-            columns: ['tenant_id', 'outlet_id'];
+            foreignKeyName: "delivery_jobs_tenant_id_outlet_id_fkey";
+            columns: ["tenant_id", "outlet_id"];
             isOneToOne: false;
-            referencedRelation: 'outlets';
-            referencedColumns: ['tenant_id', 'id'];
+            referencedRelation: "outlets";
+            referencedColumns: ["tenant_id", "id"];
           },
           {
-            foreignKeyName: 'delivery_jobs_tenant_id_rider_id_fkey';
-            columns: ['tenant_id', 'rider_id'];
+            foreignKeyName: "delivery_jobs_tenant_id_rider_id_fkey";
+            columns: ["tenant_id", "rider_id"];
             isOneToOne: false;
-            referencedRelation: 'riders';
-            referencedColumns: ['tenant_id', 'id'];
+            referencedRelation: "riders";
+            referencedColumns: ["tenant_id", "id"];
           },
         ];
       };
@@ -820,18 +820,18 @@ export type Database = {
         };
         Relationships: [
           {
-            foreignKeyName: 'dining_tables_tenant_id_fkey';
-            columns: ['tenant_id'];
+            foreignKeyName: "dining_tables_tenant_id_fkey";
+            columns: ["tenant_id"];
             isOneToOne: false;
-            referencedRelation: 'tenants';
-            referencedColumns: ['id'];
+            referencedRelation: "tenants";
+            referencedColumns: ["id"];
           },
           {
-            foreignKeyName: 'dining_tables_tenant_id_outlet_id_fkey';
-            columns: ['tenant_id', 'outlet_id'];
+            foreignKeyName: "dining_tables_tenant_id_outlet_id_fkey";
+            columns: ["tenant_id", "outlet_id"];
             isOneToOne: false;
-            referencedRelation: 'outlets';
-            referencedColumns: ['tenant_id', 'id'];
+            referencedRelation: "outlets";
+            referencedColumns: ["tenant_id", "id"];
           },
         ];
       };
@@ -842,7 +842,7 @@ export type Database = {
           effective_from: string;
           employee_id: string;
           id: string;
-          pay_type: Database['public']['Enums']['pay_type'];
+          pay_type: Database["public"]["Enums"]["pay_type"];
           rate: number;
           tenant_id: string;
         };
@@ -853,7 +853,7 @@ export type Database = {
           effective_from: string;
           employee_id: string;
           id?: string;
-          pay_type: Database['public']['Enums']['pay_type'];
+          pay_type: Database["public"]["Enums"]["pay_type"];
           rate: number;
           tenant_id: string;
         };
@@ -863,31 +863,31 @@ export type Database = {
           effective_from?: string;
           employee_id?: string;
           id?: string;
-          pay_type?: Database['public']['Enums']['pay_type'];
+          pay_type?: Database["public"]["Enums"]["pay_type"];
           rate?: number;
           tenant_id?: string;
         };
         Relationships: [
           {
-            foreignKeyName: 'employee_pay_rates_created_by_fkey';
-            columns: ['created_by'];
+            foreignKeyName: "employee_pay_rates_created_by_fkey";
+            columns: ["created_by"];
             isOneToOne: false;
-            referencedRelation: 'profiles';
-            referencedColumns: ['id'];
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
           },
           {
-            foreignKeyName: 'employee_pay_rates_tenant_id_employee_id_fkey';
-            columns: ['tenant_id', 'employee_id'];
+            foreignKeyName: "employee_pay_rates_tenant_id_employee_id_fkey";
+            columns: ["tenant_id", "employee_id"];
             isOneToOne: false;
-            referencedRelation: 'employees';
-            referencedColumns: ['tenant_id', 'id'];
+            referencedRelation: "employees";
+            referencedColumns: ["tenant_id", "id"];
           },
           {
-            foreignKeyName: 'employee_pay_rates_tenant_id_fkey';
-            columns: ['tenant_id'];
+            foreignKeyName: "employee_pay_rates_tenant_id_fkey";
+            columns: ["tenant_id"];
             isOneToOne: false;
-            referencedRelation: 'tenants';
-            referencedColumns: ['id'];
+            referencedRelation: "tenants";
+            referencedColumns: ["id"];
           },
         ];
       };
@@ -937,25 +937,25 @@ export type Database = {
         };
         Relationships: [
           {
-            foreignKeyName: 'employees_tenant_id_fkey';
-            columns: ['tenant_id'];
+            foreignKeyName: "employees_tenant_id_fkey";
+            columns: ["tenant_id"];
             isOneToOne: false;
-            referencedRelation: 'tenants';
-            referencedColumns: ['id'];
+            referencedRelation: "tenants";
+            referencedColumns: ["id"];
           },
           {
-            foreignKeyName: 'employees_tenant_id_outlet_id_fkey';
-            columns: ['tenant_id', 'outlet_id'];
+            foreignKeyName: "employees_tenant_id_outlet_id_fkey";
+            columns: ["tenant_id", "outlet_id"];
             isOneToOne: false;
-            referencedRelation: 'outlets';
-            referencedColumns: ['tenant_id', 'id'];
+            referencedRelation: "outlets";
+            referencedColumns: ["tenant_id", "id"];
           },
           {
-            foreignKeyName: 'employees_user_id_fkey';
-            columns: ['user_id'];
+            foreignKeyName: "employees_user_id_fkey";
+            columns: ["user_id"];
             isOneToOne: false;
-            referencedRelation: 'profiles';
-            referencedColumns: ['id'];
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
           },
         ];
       };
@@ -968,7 +968,7 @@ export type Database = {
           id: string;
           invited_by: string | null;
           outlet_id: string | null;
-          role: Database['public']['Enums']['tenant_role'];
+          role: Database["public"]["Enums"]["tenant_role"];
           tenant_id: string;
         };
         ComputedFields: never;
@@ -980,7 +980,7 @@ export type Database = {
           id?: string;
           invited_by?: string | null;
           outlet_id?: string | null;
-          role: Database['public']['Enums']['tenant_role'];
+          role: Database["public"]["Enums"]["tenant_role"];
           tenant_id: string;
         };
         Update: {
@@ -991,30 +991,30 @@ export type Database = {
           id?: string;
           invited_by?: string | null;
           outlet_id?: string | null;
-          role?: Database['public']['Enums']['tenant_role'];
+          role?: Database["public"]["Enums"]["tenant_role"];
           tenant_id?: string;
         };
         Relationships: [
           {
-            foreignKeyName: 'invitations_invited_by_fkey';
-            columns: ['invited_by'];
+            foreignKeyName: "invitations_invited_by_fkey";
+            columns: ["invited_by"];
             isOneToOne: false;
-            referencedRelation: 'profiles';
-            referencedColumns: ['id'];
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
           },
           {
-            foreignKeyName: 'invitations_tenant_id_fkey';
-            columns: ['tenant_id'];
+            foreignKeyName: "invitations_tenant_id_fkey";
+            columns: ["tenant_id"];
             isOneToOne: false;
-            referencedRelation: 'tenants';
-            referencedColumns: ['id'];
+            referencedRelation: "tenants";
+            referencedColumns: ["id"];
           },
           {
-            foreignKeyName: 'invitations_tenant_id_outlet_id_fkey';
-            columns: ['tenant_id', 'outlet_id'];
+            foreignKeyName: "invitations_tenant_id_outlet_id_fkey";
+            columns: ["tenant_id", "outlet_id"];
             isOneToOne: false;
-            referencedRelation: 'outlets';
-            referencedColumns: ['tenant_id', 'id'];
+            referencedRelation: "outlets";
+            referencedColumns: ["tenant_id", "id"];
           },
         ];
       };
@@ -1040,25 +1040,25 @@ export type Database = {
         };
         Relationships: [
           {
-            foreignKeyName: 'item_addon_groups_tenant_id_fkey';
-            columns: ['tenant_id'];
+            foreignKeyName: "item_addon_groups_tenant_id_fkey";
+            columns: ["tenant_id"];
             isOneToOne: false;
-            referencedRelation: 'tenants';
-            referencedColumns: ['id'];
+            referencedRelation: "tenants";
+            referencedColumns: ["id"];
           },
           {
-            foreignKeyName: 'item_addon_groups_tenant_id_group_id_fkey';
-            columns: ['tenant_id', 'group_id'];
+            foreignKeyName: "item_addon_groups_tenant_id_group_id_fkey";
+            columns: ["tenant_id", "group_id"];
             isOneToOne: false;
-            referencedRelation: 'addon_groups';
-            referencedColumns: ['tenant_id', 'id'];
+            referencedRelation: "addon_groups";
+            referencedColumns: ["tenant_id", "id"];
           },
           {
-            foreignKeyName: 'item_addon_groups_tenant_id_item_id_fkey';
-            columns: ['tenant_id', 'item_id'];
+            foreignKeyName: "item_addon_groups_tenant_id_item_id_fkey";
+            columns: ["tenant_id", "item_id"];
             isOneToOne: false;
-            referencedRelation: 'menu_items';
-            referencedColumns: ['tenant_id', 'id'];
+            referencedRelation: "menu_items";
+            referencedColumns: ["tenant_id", "id"];
           },
         ];
       };
@@ -1090,18 +1090,18 @@ export type Database = {
         };
         Relationships: [
           {
-            foreignKeyName: 'item_variants_tenant_id_fkey';
-            columns: ['tenant_id'];
+            foreignKeyName: "item_variants_tenant_id_fkey";
+            columns: ["tenant_id"];
             isOneToOne: false;
-            referencedRelation: 'tenants';
-            referencedColumns: ['id'];
+            referencedRelation: "tenants";
+            referencedColumns: ["id"];
           },
           {
-            foreignKeyName: 'item_variants_tenant_id_item_id_fkey';
-            columns: ['tenant_id', 'item_id'];
+            foreignKeyName: "item_variants_tenant_id_item_id_fkey";
+            columns: ["tenant_id", "item_id"];
             isOneToOne: false;
-            referencedRelation: 'menu_items';
-            referencedColumns: ['tenant_id', 'id'];
+            referencedRelation: "menu_items";
+            referencedColumns: ["tenant_id", "id"];
           },
         ];
       };
@@ -1113,7 +1113,7 @@ export type Database = {
           order_id: string;
           outlet_id: string;
           round_no: number;
-          status: Database['public']['Enums']['kot_status'];
+          status: Database["public"]["Enums"]["kot_status"];
           status_changed_at: string;
           tenant_id: string;
         };
@@ -1125,7 +1125,7 @@ export type Database = {
           order_id: string;
           outlet_id: string;
           round_no: number;
-          status?: Database['public']['Enums']['kot_status'];
+          status?: Database["public"]["Enums"]["kot_status"];
           status_changed_at?: string;
           tenant_id: string;
         };
@@ -1136,38 +1136,38 @@ export type Database = {
           order_id?: string;
           outlet_id?: string;
           round_no?: number;
-          status?: Database['public']['Enums']['kot_status'];
+          status?: Database["public"]["Enums"]["kot_status"];
           status_changed_at?: string;
           tenant_id?: string;
         };
         Relationships: [
           {
-            foreignKeyName: 'kots_created_by_fkey';
-            columns: ['created_by'];
+            foreignKeyName: "kots_created_by_fkey";
+            columns: ["created_by"];
             isOneToOne: false;
-            referencedRelation: 'profiles';
-            referencedColumns: ['id'];
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
           },
           {
-            foreignKeyName: 'kots_tenant_id_fkey';
-            columns: ['tenant_id'];
+            foreignKeyName: "kots_tenant_id_fkey";
+            columns: ["tenant_id"];
             isOneToOne: false;
-            referencedRelation: 'tenants';
-            referencedColumns: ['id'];
+            referencedRelation: "tenants";
+            referencedColumns: ["id"];
           },
           {
-            foreignKeyName: 'kots_tenant_id_order_id_fkey';
-            columns: ['tenant_id', 'order_id'];
+            foreignKeyName: "kots_tenant_id_order_id_fkey";
+            columns: ["tenant_id", "order_id"];
             isOneToOne: false;
-            referencedRelation: 'orders';
-            referencedColumns: ['tenant_id', 'id'];
+            referencedRelation: "orders";
+            referencedColumns: ["tenant_id", "id"];
           },
           {
-            foreignKeyName: 'kots_tenant_id_outlet_id_fkey';
-            columns: ['tenant_id', 'outlet_id'];
+            foreignKeyName: "kots_tenant_id_outlet_id_fkey";
+            columns: ["tenant_id", "outlet_id"];
             isOneToOne: false;
-            referencedRelation: 'outlets';
-            referencedColumns: ['tenant_id', 'id'];
+            referencedRelation: "outlets";
+            referencedColumns: ["tenant_id", "id"];
           },
         ];
       };
@@ -1177,7 +1177,7 @@ export type Database = {
           id: string;
           is_active: boolean;
           outlet_id: string | null;
-          role: Database['public']['Enums']['tenant_role'];
+          role: Database["public"]["Enums"]["tenant_role"];
           tenant_id: string;
           user_id: string;
         };
@@ -1187,7 +1187,7 @@ export type Database = {
           id?: string;
           is_active?: boolean;
           outlet_id?: string | null;
-          role: Database['public']['Enums']['tenant_role'];
+          role: Database["public"]["Enums"]["tenant_role"];
           tenant_id: string;
           user_id: string;
         };
@@ -1196,31 +1196,31 @@ export type Database = {
           id?: string;
           is_active?: boolean;
           outlet_id?: string | null;
-          role?: Database['public']['Enums']['tenant_role'];
+          role?: Database["public"]["Enums"]["tenant_role"];
           tenant_id?: string;
           user_id?: string;
         };
         Relationships: [
           {
-            foreignKeyName: 'memberships_tenant_id_fkey';
-            columns: ['tenant_id'];
+            foreignKeyName: "memberships_tenant_id_fkey";
+            columns: ["tenant_id"];
             isOneToOne: false;
-            referencedRelation: 'tenants';
-            referencedColumns: ['id'];
+            referencedRelation: "tenants";
+            referencedColumns: ["id"];
           },
           {
-            foreignKeyName: 'memberships_tenant_id_outlet_id_fkey';
-            columns: ['tenant_id', 'outlet_id'];
+            foreignKeyName: "memberships_tenant_id_outlet_id_fkey";
+            columns: ["tenant_id", "outlet_id"];
             isOneToOne: false;
-            referencedRelation: 'outlets';
-            referencedColumns: ['tenant_id', 'id'];
+            referencedRelation: "outlets";
+            referencedColumns: ["tenant_id", "id"];
           },
           {
-            foreignKeyName: 'memberships_user_id_fkey';
-            columns: ['user_id'];
+            foreignKeyName: "memberships_user_id_fkey";
+            columns: ["user_id"];
             isOneToOne: false;
-            referencedRelation: 'profiles';
-            referencedColumns: ['id'];
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
           },
         ];
       };
@@ -1229,7 +1229,7 @@ export type Database = {
           created_at: string;
           id: string;
           is_active: boolean;
-          kind: Database['public']['Enums']['item_kind'];
+          kind: Database["public"]["Enums"]["item_kind"];
           name: string;
           sort_order: number;
           tenant_id: string;
@@ -1239,7 +1239,7 @@ export type Database = {
           created_at?: string;
           id?: string;
           is_active?: boolean;
-          kind?: Database['public']['Enums']['item_kind'];
+          kind?: Database["public"]["Enums"]["item_kind"];
           name: string;
           sort_order?: number;
           tenant_id: string;
@@ -1248,18 +1248,18 @@ export type Database = {
           created_at?: string;
           id?: string;
           is_active?: boolean;
-          kind?: Database['public']['Enums']['item_kind'];
+          kind?: Database["public"]["Enums"]["item_kind"];
           name?: string;
           sort_order?: number;
           tenant_id?: string;
         };
         Relationships: [
           {
-            foreignKeyName: 'menu_categories_tenant_id_fkey';
-            columns: ['tenant_id'];
+            foreignKeyName: "menu_categories_tenant_id_fkey";
+            columns: ["tenant_id"];
             isOneToOne: false;
-            referencedRelation: 'tenants';
-            referencedColumns: ['id'];
+            referencedRelation: "tenants";
+            referencedColumns: ["id"];
           },
         ];
       };
@@ -1268,7 +1268,7 @@ export type Database = {
           category_id: string;
           created_at: string;
           description: string | null;
-          diet: Database['public']['Enums']['diet_type'];
+          diet: Database["public"]["Enums"]["diet_type"];
           id: string;
           image_url: string | null;
           is_available: boolean;
@@ -1284,7 +1284,7 @@ export type Database = {
           category_id: string;
           created_at?: string;
           description?: string | null;
-          diet?: Database['public']['Enums']['diet_type'];
+          diet?: Database["public"]["Enums"]["diet_type"];
           id?: string;
           image_url?: string | null;
           is_available?: boolean;
@@ -1299,7 +1299,7 @@ export type Database = {
           category_id?: string;
           created_at?: string;
           description?: string | null;
-          diet?: Database['public']['Enums']['diet_type'];
+          diet?: Database["public"]["Enums"]["diet_type"];
           id?: string;
           image_url?: string | null;
           is_available?: boolean;
@@ -1312,25 +1312,25 @@ export type Database = {
         };
         Relationships: [
           {
-            foreignKeyName: 'menu_items_tenant_id_category_id_fkey';
-            columns: ['tenant_id', 'category_id'];
+            foreignKeyName: "menu_items_tenant_id_category_id_fkey";
+            columns: ["tenant_id", "category_id"];
             isOneToOne: false;
-            referencedRelation: 'menu_categories';
-            referencedColumns: ['tenant_id', 'id'];
+            referencedRelation: "menu_categories";
+            referencedColumns: ["tenant_id", "id"];
           },
           {
-            foreignKeyName: 'menu_items_tenant_id_fkey';
-            columns: ['tenant_id'];
+            foreignKeyName: "menu_items_tenant_id_fkey";
+            columns: ["tenant_id"];
             isOneToOne: false;
-            referencedRelation: 'tenants';
-            referencedColumns: ['id'];
+            referencedRelation: "tenants";
+            referencedColumns: ["id"];
           },
           {
-            foreignKeyName: 'menu_items_tenant_id_tax_rate_id_fkey';
-            columns: ['tenant_id', 'tax_rate_id'];
+            foreignKeyName: "menu_items_tenant_id_tax_rate_id_fkey";
+            columns: ["tenant_id", "tax_rate_id"];
             isOneToOne: false;
-            referencedRelation: 'tax_rates';
-            referencedColumns: ['tenant_id', 'id'];
+            referencedRelation: "tax_rates";
+            referencedColumns: ["tenant_id", "id"];
           },
         ];
       };
@@ -1398,46 +1398,46 @@ export type Database = {
         };
         Relationships: [
           {
-            foreignKeyName: 'order_items_bill_fk';
-            columns: ['tenant_id', 'bill_id'];
+            foreignKeyName: "order_items_bill_fk";
+            columns: ["tenant_id", "bill_id"];
             isOneToOne: false;
-            referencedRelation: 'bills';
-            referencedColumns: ['tenant_id', 'id'];
+            referencedRelation: "bills";
+            referencedColumns: ["tenant_id", "id"];
           },
           {
-            foreignKeyName: 'order_items_kot_fk';
-            columns: ['tenant_id', 'kot_id'];
+            foreignKeyName: "order_items_kot_fk";
+            columns: ["tenant_id", "kot_id"];
             isOneToOne: false;
-            referencedRelation: 'kots';
-            referencedColumns: ['tenant_id', 'id'];
+            referencedRelation: "kots";
+            referencedColumns: ["tenant_id", "id"];
           },
           {
-            foreignKeyName: 'order_items_tenant_id_combo_id_fkey';
-            columns: ['tenant_id', 'combo_id'];
+            foreignKeyName: "order_items_tenant_id_combo_id_fkey";
+            columns: ["tenant_id", "combo_id"];
             isOneToOne: false;
-            referencedRelation: 'combos';
-            referencedColumns: ['tenant_id', 'id'];
+            referencedRelation: "combos";
+            referencedColumns: ["tenant_id", "id"];
           },
           {
-            foreignKeyName: 'order_items_tenant_id_fkey';
-            columns: ['tenant_id'];
+            foreignKeyName: "order_items_tenant_id_fkey";
+            columns: ["tenant_id"];
             isOneToOne: false;
-            referencedRelation: 'tenants';
-            referencedColumns: ['id'];
+            referencedRelation: "tenants";
+            referencedColumns: ["id"];
           },
           {
-            foreignKeyName: 'order_items_tenant_id_item_id_fkey';
-            columns: ['tenant_id', 'item_id'];
+            foreignKeyName: "order_items_tenant_id_item_id_fkey";
+            columns: ["tenant_id", "item_id"];
             isOneToOne: false;
-            referencedRelation: 'menu_items';
-            referencedColumns: ['tenant_id', 'id'];
+            referencedRelation: "menu_items";
+            referencedColumns: ["tenant_id", "id"];
           },
           {
-            foreignKeyName: 'order_items_tenant_id_order_id_fkey';
-            columns: ['tenant_id', 'order_id'];
+            foreignKeyName: "order_items_tenant_id_order_id_fkey";
+            columns: ["tenant_id", "order_id"];
             isOneToOne: false;
-            referencedRelation: 'orders';
-            referencedColumns: ['tenant_id', 'id'];
+            referencedRelation: "orders";
+            referencedColumns: ["tenant_id", "id"];
           },
         ];
       };
@@ -1457,14 +1457,14 @@ export type Database = {
           notes: string | null;
           order_no: number;
           outlet_id: string;
-          status: Database['public']['Enums']['order_status'];
+          status: Database["public"]["Enums"]["order_status"];
           status_changed_at: string;
           subtotal: number;
           table_id: string | null;
           tax_total: number;
           tenant_id: string;
           total: number;
-          type: Database['public']['Enums']['order_type'];
+          type: Database["public"]["Enums"]["order_type"];
           updated_at: string;
         };
         ComputedFields: never;
@@ -1483,14 +1483,14 @@ export type Database = {
           notes?: string | null;
           order_no: number;
           outlet_id: string;
-          status?: Database['public']['Enums']['order_status'];
+          status?: Database["public"]["Enums"]["order_status"];
           status_changed_at?: string;
           subtotal?: number;
           table_id?: string | null;
           tax_total?: number;
           tenant_id: string;
           total?: number;
-          type?: Database['public']['Enums']['order_type'];
+          type?: Database["public"]["Enums"]["order_type"];
           updated_at?: string;
         };
         Update: {
@@ -1508,51 +1508,51 @@ export type Database = {
           notes?: string | null;
           order_no?: number;
           outlet_id?: string;
-          status?: Database['public']['Enums']['order_status'];
+          status?: Database["public"]["Enums"]["order_status"];
           status_changed_at?: string;
           subtotal?: number;
           table_id?: string | null;
           tax_total?: number;
           tenant_id?: string;
           total?: number;
-          type?: Database['public']['Enums']['order_type'];
+          type?: Database["public"]["Enums"]["order_type"];
           updated_at?: string;
         };
         Relationships: [
           {
-            foreignKeyName: 'orders_created_by_fkey';
-            columns: ['created_by'];
+            foreignKeyName: "orders_created_by_fkey";
+            columns: ["created_by"];
             isOneToOne: false;
-            referencedRelation: 'profiles';
-            referencedColumns: ['id'];
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
           },
           {
-            foreignKeyName: 'orders_tenant_id_fkey';
-            columns: ['tenant_id'];
+            foreignKeyName: "orders_tenant_id_fkey";
+            columns: ["tenant_id"];
             isOneToOne: false;
-            referencedRelation: 'tenants';
-            referencedColumns: ['id'];
+            referencedRelation: "tenants";
+            referencedColumns: ["id"];
           },
           {
-            foreignKeyName: 'orders_tenant_id_outlet_id_fkey';
-            columns: ['tenant_id', 'outlet_id'];
+            foreignKeyName: "orders_tenant_id_outlet_id_fkey";
+            columns: ["tenant_id", "outlet_id"];
             isOneToOne: false;
-            referencedRelation: 'outlets';
-            referencedColumns: ['tenant_id', 'id'];
+            referencedRelation: "outlets";
+            referencedColumns: ["tenant_id", "id"];
           },
           {
-            foreignKeyName: 'orders_tenant_id_table_id_fkey';
-            columns: ['tenant_id', 'table_id'];
+            foreignKeyName: "orders_tenant_id_table_id_fkey";
+            columns: ["tenant_id", "table_id"];
             isOneToOne: false;
-            referencedRelation: 'dining_tables';
-            referencedColumns: ['tenant_id', 'id'];
+            referencedRelation: "dining_tables";
+            referencedColumns: ["tenant_id", "id"];
           },
           {
-            foreignKeyName: 'orders_tenant_id_table_id_fkey';
-            columns: ['tenant_id', 'table_id'];
+            foreignKeyName: "orders_tenant_id_table_id_fkey";
+            columns: ["tenant_id", "table_id"];
             isOneToOne: false;
-            referencedRelation: 'table_status';
-            referencedColumns: ['tenant_id', 'table_id'];
+            referencedRelation: "table_status";
+            referencedColumns: ["tenant_id", "table_id"];
           },
         ];
       };
@@ -1614,11 +1614,11 @@ export type Database = {
         };
         Relationships: [
           {
-            foreignKeyName: 'outlets_tenant_id_fkey';
-            columns: ['tenant_id'];
+            foreignKeyName: "outlets_tenant_id_fkey";
+            columns: ["tenant_id"];
             isOneToOne: false;
-            referencedRelation: 'tenants';
-            referencedColumns: ['id'];
+            referencedRelation: "tenants";
+            referencedColumns: ["id"];
           },
         ];
       };
@@ -1750,7 +1750,7 @@ export type Database = {
           rate: number;
           sort_order: number;
           tenant_id: string;
-          unit: Database['public']['Enums']['purchase_unit'];
+          unit: Database["public"]["Enums"]["purchase_unit"];
         };
         ComputedFields: never;
         Insert: {
@@ -1762,7 +1762,7 @@ export type Database = {
           rate: number;
           sort_order?: number;
           tenant_id: string;
-          unit?: Database['public']['Enums']['purchase_unit'];
+          unit?: Database["public"]["Enums"]["purchase_unit"];
         };
         Update: {
           amount?: never;
@@ -1773,22 +1773,22 @@ export type Database = {
           rate?: number;
           sort_order?: number;
           tenant_id?: string;
-          unit?: Database['public']['Enums']['purchase_unit'];
+          unit?: Database["public"]["Enums"]["purchase_unit"];
         };
         Relationships: [
           {
-            foreignKeyName: 'purchase_items_tenant_id_fkey';
-            columns: ['tenant_id'];
+            foreignKeyName: "purchase_items_tenant_id_fkey";
+            columns: ["tenant_id"];
             isOneToOne: false;
-            referencedRelation: 'tenants';
-            referencedColumns: ['id'];
+            referencedRelation: "tenants";
+            referencedColumns: ["id"];
           },
           {
-            foreignKeyName: 'purchase_items_tenant_id_purchase_id_fkey';
-            columns: ['tenant_id', 'purchase_id'];
+            foreignKeyName: "purchase_items_tenant_id_purchase_id_fkey";
+            columns: ["tenant_id", "purchase_id"];
             isOneToOne: false;
-            referencedRelation: 'purchases';
-            referencedColumns: ['tenant_id', 'id'];
+            referencedRelation: "purchases";
+            referencedColumns: ["tenant_id", "id"];
           },
         ];
       };
@@ -1802,9 +1802,9 @@ export type Database = {
           notes: string | null;
           outlet_id: string;
           paid_at: string | null;
-          payment_mode: Database['public']['Enums']['expense_mode'];
+          payment_mode: Database["public"]["Enums"]["expense_mode"];
           purchase_date: string;
-          settled_mode: Database['public']['Enums']['expense_mode'] | null;
+          settled_mode: Database["public"]["Enums"]["expense_mode"] | null;
           subtotal: number;
           tenant_id: string;
           total: number;
@@ -1822,9 +1822,9 @@ export type Database = {
           notes?: string | null;
           outlet_id: string;
           paid_at?: string | null;
-          payment_mode?: Database['public']['Enums']['expense_mode'];
+          payment_mode?: Database["public"]["Enums"]["expense_mode"];
           purchase_date: string;
-          settled_mode?: Database['public']['Enums']['expense_mode'] | null;
+          settled_mode?: Database["public"]["Enums"]["expense_mode"] | null;
           subtotal?: number;
           tenant_id: string;
           total?: number;
@@ -1841,9 +1841,9 @@ export type Database = {
           notes?: string | null;
           outlet_id?: string;
           paid_at?: string | null;
-          payment_mode?: Database['public']['Enums']['expense_mode'];
+          payment_mode?: Database["public"]["Enums"]["expense_mode"];
           purchase_date?: string;
-          settled_mode?: Database['public']['Enums']['expense_mode'] | null;
+          settled_mode?: Database["public"]["Enums"]["expense_mode"] | null;
           subtotal?: number;
           tenant_id?: string;
           total?: number;
@@ -1853,32 +1853,84 @@ export type Database = {
         };
         Relationships: [
           {
-            foreignKeyName: 'purchases_created_by_fkey';
-            columns: ['created_by'];
+            foreignKeyName: "purchases_created_by_fkey";
+            columns: ["created_by"];
             isOneToOne: false;
-            referencedRelation: 'profiles';
-            referencedColumns: ['id'];
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
           },
           {
-            foreignKeyName: 'purchases_tenant_id_fkey';
-            columns: ['tenant_id'];
+            foreignKeyName: "purchases_tenant_id_fkey";
+            columns: ["tenant_id"];
             isOneToOne: false;
-            referencedRelation: 'tenants';
-            referencedColumns: ['id'];
+            referencedRelation: "tenants";
+            referencedColumns: ["id"];
           },
           {
-            foreignKeyName: 'purchases_tenant_id_outlet_id_fkey';
-            columns: ['tenant_id', 'outlet_id'];
+            foreignKeyName: "purchases_tenant_id_outlet_id_fkey";
+            columns: ["tenant_id", "outlet_id"];
             isOneToOne: false;
-            referencedRelation: 'outlets';
-            referencedColumns: ['tenant_id', 'id'];
+            referencedRelation: "outlets";
+            referencedColumns: ["tenant_id", "id"];
           },
           {
-            foreignKeyName: 'purchases_tenant_id_vendor_id_fkey';
-            columns: ['tenant_id', 'vendor_id'];
+            foreignKeyName: "purchases_tenant_id_vendor_id_fkey";
+            columns: ["tenant_id", "vendor_id"];
             isOneToOne: false;
-            referencedRelation: 'vendors';
-            referencedColumns: ['tenant_id', 'id'];
+            referencedRelation: "vendors";
+            referencedColumns: ["tenant_id", "id"];
+          },
+        ];
+      };
+      rider_details: {
+        Row: {
+          address: string | null;
+          blood_group: string | null;
+          city: string | null;
+          date_of_birth: string | null;
+          fathers_name: string | null;
+          national_id: string | null;
+          rider_id: string;
+          tenant_id: string;
+          updated_at: string;
+        };
+        ComputedFields: never;
+        Insert: {
+          address?: string | null;
+          blood_group?: string | null;
+          city?: string | null;
+          date_of_birth?: string | null;
+          fathers_name?: string | null;
+          national_id?: string | null;
+          rider_id: string;
+          tenant_id: string;
+          updated_at?: string;
+        };
+        Update: {
+          address?: string | null;
+          blood_group?: string | null;
+          city?: string | null;
+          date_of_birth?: string | null;
+          fathers_name?: string | null;
+          national_id?: string | null;
+          rider_id?: string;
+          tenant_id?: string;
+          updated_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "rider_details_tenant_id_fkey";
+            columns: ["tenant_id"];
+            isOneToOne: false;
+            referencedRelation: "tenants";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "rider_details_tenant_id_rider_id_fkey";
+            columns: ["tenant_id", "rider_id"];
+            isOneToOne: false;
+            referencedRelation: "riders";
+            referencedColumns: ["tenant_id", "id"];
           },
         ];
       };
@@ -1913,25 +1965,25 @@ export type Database = {
         };
         Relationships: [
           {
-            foreignKeyName: 'rider_locations_tenant_id_fkey';
-            columns: ['tenant_id'];
+            foreignKeyName: "rider_locations_tenant_id_fkey";
+            columns: ["tenant_id"];
             isOneToOne: false;
-            referencedRelation: 'tenants';
-            referencedColumns: ['id'];
+            referencedRelation: "tenants";
+            referencedColumns: ["id"];
           },
           {
-            foreignKeyName: 'rider_locations_tenant_id_job_id_fkey';
-            columns: ['tenant_id', 'job_id'];
+            foreignKeyName: "rider_locations_tenant_id_job_id_fkey";
+            columns: ["tenant_id", "job_id"];
             isOneToOne: false;
-            referencedRelation: 'delivery_jobs';
-            referencedColumns: ['tenant_id', 'id'];
+            referencedRelation: "delivery_jobs";
+            referencedColumns: ["tenant_id", "id"];
           },
           {
-            foreignKeyName: 'rider_locations_tenant_id_rider_id_fkey';
-            columns: ['tenant_id', 'rider_id'];
+            foreignKeyName: "rider_locations_tenant_id_rider_id_fkey";
+            columns: ["tenant_id", "rider_id"];
             isOneToOne: false;
-            referencedRelation: 'riders';
-            referencedColumns: ['tenant_id', 'id'];
+            referencedRelation: "riders";
+            referencedColumns: ["tenant_id", "id"];
           },
         ];
       };
@@ -1956,8 +2008,8 @@ export type Database = {
           upi_id: string | null;
           user_id: string;
           vehicle_number: string | null;
-          vehicle_type: Database['public']['Enums']['vehicle_type'];
-          verification: Database['public']['Enums']['rider_verification'];
+          vehicle_type: Database["public"]["Enums"]["vehicle_type"];
+          verification: Database["public"]["Enums"]["rider_verification"];
           verified_at: string | null;
         };
         ComputedFields: never;
@@ -1981,8 +2033,8 @@ export type Database = {
           upi_id?: string | null;
           user_id: string;
           vehicle_number?: string | null;
-          vehicle_type?: Database['public']['Enums']['vehicle_type'];
-          verification?: Database['public']['Enums']['rider_verification'];
+          vehicle_type?: Database["public"]["Enums"]["vehicle_type"];
+          verification?: Database["public"]["Enums"]["rider_verification"];
           verified_at?: string | null;
         };
         Update: {
@@ -2005,24 +2057,24 @@ export type Database = {
           upi_id?: string | null;
           user_id?: string;
           vehicle_number?: string | null;
-          vehicle_type?: Database['public']['Enums']['vehicle_type'];
-          verification?: Database['public']['Enums']['rider_verification'];
+          vehicle_type?: Database["public"]["Enums"]["vehicle_type"];
+          verification?: Database["public"]["Enums"]["rider_verification"];
           verified_at?: string | null;
         };
         Relationships: [
           {
-            foreignKeyName: 'riders_tenant_id_fkey';
-            columns: ['tenant_id'];
+            foreignKeyName: "riders_tenant_id_fkey";
+            columns: ["tenant_id"];
             isOneToOne: false;
-            referencedRelation: 'tenants';
-            referencedColumns: ['id'];
+            referencedRelation: "tenants";
+            referencedColumns: ["id"];
           },
           {
-            foreignKeyName: 'riders_user_id_fkey';
-            columns: ['user_id'];
+            foreignKeyName: "riders_user_id_fkey";
+            columns: ["user_id"];
             isOneToOne: false;
-            referencedRelation: 'profiles';
-            referencedColumns: ['id'];
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
           },
         ];
       };
@@ -2034,10 +2086,10 @@ export type Database = {
           employee_id: string;
           entry_date: string;
           id: string;
-          kind: Database['public']['Enums']['salary_entry_kind'];
+          kind: Database["public"]["Enums"]["salary_entry_kind"];
           note: string | null;
           outlet_id: string | null;
-          payment_mode: Database['public']['Enums']['expense_mode'] | null;
+          payment_mode: Database["public"]["Enums"]["expense_mode"] | null;
           period_month: string;
           tenant_id: string;
         };
@@ -2049,10 +2101,10 @@ export type Database = {
           employee_id: string;
           entry_date: string;
           id?: string;
-          kind: Database['public']['Enums']['salary_entry_kind'];
+          kind: Database["public"]["Enums"]["salary_entry_kind"];
           note?: string | null;
           outlet_id?: string | null;
-          payment_mode?: Database['public']['Enums']['expense_mode'] | null;
+          payment_mode?: Database["public"]["Enums"]["expense_mode"] | null;
           period_month: string;
           tenant_id: string;
         };
@@ -2063,41 +2115,41 @@ export type Database = {
           employee_id?: string;
           entry_date?: string;
           id?: string;
-          kind?: Database['public']['Enums']['salary_entry_kind'];
+          kind?: Database["public"]["Enums"]["salary_entry_kind"];
           note?: string | null;
           outlet_id?: string | null;
-          payment_mode?: Database['public']['Enums']['expense_mode'] | null;
+          payment_mode?: Database["public"]["Enums"]["expense_mode"] | null;
           period_month?: string;
           tenant_id?: string;
         };
         Relationships: [
           {
-            foreignKeyName: 'salary_entries_created_by_fkey';
-            columns: ['created_by'];
+            foreignKeyName: "salary_entries_created_by_fkey";
+            columns: ["created_by"];
             isOneToOne: false;
-            referencedRelation: 'profiles';
-            referencedColumns: ['id'];
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
           },
           {
-            foreignKeyName: 'salary_entries_tenant_id_employee_id_fkey';
-            columns: ['tenant_id', 'employee_id'];
+            foreignKeyName: "salary_entries_tenant_id_employee_id_fkey";
+            columns: ["tenant_id", "employee_id"];
             isOneToOne: false;
-            referencedRelation: 'employees';
-            referencedColumns: ['tenant_id', 'id'];
+            referencedRelation: "employees";
+            referencedColumns: ["tenant_id", "id"];
           },
           {
-            foreignKeyName: 'salary_entries_tenant_id_fkey';
-            columns: ['tenant_id'];
+            foreignKeyName: "salary_entries_tenant_id_fkey";
+            columns: ["tenant_id"];
             isOneToOne: false;
-            referencedRelation: 'tenants';
-            referencedColumns: ['id'];
+            referencedRelation: "tenants";
+            referencedColumns: ["id"];
           },
           {
-            foreignKeyName: 'salary_entries_tenant_id_outlet_id_fkey';
-            columns: ['tenant_id', 'outlet_id'];
+            foreignKeyName: "salary_entries_tenant_id_outlet_id_fkey";
+            columns: ["tenant_id", "outlet_id"];
             isOneToOne: false;
-            referencedRelation: 'outlets';
-            referencedColumns: ['tenant_id', 'id'];
+            referencedRelation: "outlets";
+            referencedColumns: ["tenant_id", "id"];
           },
         ];
       };
@@ -2122,7 +2174,7 @@ export type Database = {
           seller_name: string;
           seller_state: string;
           sgst: number;
-          status: Database['public']['Enums']['subscription_invoice_status'];
+          status: Database["public"]["Enums"]["subscription_invoice_status"];
           tenant_id: string;
           total: number;
           void_reason: string | null;
@@ -2148,7 +2200,7 @@ export type Database = {
           seller_name: string;
           seller_state: string;
           sgst: number;
-          status?: Database['public']['Enums']['subscription_invoice_status'];
+          status?: Database["public"]["Enums"]["subscription_invoice_status"];
           tenant_id: string;
           total: number;
           void_reason?: string | null;
@@ -2173,32 +2225,32 @@ export type Database = {
           seller_name?: string;
           seller_state?: string;
           sgst?: number;
-          status?: Database['public']['Enums']['subscription_invoice_status'];
+          status?: Database["public"]["Enums"]["subscription_invoice_status"];
           tenant_id?: string;
           total?: number;
           void_reason?: string | null;
         };
         Relationships: [
           {
-            foreignKeyName: 'subscription_invoices_created_by_fkey';
-            columns: ['created_by'];
+            foreignKeyName: "subscription_invoices_created_by_fkey";
+            columns: ["created_by"];
             isOneToOne: false;
-            referencedRelation: 'profiles';
-            referencedColumns: ['id'];
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
           },
           {
-            foreignKeyName: 'subscription_invoices_plan_id_fkey';
-            columns: ['plan_id'];
+            foreignKeyName: "subscription_invoices_plan_id_fkey";
+            columns: ["plan_id"];
             isOneToOne: false;
-            referencedRelation: 'plans';
-            referencedColumns: ['id'];
+            referencedRelation: "plans";
+            referencedColumns: ["id"];
           },
           {
-            foreignKeyName: 'subscription_invoices_tenant_id_fkey';
-            columns: ['tenant_id'];
+            foreignKeyName: "subscription_invoices_tenant_id_fkey";
+            columns: ["tenant_id"];
             isOneToOne: false;
-            referencedRelation: 'tenants';
-            referencedColumns: ['id'];
+            referencedRelation: "tenants";
+            referencedColumns: ["id"];
           },
         ];
       };
@@ -2208,7 +2260,7 @@ export type Database = {
           created_at: string;
           id: string;
           invoice_id: string;
-          method: Database['public']['Enums']['payment_mode'];
+          method: Database["public"]["Enums"]["payment_mode"];
           paid_on: string;
           recorded_by: string | null;
           reference: string | null;
@@ -2220,7 +2272,7 @@ export type Database = {
           created_at?: string;
           id?: string;
           invoice_id: string;
-          method: Database['public']['Enums']['payment_mode'];
+          method: Database["public"]["Enums"]["payment_mode"];
           paid_on?: string;
           recorded_by?: string | null;
           reference?: string | null;
@@ -2231,7 +2283,7 @@ export type Database = {
           created_at?: string;
           id?: string;
           invoice_id?: string;
-          method?: Database['public']['Enums']['payment_mode'];
+          method?: Database["public"]["Enums"]["payment_mode"];
           paid_on?: string;
           recorded_by?: string | null;
           reference?: string | null;
@@ -2239,25 +2291,25 @@ export type Database = {
         };
         Relationships: [
           {
-            foreignKeyName: 'subscription_payments_recorded_by_fkey';
-            columns: ['recorded_by'];
+            foreignKeyName: "subscription_payments_recorded_by_fkey";
+            columns: ["recorded_by"];
             isOneToOne: false;
-            referencedRelation: 'profiles';
-            referencedColumns: ['id'];
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
           },
           {
-            foreignKeyName: 'subscription_payments_tenant_id_fkey';
-            columns: ['tenant_id'];
+            foreignKeyName: "subscription_payments_tenant_id_fkey";
+            columns: ["tenant_id"];
             isOneToOne: false;
-            referencedRelation: 'tenants';
-            referencedColumns: ['id'];
+            referencedRelation: "tenants";
+            referencedColumns: ["id"];
           },
           {
-            foreignKeyName: 'subscription_payments_tenant_id_invoice_id_fkey';
-            columns: ['tenant_id', 'invoice_id'];
+            foreignKeyName: "subscription_payments_tenant_id_invoice_id_fkey";
+            columns: ["tenant_id", "invoice_id"];
             isOneToOne: false;
-            referencedRelation: 'subscription_invoices';
-            referencedColumns: ['tenant_id', 'id'];
+            referencedRelation: "subscription_invoices";
+            referencedColumns: ["tenant_id", "id"];
           },
         ];
       };
@@ -2289,11 +2341,11 @@ export type Database = {
         };
         Relationships: [
           {
-            foreignKeyName: 'tax_rates_tenant_id_fkey';
-            columns: ['tenant_id'];
+            foreignKeyName: "tax_rates_tenant_id_fkey";
+            columns: ["tenant_id"];
             isOneToOne: false;
-            referencedRelation: 'tenants';
-            referencedColumns: ['id'];
+            referencedRelation: "tenants";
+            referencedColumns: ["id"];
           },
         ];
       };
@@ -2325,11 +2377,11 @@ export type Database = {
         };
         Relationships: [
           {
-            foreignKeyName: 'tenant_billing_tenant_id_fkey';
-            columns: ['tenant_id'];
+            foreignKeyName: "tenant_billing_tenant_id_fkey";
+            columns: ["tenant_id"];
             isOneToOne: true;
-            referencedRelation: 'tenants';
-            referencedColumns: ['id'];
+            referencedRelation: "tenants";
+            referencedColumns: ["id"];
           },
         ];
       };
@@ -2352,11 +2404,11 @@ export type Database = {
         };
         Relationships: [
           {
-            foreignKeyName: 'tenant_notes_tenant_id_fkey';
-            columns: ['tenant_id'];
+            foreignKeyName: "tenant_notes_tenant_id_fkey";
+            columns: ["tenant_id"];
             isOneToOne: true;
-            referencedRelation: 'tenants';
-            referencedColumns: ['id'];
+            referencedRelation: "tenants";
+            referencedColumns: ["id"];
           },
         ];
       };
@@ -2378,7 +2430,7 @@ export type Database = {
           prices_include_tax: boolean;
           round_off: boolean;
           slug: string;
-          status: Database['public']['Enums']['tenant_status'];
+          status: Database["public"]["Enums"]["tenant_status"];
           timezone: string;
           trial_ends_at: string | null;
           updated_at: string;
@@ -2401,7 +2453,7 @@ export type Database = {
           prices_include_tax?: boolean;
           round_off?: boolean;
           slug: string;
-          status?: Database['public']['Enums']['tenant_status'];
+          status?: Database["public"]["Enums"]["tenant_status"];
           timezone?: string;
           trial_ends_at?: string | null;
           updated_at?: string;
@@ -2423,18 +2475,18 @@ export type Database = {
           prices_include_tax?: boolean;
           round_off?: boolean;
           slug?: string;
-          status?: Database['public']['Enums']['tenant_status'];
+          status?: Database["public"]["Enums"]["tenant_status"];
           timezone?: string;
           trial_ends_at?: string | null;
           updated_at?: string;
         };
         Relationships: [
           {
-            foreignKeyName: 'tenants_plan_id_fkey';
-            columns: ['plan_id'];
+            foreignKeyName: "tenants_plan_id_fkey";
+            columns: ["plan_id"];
             isOneToOne: false;
-            referencedRelation: 'plans';
-            referencedColumns: ['id'];
+            referencedRelation: "plans";
+            referencedColumns: ["id"];
           },
         ];
       };
@@ -2469,11 +2521,11 @@ export type Database = {
         };
         Relationships: [
           {
-            foreignKeyName: 'vendors_tenant_id_fkey';
-            columns: ['tenant_id'];
+            foreignKeyName: "vendors_tenant_id_fkey";
+            columns: ["tenant_id"];
             isOneToOne: false;
-            referencedRelation: 'tenants';
-            referencedColumns: ['id'];
+            referencedRelation: "tenants";
+            referencedColumns: ["id"];
           },
         ];
       };
@@ -2498,18 +2550,18 @@ export type Database = {
         ComputedFields: never;
         Relationships: [
           {
-            foreignKeyName: 'dining_tables_tenant_id_fkey';
-            columns: ['tenant_id'];
+            foreignKeyName: "dining_tables_tenant_id_fkey";
+            columns: ["tenant_id"];
             isOneToOne: false;
-            referencedRelation: 'tenants';
-            referencedColumns: ['id'];
+            referencedRelation: "tenants";
+            referencedColumns: ["id"];
           },
           {
-            foreignKeyName: 'dining_tables_tenant_id_outlet_id_fkey';
-            columns: ['tenant_id', 'outlet_id'];
+            foreignKeyName: "dining_tables_tenant_id_outlet_id_fkey";
+            columns: ["tenant_id", "outlet_id"];
             isOneToOne: false;
-            referencedRelation: 'outlets';
-            referencedColumns: ['tenant_id', 'id'];
+            referencedRelation: "outlets";
+            referencedColumns: ["tenant_id", "id"];
           },
         ];
       };
@@ -2520,7 +2572,7 @@ export type Database = {
           p_job: string;
           p_lat?: number;
           p_lng?: number;
-          p_status: Database['public']['Enums']['delivery_status'];
+          p_status: Database["public"]["Enums"]["delivery_status"];
         };
         Returns: undefined;
       };
@@ -2567,8 +2619,8 @@ export type Database = {
           tenant_id: string;
         };
         SetofOptions: {
-          from: '*';
-          to: 'day_sessions';
+          from: "*";
+          to: "day_sessions";
           isOneToOne: true;
           isSetofReturn: false;
         };
@@ -2621,14 +2673,14 @@ export type Database = {
         Args: {
           p_email: string;
           p_outlet?: string;
-          p_role: Database['public']['Enums']['tenant_role'];
+          p_role: Database["public"]["Enums"]["tenant_role"];
           p_tenant: string;
         };
         Returns: string;
       };
       mark_overdue: { Args: Record<PropertyKey, never>; Returns: number };
       mark_purchase_paid: {
-        Args: { p_mode: Database['public']['Enums']['expense_mode']; p_purchase: string };
+        Args: { p_mode: Database["public"]["Enums"]["expense_mode"]; p_purchase: string };
         Returns: {
           bill_path: string | null;
           created_at: string;
@@ -2638,9 +2690,9 @@ export type Database = {
           notes: string | null;
           outlet_id: string;
           paid_at: string | null;
-          payment_mode: Database['public']['Enums']['expense_mode'];
+          payment_mode: Database["public"]["Enums"]["expense_mode"];
           purchase_date: string;
-          settled_mode: Database['public']['Enums']['expense_mode'] | null;
+          settled_mode: Database["public"]["Enums"]["expense_mode"] | null;
           subtotal: number;
           tenant_id: string;
           total: number;
@@ -2649,8 +2701,8 @@ export type Database = {
           vendor_name: string | null;
         };
         SetofOptions: {
-          from: '*';
-          to: 'purchases';
+          from: "*";
+          to: "purchases";
           isOneToOne: true;
           isSetofReturn: false;
         };
@@ -2672,19 +2724,19 @@ export type Database = {
           notes: string | null;
           order_no: number;
           outlet_id: string;
-          status: Database['public']['Enums']['order_status'];
+          status: Database["public"]["Enums"]["order_status"];
           status_changed_at: string;
           subtotal: number;
           table_id: string | null;
           tax_total: number;
           tenant_id: string;
           total: number;
-          type: Database['public']['Enums']['order_type'];
+          type: Database["public"]["Enums"]["order_type"];
           updated_at: string;
         };
         SetofOptions: {
-          from: '*';
-          to: 'orders';
+          from: "*";
+          to: "orders";
           isOneToOne: true;
           isSetofReturn: false;
         };
@@ -2715,7 +2767,7 @@ export type Database = {
           outlet_lng: number;
           outlet_name: string;
           outlet_phone: string;
-          status: Database['public']['Enums']['delivery_status'];
+          status: Database["public"]["Enums"]["delivery_status"];
         }[];
       };
       my_workspaces: {
@@ -2724,8 +2776,8 @@ export type Database = {
           features: Json;
           outlet_id: string;
           plan_id: string;
-          role: Database['public']['Enums']['tenant_role'];
-          status: Database['public']['Enums']['tenant_status'];
+          role: Database["public"]["Enums"]["tenant_role"];
+          status: Database["public"]["Enums"]["tenant_status"];
           tenant_id: string;
           tenant_name: string;
           tenant_slug: string;
@@ -2752,8 +2804,8 @@ export type Database = {
           tenant_id: string;
         };
         SetofOptions: {
-          from: '*';
-          to: 'day_sessions';
+          from: "*";
+          to: "day_sessions";
           isOneToOne: true;
           isSetofReturn: false;
         };
@@ -2772,7 +2824,7 @@ export type Database = {
         Args: {
           p_amount: number;
           p_invoice: string;
-          p_method: Database['public']['Enums']['payment_mode'];
+          p_method: Database["public"]["Enums"]["payment_mode"];
           p_paid_on?: string;
           p_reference?: string;
         };
@@ -2796,14 +2848,14 @@ export type Database = {
           seller_name: string;
           seller_state: string;
           sgst: number;
-          status: Database['public']['Enums']['subscription_invoice_status'];
+          status: Database["public"]["Enums"]["subscription_invoice_status"];
           tenant_id: string;
           total: number;
           void_reason: string | null;
         };
         SetofOptions: {
-          from: '*';
-          to: 'subscription_invoices';
+          from: "*";
+          to: "subscription_invoices";
           isOneToOne: true;
           isSetofReturn: false;
         };
@@ -2816,7 +2868,7 @@ export type Database = {
       request_bill: { Args: { p_order: string }; Returns: undefined };
       respond_to_delivery: {
         Args: { p_accept: boolean; p_job: string; p_reason?: string };
-        Returns: Database['public']['Enums']['delivery_status'];
+        Returns: Database["public"]["Enums"]["delivery_status"];
       };
       run_billing_cycle: { Args: Record<PropertyKey, never>; Returns: Json };
       salary_month: {
@@ -2833,7 +2885,7 @@ export type Database = {
           job_title: string;
           outlet_id: string;
           paid: number;
-          pay_type: Database['public']['Enums']['pay_type'];
+          pay_type: Database["public"]["Enums"]["pay_type"];
           rate: number;
         }[];
       };
@@ -2846,13 +2898,13 @@ export type Database = {
           order_id: string;
           outlet_id: string;
           round_no: number;
-          status: Database['public']['Enums']['kot_status'];
+          status: Database["public"]["Enums"]["kot_status"];
           status_changed_at: string;
           tenant_id: string;
         };
         SetofOptions: {
-          from: '*';
-          to: 'kots';
+          from: "*";
+          to: "kots";
           isOneToOne: true;
           isSetofReturn: false;
         };
@@ -2863,7 +2915,7 @@ export type Database = {
           category_id: string;
           created_at: string;
           description: string | null;
-          diet: Database['public']['Enums']['diet_type'];
+          diet: Database["public"]["Enums"]["diet_type"];
           id: string;
           image_url: string | null;
           is_available: boolean;
@@ -2875,8 +2927,8 @@ export type Database = {
           updated_at: string;
         };
         SetofOptions: {
-          from: '*';
-          to: 'menu_items';
+          from: "*";
+          to: "menu_items";
           isOneToOne: true;
           isSetofReturn: false;
         };
@@ -2898,7 +2950,7 @@ export type Database = {
           order_id: string;
           outlet_id: string;
           paid_at: string;
-          payment_mode: Database['public']['Enums']['payment_mode'];
+          payment_mode: Database["public"]["Enums"]["payment_mode"];
           round_off: number;
           sgst: number;
           subtotal: number;
@@ -2908,8 +2960,8 @@ export type Database = {
           void_reason: string | null;
         };
         SetofOptions: {
-          from: '*';
-          to: 'bills';
+          from: "*";
+          to: "bills";
           isOneToOne: true;
           isSetofReturn: false;
         };
@@ -2936,8 +2988,8 @@ export type Database = {
           tenant_id: string;
         };
         SetofOptions: {
-          from: '*';
-          to: 'cod_settlements';
+          from: "*";
+          to: "cod_settlements";
           isOneToOne: true;
           isSetofReturn: false;
         };
@@ -2964,7 +3016,7 @@ export type Database = {
           order_id: string;
           outlet_id: string;
           paid_at: string;
-          payment_mode: Database['public']['Enums']['payment_mode'];
+          payment_mode: Database["public"]["Enums"]["payment_mode"];
           round_off: number;
           sgst: number;
           subtotal: number;
@@ -2974,8 +3026,8 @@ export type Database = {
           void_reason: string | null;
         };
         SetofOptions: {
-          from: '*';
-          to: 'bills';
+          from: "*";
+          to: "bills";
           isOneToOne: true;
           isSetofReturn: false;
         };
@@ -3003,8 +3055,8 @@ export type Database = {
           variant_name: string | null;
         };
         SetofOptions: {
-          from: '*';
-          to: 'order_items';
+          from: "*";
+          to: "order_items";
           isOneToOne: true;
           isSetofReturn: false;
         };
@@ -3036,14 +3088,14 @@ export type Database = {
           seller_name: string;
           seller_state: string;
           sgst: number;
-          status: Database['public']['Enums']['subscription_invoice_status'];
+          status: Database["public"]["Enums"]["subscription_invoice_status"];
           tenant_id: string;
           total: number;
           void_reason: string | null;
         };
         SetofOptions: {
-          from: '*';
-          to: 'subscription_invoices';
+          from: "*";
+          to: "subscription_invoices";
           isOneToOne: true;
           isSetofReturn: false;
         };
@@ -3051,29 +3103,29 @@ export type Database = {
     };
     Enums: {
       delivery_status:
-        | 'offered'
-        | 'assigned'
-        | 'at_pickup'
-        | 'picked_up'
-        | 'at_drop'
-        | 'delivered'
-        | 'failed'
-        | 'cancelled';
-      diet_type: 'veg' | 'non_veg' | 'egg';
-      expense_mode: 'cash' | 'upi' | 'bank' | 'card' | 'credit';
-      item_kind: 'food' | 'beverage';
-      kot_status: 'new' | 'preparing' | 'ready' | 'served' | 'cancelled';
-      order_status: 'new' | 'preparing' | 'ready' | 'served' | 'delivered' | 'cancelled';
-      order_type: 'dine_in' | 'takeaway' | 'delivery';
-      pay_type: 'monthly' | 'daily' | 'hourly';
-      payment_mode: 'cash' | 'upi' | 'card' | 'other';
-      purchase_unit: 'kg' | 'g' | 'l' | 'ml' | 'pcs' | 'pack' | 'dozen' | 'box' | 'bag';
-      rider_verification: 'pending' | 'verified' | 'rejected';
-      salary_entry_kind: 'salary' | 'advance' | 'bonus' | 'deduction';
-      subscription_invoice_status: 'open' | 'paid' | 'void';
-      tenant_role: 'admin' | 'owner' | 'manager' | 'cashier' | 'waiter' | 'kitchen' | 'delivery';
-      tenant_status: 'trial' | 'active' | 'past_due' | 'suspended' | 'cancelled';
-      vehicle_type: 'bicycle' | 'scooter' | 'motorcycle' | 'ev_scooter' | 'on_foot';
+        | "offered"
+        | "assigned"
+        | "at_pickup"
+        | "picked_up"
+        | "at_drop"
+        | "delivered"
+        | "failed"
+        | "cancelled";
+      diet_type: "veg" | "non_veg" | "egg";
+      expense_mode: "cash" | "upi" | "bank" | "card" | "credit";
+      item_kind: "food" | "beverage";
+      kot_status: "new" | "preparing" | "ready" | "served" | "cancelled";
+      order_status: "new" | "preparing" | "ready" | "served" | "delivered" | "cancelled";
+      order_type: "dine_in" | "takeaway" | "delivery";
+      pay_type: "monthly" | "daily" | "hourly";
+      payment_mode: "cash" | "upi" | "card" | "other";
+      purchase_unit: "kg" | "g" | "l" | "ml" | "pcs" | "pack" | "dozen" | "box" | "bag";
+      rider_verification: "pending" | "verified" | "rejected";
+      salary_entry_kind: "salary" | "advance" | "bonus" | "deduction";
+      subscription_invoice_status: "open" | "paid" | "void";
+      tenant_role: "admin" | "owner" | "manager" | "cashier" | "waiter" | "kitchen" | "delivery";
+      tenant_status: "trial" | "active" | "past_due" | "suspended" | "cancelled";
+      vehicle_type: "bicycle" | "scooter" | "motorcycle" | "ev_scooter" | "on_foot";
     };
     CompositeTypes: {
       [_ in never]: never;
@@ -3081,29 +3133,29 @@ export type Database = {
   };
 };
 
-type DatabaseWithoutInternals = Omit<Database, '__InternalSupabase'>;
+type DatabaseWithoutInternals = Omit<Database, "__InternalSupabase">;
 
-type DefaultSchema = DatabaseWithoutInternals[Extract<keyof Database, 'public'>];
+type DefaultSchema = DatabaseWithoutInternals[Extract<keyof Database, "public">];
 
 export type Tables<
   DefaultSchemaTableNameOrOptions extends
-    | keyof (DefaultSchema['Tables'] & DefaultSchema['Views'])
+    | keyof (DefaultSchema["Tables"] & DefaultSchema["Views"])
     | { schema: keyof DatabaseWithoutInternals },
   TableName extends (DefaultSchemaTableNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals;
   }
-    ? keyof (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Tables'] &
-        DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Views'])
+    ? keyof (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
+        DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Views"])
     : never) = never,
 > = DefaultSchemaTableNameOrOptions extends { schema: keyof DatabaseWithoutInternals }
-  ? (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Tables'] &
-      DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Views'])[TableName] extends {
+  ? (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
+      DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Views"])[TableName] extends {
       Row: infer R;
     }
     ? R
     : never
-  : DefaultSchemaTableNameOrOptions extends keyof (DefaultSchema['Tables'] & DefaultSchema['Views'])
-    ? (DefaultSchema['Tables'] & DefaultSchema['Views'])[DefaultSchemaTableNameOrOptions] extends {
+  : DefaultSchemaTableNameOrOptions extends keyof (DefaultSchema["Tables"] & DefaultSchema["Views"])
+    ? (DefaultSchema["Tables"] & DefaultSchema["Views"])[DefaultSchemaTableNameOrOptions] extends {
         Row: infer R;
       }
       ? R
@@ -3112,21 +3164,21 @@ export type Tables<
 
 export type TablesInsert<
   DefaultSchemaTableNameOrOptions extends
-    | keyof DefaultSchema['Tables']
+    | keyof DefaultSchema["Tables"]
     | { schema: keyof DatabaseWithoutInternals },
   TableName extends (DefaultSchemaTableNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals;
   }
-    ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Tables']
+    ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
     : never) = never,
 > = DefaultSchemaTableNameOrOptions extends { schema: keyof DatabaseWithoutInternals }
-  ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Tables'][TableName] extends {
+  ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"][TableName] extends {
       Insert: infer I;
     }
     ? I
     : never
-  : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema['Tables']
-    ? DefaultSchema['Tables'][DefaultSchemaTableNameOrOptions] extends {
+  : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema["Tables"]
+    ? DefaultSchema["Tables"][DefaultSchemaTableNameOrOptions] extends {
         Insert: infer I;
       }
       ? I
@@ -3135,21 +3187,21 @@ export type TablesInsert<
 
 export type TablesUpdate<
   DefaultSchemaTableNameOrOptions extends
-    | keyof DefaultSchema['Tables']
+    | keyof DefaultSchema["Tables"]
     | { schema: keyof DatabaseWithoutInternals },
   TableName extends (DefaultSchemaTableNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals;
   }
-    ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Tables']
+    ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
     : never) = never,
 > = DefaultSchemaTableNameOrOptions extends { schema: keyof DatabaseWithoutInternals }
-  ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Tables'][TableName] extends {
+  ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"][TableName] extends {
       Update: infer U;
     }
     ? U
     : never
-  : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema['Tables']
-    ? DefaultSchema['Tables'][DefaultSchemaTableNameOrOptions] extends {
+  : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema["Tables"]
+    ? DefaultSchema["Tables"][DefaultSchemaTableNameOrOptions] extends {
         Update: infer U;
       }
       ? U
@@ -3158,62 +3210,62 @@ export type TablesUpdate<
 
 export type Enums<
   DefaultSchemaEnumNameOrOptions extends
-    | keyof DefaultSchema['Enums']
+    | keyof DefaultSchema["Enums"]
     | { schema: keyof DatabaseWithoutInternals },
   EnumName extends (DefaultSchemaEnumNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals;
   }
-    ? keyof DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions['schema']]['Enums']
+    ? keyof DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"]
     : never) = never,
 > = DefaultSchemaEnumNameOrOptions extends { schema: keyof DatabaseWithoutInternals }
-  ? DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions['schema']]['Enums'][EnumName]
-  : DefaultSchemaEnumNameOrOptions extends keyof DefaultSchema['Enums']
-    ? DefaultSchema['Enums'][DefaultSchemaEnumNameOrOptions]
+  ? DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"][EnumName]
+  : DefaultSchemaEnumNameOrOptions extends keyof DefaultSchema["Enums"]
+    ? DefaultSchema["Enums"][DefaultSchemaEnumNameOrOptions]
     : never;
 
 export type CompositeTypes<
   PublicCompositeTypeNameOrOptions extends
-    | keyof DefaultSchema['CompositeTypes']
+    | keyof DefaultSchema["CompositeTypes"]
     | { schema: keyof DatabaseWithoutInternals },
   CompositeTypeName extends (PublicCompositeTypeNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals;
   }
-    ? keyof DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions['schema']]['CompositeTypes']
+    ? keyof DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"]
     : never) = never,
 > = PublicCompositeTypeNameOrOptions extends { schema: keyof DatabaseWithoutInternals }
-  ? DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions['schema']]['CompositeTypes'][CompositeTypeName]
-  : PublicCompositeTypeNameOrOptions extends keyof DefaultSchema['CompositeTypes']
-    ? DefaultSchema['CompositeTypes'][PublicCompositeTypeNameOrOptions]
+  ? DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"][CompositeTypeName]
+  : PublicCompositeTypeNameOrOptions extends keyof DefaultSchema["CompositeTypes"]
+    ? DefaultSchema["CompositeTypes"][PublicCompositeTypeNameOrOptions]
     : never;
 
 export const Constants = {
   public: {
     Enums: {
       delivery_status: [
-        'offered',
-        'assigned',
-        'at_pickup',
-        'picked_up',
-        'at_drop',
-        'delivered',
-        'failed',
-        'cancelled',
+        "offered",
+        "assigned",
+        "at_pickup",
+        "picked_up",
+        "at_drop",
+        "delivered",
+        "failed",
+        "cancelled",
       ],
-      diet_type: ['veg', 'non_veg', 'egg'],
-      expense_mode: ['cash', 'upi', 'bank', 'card', 'credit'],
-      item_kind: ['food', 'beverage'],
-      kot_status: ['new', 'preparing', 'ready', 'served', 'cancelled'],
-      order_status: ['new', 'preparing', 'ready', 'served', 'delivered', 'cancelled'],
-      order_type: ['dine_in', 'takeaway', 'delivery'],
-      pay_type: ['monthly', 'daily', 'hourly'],
-      payment_mode: ['cash', 'upi', 'card', 'other'],
-      purchase_unit: ['kg', 'g', 'l', 'ml', 'pcs', 'pack', 'dozen', 'box', 'bag'],
-      rider_verification: ['pending', 'verified', 'rejected'],
-      salary_entry_kind: ['salary', 'advance', 'bonus', 'deduction'],
-      subscription_invoice_status: ['open', 'paid', 'void'],
-      tenant_role: ['admin', 'owner', 'manager', 'cashier', 'waiter', 'kitchen', 'delivery'],
-      tenant_status: ['trial', 'active', 'past_due', 'suspended', 'cancelled'],
-      vehicle_type: ['bicycle', 'scooter', 'motorcycle', 'ev_scooter', 'on_foot'],
+      diet_type: ["veg", "non_veg", "egg"],
+      expense_mode: ["cash", "upi", "bank", "card", "credit"],
+      item_kind: ["food", "beverage"],
+      kot_status: ["new", "preparing", "ready", "served", "cancelled"],
+      order_status: ["new", "preparing", "ready", "served", "delivered", "cancelled"],
+      order_type: ["dine_in", "takeaway", "delivery"],
+      pay_type: ["monthly", "daily", "hourly"],
+      payment_mode: ["cash", "upi", "card", "other"],
+      purchase_unit: ["kg", "g", "l", "ml", "pcs", "pack", "dozen", "box", "bag"],
+      rider_verification: ["pending", "verified", "rejected"],
+      salary_entry_kind: ["salary", "advance", "bonus", "deduction"],
+      subscription_invoice_status: ["open", "paid", "void"],
+      tenant_role: ["admin", "owner", "manager", "cashier", "waiter", "kitchen", "delivery"],
+      tenant_status: ["trial", "active", "past_due", "suspended", "cancelled"],
+      vehicle_type: ["bicycle", "scooter", "motorcycle", "ev_scooter", "on_foot"],
     },
   },
 } as const;

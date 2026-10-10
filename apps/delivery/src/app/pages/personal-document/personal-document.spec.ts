@@ -15,6 +15,7 @@ describe('PersonalDocument', () => {
   let alerts: ReturnType<typeof fakeAlertService>;
   let navigation: ReturnType<typeof fakeNavigationService>;
   const saveDocuments = vi.fn();
+  const getDocuments = vi.fn();
 
   function create() {
     TestBed.configureTestingModule({
@@ -22,7 +23,7 @@ describe('PersonalDocument', () => {
       providers: [
         provideRouter([]),
         { provide: AuthService, useValue: fakeAuthService() },
-        { provide: RiderService, useValue: { saveDocuments } },
+        { provide: RiderService, useValue: { saveDocuments, getDocuments } },
         { provide: AlertService, useValue: alerts },
         { provide: NavigationService, useValue: navigation },
       ],
@@ -40,6 +41,7 @@ describe('PersonalDocument', () => {
     alerts = fakeAlertService();
     navigation = fakeNavigationService();
     saveDocuments.mockReset();
+    getDocuments.mockReset().mockResolvedValue(null);
   });
 
   it('shows one upload card per document', () => {
@@ -74,5 +76,14 @@ describe('PersonalDocument', () => {
     await submit(component.documentForm);
     expect(saveDocuments).toHaveBeenCalledWith('rider-1', expect.objectContaining({ nationalId: 'data:image/png;base64,AA==' }));
     expect(navigation.forward).toHaveBeenCalledWith(APP_ROUTE_LINKS.ORDER);
+  });
+
+  it('shows photos saved before', async () => {
+    getDocuments.mockResolvedValue({ profile: 'https://signed.test/photo.jpg', drivingLicence: '', nationalId: '' });
+    const fixture = create();
+    await fixture.whenStable();
+    fixture.detectChanges();
+    expect(fixture.nativeElement.querySelector('img.preview')?.getAttribute('src')).toBe('https://signed.test/photo.jpg');
+    expect(fixture.componentInstance.documentForm.profile().valid()).toBe(true);
   });
 });

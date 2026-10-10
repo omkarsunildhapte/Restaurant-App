@@ -61,15 +61,15 @@ export class AuthService {
     return data.session;
   }
 
-  /** Creates the account. Resolves null when the project requires e-mail confirmation first. */
-  async register(name: string, email: string, password: string): Promise<Session | null> {
-    const options = { data: { [SUPABASE_AUTH.DISPLAY_NAME_KEY]: name } };
-    const { data, error } = await this.supabase.require().auth.signUp({ email, password, options });
+  /**
+   * Sets the signed-in person's password. Riders are invite-only: the invite link signs them in
+   * (supabase-js reads the session from the URL), and the welcome screen calls this once.
+   */
+  async updatePassword(password: string): Promise<void> {
+    const { error } = await this.supabase.require().auth.updateUser({ password });
     if (error) {
-      throw toAuthError(error, ERROR_MESSAGES.REGISTRATION_FAILED);
+      throw toAuthError(error, ERROR_MESSAGES.PASSWORD_UPDATE_FAILED);
     }
-    this.sessionState.set(data.session);
-    return data.session;
   }
 
   async resetPassword(email: string): Promise<void> {
@@ -94,10 +94,6 @@ export class AuthService {
     LEGACY_STORAGE_KEYS.forEach((key) => storage?.removeItem(key));
   }
 
-  /** True when the error means the e-mail already has an account. */
-  isEmailInUse(error: unknown): boolean {
-    return error instanceof AuthServiceError && !!error.code && SUPABASE_AUTH.USER_EXISTS_CODES.includes(error.code);
-  }
 }
 
 function toAuthError(error: AuthError | null, fallback: string): AuthServiceError {

@@ -17,6 +17,7 @@ describe('PersonalInformation', () => {
   let alerts: ReturnType<typeof fakeAlertService>;
   let navigation: ReturnType<typeof fakeNavigationService>;
   const savePersonalInfo = vi.fn();
+  const getPersonalInfo = vi.fn();
 
   function create() {
     TestBed.configureTestingModule({
@@ -24,7 +25,7 @@ describe('PersonalInformation', () => {
       providers: [
         provideRouter([]),
         { provide: AuthService, useValue: fakeAuthService() },
-        { provide: RiderService, useValue: { savePersonalInfo } },
+        { provide: RiderService, useValue: { savePersonalInfo, getPersonalInfo } },
         { provide: AlertService, useValue: alerts },
         { provide: NavigationService, useValue: navigation },
       ],
@@ -44,6 +45,7 @@ describe('PersonalInformation', () => {
     alerts = fakeAlertService();
     navigation = fakeNavigationService();
     savePersonalInfo.mockReset();
+    getPersonalInfo.mockReset().mockResolvedValue(null);
   });
 
   it('renders one row per field', () => {
@@ -80,5 +82,18 @@ describe('PersonalInformation', () => {
     fillAll(component);
     await submit(component.personalForm);
     expect(navigation.forward).toHaveBeenCalledWith(APP_ROUTE_LINKS.PERSONAL_DOCUMENT);
+  });
+
+  it('fills in what was saved and keeps the national ID unless a new one is typed', async () => {
+    const info = { ...PERSONAL_INFORMATION_PAGE.EMPTY_FORM, firstName: 'Sagar', lastName: 'Pawar', fathersName: 'Ramesh', dateOfBirth: '1998-04-12', mobileNumber: '9822033333', bloodGroup: 'O+', city: 'Pune', address: 'Baner', deliveryLicenseId: 'MH12' };
+    getPersonalInfo.mockResolvedValue({ info, nationalIdLast4: '9012' });
+    const fixture = create();
+    await fixture.whenStable();
+    fixture.detectChanges();
+    const component = fixture.componentInstance;
+    expect(component.personalForm.firstName().value()).toBe('Sagar');
+    expect(fixture.nativeElement.querySelector('[data-testid="national-id-saved"]').textContent).toContain('9012');
+    expect(component.personalForm.nationalId().valid()).toBe(true);
+    expect(fixture.nativeElement.textContent).not.toContain('1234 5678');
   });
 });

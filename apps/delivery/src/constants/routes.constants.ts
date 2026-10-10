@@ -1,6 +1,6 @@
 /** Route path segments, as used in app.routes.ts. URLs are unchanged from the original app. */
 export const APP_ROUTES = {
-  REGISTER: 'register',
+  WELCOME: 'welcome',
   LOGIN: 'login',
   FORGOT_PASSWORD: 'forget',
   PERSONAL_INFORMATION: 'personal-information',
@@ -15,7 +15,7 @@ export const APP_ROUTES = {
 
 /** Absolute links for [routerLink] and programmatic navigation. */
 export const APP_ROUTE_LINKS = {
-  REGISTER: `/${APP_ROUTES.REGISTER}`,
+  WELCOME: `/${APP_ROUTES.WELCOME}`,
   LOGIN: `/${APP_ROUTES.LOGIN}`,
   FORGOT_PASSWORD: `/${APP_ROUTES.FORGOT_PASSWORD}`,
   PERSONAL_INFORMATION: `/${APP_ROUTES.PERSONAL_INFORMATION}`,
@@ -39,4 +39,7 @@ export const SIGNED_IN_ROUTES = [
 ] as const;
 
 /** Public (signed-out) routes; rendered on the server for the web build. */
-export const PUBLIC_ROUTES = [APP_ROUTES.REGISTER, APP_ROUTES.LOGIN, APP_ROUTES.FORGOT_PASSWORD] as const;
+export const PUBLIC_ROUTES = [APP_ROUTES.LOGIN, APP_ROUTES.FORGOT_PASSWORD] as const;
+
+/** Public routes that need the browser (the invite link's session lives there): RenderMode.Client. */
+export const BROWSER_ONLY_PUBLIC_ROUTES = [APP_ROUTES.WELCOME] as const;

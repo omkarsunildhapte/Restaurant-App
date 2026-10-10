@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, computed, inject, linkedSignal, resource } from '@angular/core';
 import { FormField, FormRoot, form, pattern, required } from '@angular/forms/signals';
 import { IonBackButton } from '@ionic/angular/ion-back-button';
 import { IonButton } from '@ionic/angular/ion-button';
@@ -43,9 +43,18 @@ export class PersonalInformation {
   private readonly navigation = inject(NavigationService);
 
   readonly page = PERSONAL_INFORMATION_PAGE;
-  readonly backLink = APP_ROUTE_LINKS.REGISTER;
+  readonly backLink = APP_ROUTE_LINKS.LOGIN;
 
-  private readonly model = signal<RiderPersonalInfo>({ ...PERSONAL_INFORMATION_PAGE.EMPTY_FORM });
+  /** What was saved before, if anything (national ID only as its last 4). */
+  readonly saved = resource({
+    params: () => this.auth.userId() ?? undefined,
+    loader: ({ params }) => this.riders.getPersonalInfo(params),
+    defaultValue: null,
+  });
+  readonly savedIdLast4 = computed(() => (this.saved.hasValue() ? (this.saved.value()?.nationalIdLast4 ?? null) : null));
+
+  /** Form model: resets to the saved details whenever they (re)load. */
+  private readonly model = linkedSignal<RiderPersonalInfo>(() => (this.saved.hasValue() ? this.saved.value()?.info : null) ?? { ...PERSONAL_INFORMATION_PAGE.EMPTY_FORM });
   readonly personalForm = form(
     this.model,
     (path) => {
@@ -59,7 +68,8 @@ export class PersonalInformation {
       required(path.city, { message: VALIDATION_MESSAGES.CITY_REQUIRED });
       required(path.address, { message: VALIDATION_MESSAGES.ADDRESS_REQUIRED });
       required(path.deliveryLicenseId, { message: VALIDATION_MESSAGES.DELIVERY_LICENSE_REQUIRED });
-      required(path.nationalId, { message: VALIDATION_MESSAGES.NATIONAL_ID_REQUIRED });
+      // Once saved, the ID is not sent back; leaving the field empty keeps it.
+      required(path.nationalId, { message: VALIDATION_MESSAGES.NATIONAL_ID_REQUIRED, when: () => !this.savedIdLast4() });
     },
     { submission: { action: async (f) => this.save(f().value()) } },
   );

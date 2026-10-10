@@ -12,6 +12,8 @@ import { SUPABASE_TABLES } from '@constants/supabase.constants';
 import { ERROR_MESSAGES } from '@constants/messages.constants';
 import { errorMessage } from '@utils/errors/errors.util';
 import { onlineBlock } from '@utils/rider-status/rider-status.util';
+import { distanceMeters } from '@utils/geo/geo.util';
+import { MapPoint } from '@appTypes/order.types';
 
 /**
  * The rider's shift: online/offline, sharing position while online, and hearing about job
@@ -19,7 +21,8 @@ import { onlineBlock } from '@utils/rider-status/rider-status.util';
  *
  * - Going online first reads the device position, so a rider with location off or denied stays
  *   offline and is told why (docs/DELIVERY.md §7). The database refuses an unverified rider.
- * - While online the position is reported every 10 s on a job and every 60 s otherwise.
+ * - While online the position is reported at most every 10 s on a job and 60 s otherwise, and
+ *   only once the rider has moved 15 m, with a 90 s heartbeat for a rider who is standing still.
  * - Changes to the rider's `delivery_jobs` rows arrive over Supabase Realtime and bump
  *   `jobsVersion`, which pages put in their resource params to reload (Rule 16: callbacks write
  *   signals).
@@ -49,6 +52,7 @@ export class ShiftService {
   private channel: RealtimeChannel | null = null;
   private watch: Subscription | null = null;
   private lastReport = 0;
+  private lastPoint: MapPoint | null = null;
 
   /** Loads the rider's state and starts listening for job changes. Safe to call repeatedly. */
   async start(): Promise<void> {
@@ -133,13 +137,16 @@ export class ShiftService {
     this.watch = null;
   }
 
-  /** Sends the position unless one went out recently (10 s on a job, 60 s otherwise). */
+  /** Sends the position when it is due: interval passed and moved 15 m, or the heartbeat is due. */
   private async report(position: RiderPosition, force: boolean): Promise<void> {
     const every = this.activeJob() ? SHIFT.REPORT_EVERY_ON_JOB_MS : SHIFT.REPORT_EVERY_IDLE_MS;
-    if (!force && position.timestamp - this.lastReport < every) {
+    const elapsed = position.timestamp - this.lastReport;
+    const moved = !this.lastPoint || distanceMeters(this.lastPoint, position) >= SHIFT.MIN_MOVE_M;
+    if (!force && !(elapsed >= every && moved) && elapsed < SHIFT.HEARTBEAT_MS) {
       return;
     }
     this.lastReport = position.timestamp;
+    this.lastPoint = { lat: position.lat, lng: position.lng };
     try {
       await this.riders.reportLocation({ lat: position.lat, lng: position.lng }, this.activeJob());
     } catch {

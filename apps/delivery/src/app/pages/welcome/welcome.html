@@ -1,0 +1,72 @@
+<div class="background-pic">
+  <ion-content>
+    <ion-card>
+      <ion-card-header>
+        <div class="flex justify-center">
+          <img class="logo" [ngSrc]="logo.SRC" [alt]="logo.ALT" [width]="logo.WIDTH" [height]="logo.HEIGHT" priority />
+        </div>
+        @let current = state();
+        @switch (current) {
+          @case ('checking') {
+            <ion-card-subtitle data-testid="welcome-checking">Opening your invitation…</ion-card-subtitle>
+          }
+          @case ('no-session') {
+            <ion-card-title>This link has expired</ion-card-title>
+            <ion-card-subtitle data-testid="welcome-expired">
+              Invitation links work once and for a limited time. Ask your restaurant to send it again, or sign in if you
+              already set a password.
+            </ion-card-subtitle>
+          }
+          @case ('ready') {
+            <ion-card-title>Welcome{{ firstName() ? ', ' + firstName() : '' }}</ion-card-title>
+            <ion-card-subtitle>Choose a password for {{ email() }}. You'll use it to sign in from now on.</ion-card-subtitle>
+          }
+          @default never;
+        }
+      </ion-card-header>
+      <ion-card-content>
+        @if (state() === 'ready') {
+          <form [formRoot]="welcomeForm" novalidate>
+            <ion-item>
+              <ion-icon name="lock-closed" aria-hidden="true"></ion-icon>
+              <ion-input
+                type="password"
+                placeholder="New password (8 or more characters)"
+                aria-label="New password"
+                autocomplete="new-password"
+                data-testid="welcome-password"
+                [formField]="welcomeForm.password"
+              ></ion-input>
+            </ion-item>
+            <app-field-errors [show]="welcomeForm.password().touched()" [errors]="welcomeForm.password().errors()" />
+            <ion-item>
+              <ion-icon name="lock-closed" aria-hidden="true"></ion-icon>
+              <ion-input
+                type="password"
+                placeholder="Password again"
+                aria-label="Password again"
+                autocomplete="new-password"
+                data-testid="welcome-confirm"
+                [formField]="welcomeForm.confirmPassword"
+              ></ion-input>
+            </ion-item>
+            <app-field-errors
+              [show]="welcomeForm.confirmPassword().touched()"
+              [errors]="welcomeForm.confirmPassword().errors()"
+            />
+            <div class="bottom-section">
+              <ion-button type="submit" data-testid="welcome-submit">Save password</ion-button>
+            </div>
+          </form>
+        } @else if (state() === 'no-session') {
+          <div class="bottom-section">
+            <ion-button data-testid="welcome-login" [routerLink]="links.LOGIN">Go to sign in</ion-button>
+          </div>
+        }
+      </ion-card-content>
+    </ion-card>
+    @if (welcomeForm().submitting()) {
+      <app-loader />
+    }
+  </ion-content>
+</div>

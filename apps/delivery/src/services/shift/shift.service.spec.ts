@@ -12,7 +12,7 @@ import { LocationError } from '@utils/errors/errors.util';
 import { SHIFT } from '@constants/shift.constants';
 
 const profile: RiderProfile = { uid: 'rider-1', riderId: 'r1', tenantId: 't1', displayName: 'Sagar', verification: 'verified', rejectionReason: null, isActive: true, isOnline: false };
-const at = (timestamp: number): RiderPosition => ({ lat: 18.56, lng: 73.77, accuracy: 10, timestamp });
+const at = (timestamp: number, lat = 18.56): RiderPosition => ({ lat, lng: 73.77, accuracy: 10, timestamp });
 
 describe('ShiftService', () => {
   function setup(riderProfile: RiderProfile | null = profile) {
@@ -43,7 +43,7 @@ describe('ShiftService', () => {
     expect(service.jobsVersion()).toBe(1);
   });
 
-  it('goes online after reading the position, then reports at most every 60 s idle and 10 s on a job', async () => {
+  it('goes online after reading the position, then reports moves at most every 60 s idle and 10 s on a job', async () => {
     const { service, riders, positions } = setup();
     await service.start();
     await service.goOnline();
@@ -51,15 +51,27 @@ describe('ShiftService', () => {
     expect(riders.setOnline).toHaveBeenCalledWith(true);
     expect(riders.reportLocation).toHaveBeenCalledTimes(1);
 
-    positions.next(at(31_000));
-    positions.next(at(61_000));
+    positions.next(at(31_000, 18.561));
+    positions.next(at(61_000, 18.562));
     await Promise.resolve();
     expect(riders.reportLocation).toHaveBeenCalledTimes(2);
 
     service.setActiveJob('job-1');
-    positions.next(at(72_000));
+    positions.next(at(72_000, 18.563));
     await Promise.resolve();
-    expect(riders.reportLocation).toHaveBeenLastCalledWith({ lat: 18.56, lng: 73.77 }, 'job-1');
+    expect(riders.reportLocation).toHaveBeenLastCalledWith({ lat: 18.563, lng: 73.77 }, 'job-1');
+  });
+
+  it('skips a rider standing still until the 90 s heartbeat', async () => {
+    const { service, riders, positions } = setup();
+    await service.goOnline();
+    positions.next(at(61_000));
+    positions.next(at(80_000));
+    await Promise.resolve();
+    expect(riders.reportLocation).toHaveBeenCalledTimes(1);
+    positions.next(at(1_000 + SHIFT.HEARTBEAT_MS));
+    await Promise.resolve();
+    expect(riders.reportLocation).toHaveBeenCalledTimes(2);
   });
 
   it('stays offline and says why when location is denied', async () => {

@@ -11,12 +11,10 @@ export const LOGIN = {
   SUBMIT: byTestId('login-submit'),
 };
 
-export const REGISTER = {
-  NAME: ionInput('register-name'),
-  EMAIL: ionInput('register-email'),
-  PASSWORD: ionInput('register-password'),
-  CONFIRM: ionInput('register-confirm'),
-  SUBMIT: byTestId('register-submit'),
+export const WELCOME = {
+  PASSWORD: ionInput('welcome-password'),
+  CONFIRM: ionInput('welcome-confirm'),
+  SUBMIT: byTestId('welcome-submit'),
 };
 
 export const ALERT = {

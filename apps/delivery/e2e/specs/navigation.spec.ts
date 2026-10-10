@@ -46,12 +46,13 @@ test.describe('Every public route', () => {
     });
   }
 
-  test('the root redirects to register', async ({ page }) => {
+  test('the root redirects to login, which says access is by invitation', async ({ page }) => {
     await page.goto('/');
-    await expect(page).toHaveURL(new RegExp(`${APP_ROUTE_LINKS.REGISTER}$`));
+    await expect(page).toHaveURL(new RegExp(`${APP_ROUTE_LINKS.LOGIN}$`));
+    await expect(page.getByTestId('login-invite-note')).toContainText('Access is by invitation');
   });
 
-  test('login links to register and forgot password', async ({ page }) => {
+  test('login links to forgot password', async ({ page }) => {
     await page.goto(APP_ROUTE_LINKS.LOGIN);
     await expect(page.locator(LOGIN.SUBMIT)).toBeVisible();
     await page.getByRole('link', { name: 'Forget Password ?' }).click();

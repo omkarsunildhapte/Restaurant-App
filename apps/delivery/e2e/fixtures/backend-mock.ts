@@ -15,9 +15,9 @@ const json = (body: unknown, status = 200) => ({ status, contentType: 'applicati
 
 export async function mockBackend(page: Page): Promise<void> {
   await page.route(`${SUPABASE}/auth/v1/token**`, (route) => route.fulfill(json(e2eSession())));
-  await page.route(`${SUPABASE}/auth/v1/signup**`, (route) => route.fulfill(json(e2eSession())));
   await page.route(`${SUPABASE}/auth/v1/recover**`, (route) => route.fulfill(json({})));
   await page.route(`${SUPABASE}/auth/v1/logout**`, (route) => route.fulfill({ status: 204, body: '' }));
+  /* GET reads the user; PUT (welcome screen) sets the password and returns the user. */
   await page.route(`${SUPABASE}/auth/v1/user**`, (route) => route.fulfill(json(e2eSession().user)));
   await page.route(`${SUPABASE}/rest/v1/**`, (route) => route.fulfill(route.request().method() === 'GET' ? json([]) : json(null)));
   await page.route(`${SUPABASE}/rest/v1/rpc/${SUPABASE_RPC.MY_WORKSPACES}**`, (route) => route.fulfill(json([E2E_WORKSPACE])));

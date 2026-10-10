@@ -26,7 +26,7 @@ export function fakeSupabaseAuth() {
     getSession: vi.fn().mockResolvedValue({ data: { session: null }, error: null }),
     onAuthStateChange: vi.fn().mockReturnValue({ data: { subscription: { unsubscribe: vi.fn() } } }),
     signInWithPassword: vi.fn(),
-    signUp: vi.fn(),
+    updateUser: vi.fn().mockResolvedValue({ data: { user: null }, error: null }),
     resetPasswordForEmail: vi.fn().mockResolvedValue({ data: {}, error: null }),
     signOut: vi.fn().mockResolvedValue({ error: null }),
   };
@@ -50,11 +50,10 @@ export function fakeAuthService(session: Session | null = fakeSession()) {
     displayName: () => (state()?.user.user_metadata?.['display_name'] as string | undefined) ?? '',
     getSession: vi.fn(async () => state()),
     login: vi.fn(async () => fakeSession()),
-    register: vi.fn(async () => fakeSession()),
+    updatePassword: vi.fn(async () => undefined),
     resetPassword: vi.fn(async () => undefined),
     logout: vi.fn(async () => state.set(null)),
     clearLegacyState: vi.fn(),
-    isEmailInUse: vi.fn(() => false),
   };
 }
 

@@ -109,3 +109,9 @@ ion-modal ion-datetime {
 .date-button {
   z-index: 99;
 }
+
+.saved-hint {
+  padding: 4px 16px 0;
+  font-size: 13px;
+  color: #555;
+}
