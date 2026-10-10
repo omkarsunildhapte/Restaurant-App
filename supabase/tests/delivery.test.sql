@@ -3,7 +3,7 @@
 -- Run with: npx supabase test db. Uses the seed accounts (see supabase/seed.sql).
 begin;
 create extension if not exists pgtap with schema extensions;
-select plan(28);
+select plan(41);
 
 -- Look the user up before switching role: authenticated cannot read auth.users.
 create function pg_temp.login(p_email text) returns void language plpgsql as $$
@@ -31,6 +31,9 @@ values ('00000000-0000-0000-0000-000000000000', '00000000-0000-4000-a000-0000000
         'authenticated', 'rider.baner@brewleaf.test', '', now(), '{}', '{"full_name": "Sagar Pawar"}', now(), now());
 insert into public.memberships (tenant_id, user_id, role, outlet_id)
 values (:brew, '00000000-0000-4000-a000-000000000017', 'delivery', :baner);
+
+-- Baner's map position (set from the Business panel), for the pickup leg (0013)
+update public.outlets set latitude = 18.559000, longitude = 73.786700 where id = :baner;
 
 -- ---- Rider sign-up and verification ---------------------------------------------------------
 select pg_temp.login('rider.baner@brewleaf.test');
@@ -102,6 +105,8 @@ select is((select count(*) from public.orders), 0::bigint, 'rider cannot read or
 select is((select customer_phone from public.my_deliveries(:brew)), '+91 90000 00001',
   'rider sees customer details of an open job');
 select is((select jsonb_array_length(items) from public.my_deliveries(:brew)), 1, 'rider sees the items');
+select is((select outlet_lat || ',' || outlet_lng from public.my_deliveries(:brew)), '18.559000,73.786700',
+  'rider gets the outlet position for the pickup');
 
 -- ---- Accept → pick up → deliver -------------------------------------------------------------
 select is(public.respond_to_delivery(current_setting('test.job')::uuid, true), 'assigned'::public.delivery_status,
@@ -136,6 +141,64 @@ select is((select array_agg(status::text order by id) from public.delivery_event
 select is((select difference from public.settle_cod(:baner, current_setting('test.rider')::uuid,
                                                     (now() at time zone 'Asia/Kolkata')::date, 200, 'Short by 30')),
   -30.00, 'COD settlement records the shortfall');
+
+-- ---- Rider-only details and document photos (0014) -------------------------------------------
+select pg_temp.logout();
+-- A second Baner rider, to check one rider cannot see another's details or photos
+insert into auth.users (instance_id, id, aud, role, email, encrypted_password, email_confirmed_at,
+                        raw_app_meta_data, raw_user_meta_data, created_at, updated_at)
+values ('00000000-0000-0000-0000-000000000000', '00000000-0000-4000-a000-000000000018', 'authenticated',
+        'authenticated', 'rider2.baner@brewleaf.test', '', now(), '{}', '{"full_name": "Kiran Jadhav"}', now(), now());
+insert into public.memberships (tenant_id, user_id, role, outlet_id)
+values (:brew, '00000000-0000-4000-a000-000000000018', 'delivery', :baner);
+insert into public.riders (tenant_id, user_id, full_name, phone)
+values (:brew, '00000000-0000-4000-a000-000000000018', 'Kiran Jadhav', '+91 98220 44444');
+
+select pg_temp.login('rider.baner@brewleaf.test');
+select lives_ok(
+  $$insert into public.rider_details (rider_id, tenant_id, date_of_birth, city, blood_group, national_id)
+    values (current_setting('test.rider')::uuid, '10000000-0000-4000-a000-000000000001', '1998-04-12', 'Pune', 'O+', '1234 5678 9012')$$,
+  'rider saves their own details');
+select is((select national_id from public.rider_details), '1234 5678 9012', 'rider reads their own details');
+select lives_ok(
+  $$insert into storage.objects (bucket_id, name) values ('rider-documents',
+      '10000000-0000-4000-a000-000000000001/00000000-0000-4000-a000-000000000017/photo.png')$$,
+  'rider uploads into their own folder');
+select throws_ok(
+  $$insert into storage.objects (bucket_id, name) values ('rider-documents',
+      '10000000-0000-4000-a000-000000000001/00000000-0000-4000-a000-000000000018/photo.png')$$,
+  '42501', null, 'rider cannot upload into another rider''s folder');
+
+select pg_temp.login('rider2.baner@brewleaf.test');
+select is((select count(*) from public.rider_details), 0::bigint, 'another rider sees no details');
+select throws_ok(
+  $$insert into public.rider_details (rider_id, tenant_id, city)
+    values (current_setting('test.rider')::uuid, '10000000-0000-4000-a000-000000000001', 'Mumbai')$$,
+  '42501', null, 'another rider cannot write someone else''s details');
+select is((select count(*) from storage.objects where bucket_id = 'rider-documents'), 0::bigint,
+  'another rider cannot see someone else''s photos');
+
+select pg_temp.login('cashier.baner@brewleaf.test');
+select is((select count(*) from public.rider_details), 0::bigint, 'restaurant staff see no rider details');
+select pg_temp.login('owner@brewleaf.test');
+select is((select count(*) from public.rider_details), 0::bigint, 'the owner sees no rider details either');
+
+-- Business read-only (trial ended): the rider still sees their photo but cannot upload
+select pg_temp.logout();
+update public.tenants set status = 'trial', trial_ends_at = now() - interval '1 day' where id = :brew;
+select pg_temp.login('rider.baner@brewleaf.test');
+select is((select count(*) from storage.objects where bucket_id = 'rider-documents'), 1::bigint,
+  'rider of a read-only business still sees their own photo');
+select throws_ok(
+  $$insert into storage.objects (bucket_id, name) values ('rider-documents',
+      '10000000-0000-4000-a000-000000000001/00000000-0000-4000-a000-000000000017/licence.png')$$,
+  '42501', null, 'rider of a read-only business cannot upload');
+select pg_temp.logout();
+update public.tenants set status = 'active', trial_ends_at = null where id = :brew;
+
+select pg_temp.login('super@platform.test');
+select is((select count(*) from public.rider_details) + (select count(*) from storage.objects where bucket_id = 'rider-documents'),
+  2::bigint, 'Super Admin reads details and photos for verification');
 
 select pg_temp.logout();
 select * from finish();
