@@ -4,6 +4,7 @@ import { SessionStore } from '@app/core/session.store';
 import { money, type Bill, type Kot, type Order, type OrderItem, type Payment } from '@app/core/models';
 import { kotBytes, receiptBytes, type KotDoc, type ReceiptDoc } from '@app/core/escpos';
 import { ThermalLink, thermalSupported, type ThermalMode } from '@app/core/thermal';
+import { qrSvg, reviewUrlFor } from '@app/core/review';
 
 export type PaperWidth = 58 | 80;
 /** 'driver': the browser's print dialog; 'usb' / 'serial': ESC/POS straight to the printer. */
@@ -118,13 +119,14 @@ export class Printer {
       total,
       payments: payments.map((p) => ({ method: p.method, amount: p.amount })),
       openDrawer: payments.some((p) => p.method === 'cash'),
+      reviewUrl: reviewUrlFor(outlet),
     };
     const rows = items
       .map(
         (i) => `<tr><td>${esc(i.quantity + ' × ' + i.name + (i.variant_name ? ' (' + i.variant_name + ')' : ''))}${i.addons.length ? '<br><small>+ ' + esc(i.addons.map((a) => a.name).join(', ')) + '</small>' : ''}</td><td class="r">${money(i.unit_price * i.quantity)}</td></tr>`,
       )
       .join('');
-    this.send(() => receiptBytes(doc, this._width()), `
+    void this.withReviewQr(doc.reviewUrl ?? null).then((review) => this.send(() => receiptBytes(doc, this._width()), `
       <h1>${esc(ws?.tenant_name ?? '')}</h1>
       <p class="c">${esc(outlet?.name ?? '')}${outlet?.address ? '<br>' + esc(outlet.address) : ''}${outlet?.phone ? '<br>Ph ' + esc(outlet.phone) : ''}${outlet?.gstin ? '<br>GSTIN ' + esc(outlet.gstin) : ''}</p>
       <p class="c b">${esc(title)}</p>
@@ -139,8 +141,20 @@ export class Printer {
         <tr class="b"><td>Total</td><td class="r">${money(total)}</td></tr>
         ${payments.map((p) => `<tr><td>Paid · ${esc(p.method.toUpperCase())}</td><td class="r">${money(p.amount)}</td></tr>`).join('')}
       </table>
+      ${review}
       <p class="c">Thank you! Visit again.</p>
-      <p class="c"><small>Billing by Thaliyo</small></p>`);
+      <p class="c"><small>Billing by Thaliyo</small></p>`));
+  }
+
+  /** The review QR block for the print-dialog receipt; a failure only leaves the QR off. */
+  private async withReviewQr(url: string | null): Promise<string> {
+    if (!url) return '';
+    try {
+      const svg = await qrSvg(url, this._width() === 58 ? 2 : 3);
+      return `<p class="c" style="margin-top:6px">Enjoyed it? Review us on Google</p><p class="c">${svg}</p><p class="c"><small>Scan with your phone camera</small></p>`;
+    } catch {
+      return '';
+    }
   }
 
   public kot(order: Order, kot: Pick<Kot, 'round_no'>, lines: OrderItem[], tableName: string | null): void {

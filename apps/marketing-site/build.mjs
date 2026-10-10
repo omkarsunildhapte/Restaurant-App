@@ -8,6 +8,7 @@
 import { readFileSync, writeFileSync, mkdirSync, cpSync, rmSync, readdirSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
+import { createHash } from "node:crypto";
 import { page } from "./src/layout.mjs";
 import home from "./src/pages/home.mjs";
 import features from "./src/pages/features.mjs";
@@ -15,7 +16,6 @@ import pricing from "./src/pages/pricing.mjs";
 import demo from "./src/pages/demo.mjs";
 import contact from "./src/pages/contact.mjs";
 import about from "./src/pages/about.mjs";
-import signup from "./src/pages/signup.mjs";
 import { privacy, terms, refund, notFound } from "./src/pages/legal.mjs";
 
 const ROOT = dirname(fileURLToPath(import.meta.url));
@@ -26,7 +26,6 @@ const site = JSON.parse(readFileSync(join(ROOT, "site.json"), "utf8"));
 const errors = [];
 for (const key of ["name", "product", "company", "tagline"]) if (!site.brand?.[key]) errors.push(`brand.${key} is required`);
 if (!/^https?:\/\//.test(site.demoApiUrl || "")) errors.push("demoApiUrl must be the full URL of /api/v1/public/demo-requests");
-if (!/^https?:\/\//.test(site.signupApiUrl || "")) errors.push("signupApiUrl must be the full URL of the platform API's /public/v1/signups");
 if (!/^https?:\/\//.test(site.businessPanelUrl || "")) errors.push("businessPanelUrl must be the Business panel's address (where owners sign in)");
 if (site.url && !/^https:\/\//.test(site.url)) errors.push("url must start with https:// (or be empty until the domain is chosen)");
 for (const plan of site.pricing?.plans ?? []) {
@@ -40,12 +39,16 @@ if (errors.length) {
 }
 
 // ---- Pages ----
-const pages = [home, features, pricing, demo, signup, contact, about, privacy, terms, refund, notFound].map((p) => p(site));
+const pages = [home, features, pricing, demo, contact, about, privacy, terms, refund, notFound].map((p) => p(site));
 
 // Empty dist/ rather than deleting it: on Windows a preview server running inside it locks the folder.
 mkdirSync(OUT, { recursive: true });
 for (const entry of readdirSync(OUT)) rmSync(join(OUT, entry), { recursive: true, force: true });
-for (const p of pages) writeFileSync(join(OUT, p.file), String(page(site, p)));
+// Content-hash the stylesheet and script links so a browser never keeps last week's copy after a deploy.
+const version = (file) => createHash("sha256").update(readFileSync(join(ROOT, file))).digest("hex").slice(0, 10);
+const busted = { "css/style.css": version("css/style.css"), "js/main.js": version("js/main.js") };
+const withVersions = (html) => html.replace(/(href|src)="(css\/style\.css|js\/main\.js)"/g, (_, attr, file) => `${attr}="${file}?v=${busted[file]}"`);
+for (const p of pages) writeFileSync(join(OUT, p.file), withVersions(String(page(site, p))));
 for (const dir of ["css", "js", "assets"]) cpSync(join(ROOT, dir), join(OUT, dir), { recursive: true });
 
 // Search engines: list every indexable page once the real domain is set.

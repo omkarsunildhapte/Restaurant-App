@@ -35,7 +35,7 @@ export default function pricing(site) {
           : html`<b>${plan.pricePrefix || ""}${inr(plan.price)}</b>`}<span>/month</span>
       </p>
       ${f.enabled && plan.foundingPrice ? html`<p class="plan-note">Founding price for ${f.lockMonths} months</p>` : html`<p class="plan-note">&nbsp;</p>`}
-      <a class="btn ${plan.popular ? "btn--primary" : "btn--outline"} btn--block" href="signup.html?plan=${plan.id}">Start free trial</a>
+      <a class="btn ${plan.popular ? "btn--primary" : "btn--outline"} btn--block" href="demo.html?plan=${plan.id}">Book a free demo</a>
       <ul class="checklist">
         ${plan.features.map((x) => html`<li>${check} ${x}</li>`)}
       </ul>

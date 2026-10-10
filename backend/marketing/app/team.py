@@ -44,36 +44,41 @@ def list_users() -> list[dict[str, Any]]:
     return [_user(r) for r in rows]
 
 
-def create_user(data: dict[str, Any]) -> dict[str, Any]:
-    """Creates the person's Supabase account with a starting password and their CRM role.
-
-    The role goes in app_metadata, which only this server-side key can write; the person
-    signs in to the Super Admin app with this email and password straight away.
-    """
+def _auth_admin(method: str, path: str, **kwargs: Any) -> httpx.Response:
+    """A call to Supabase Auth with the server-only key."""
+    key = settings.supabase_service_role_key
     try:
-        res = httpx.post(
-            settings.supabase_url + "/auth/v1/admin/users",
-            headers={
-                "apikey": settings.supabase_service_role_key,
-                "Authorization": "Bearer " + settings.supabase_service_role_key,
-            },
-            json={
-                "email": data["email"],
-                "password": data["password"],
-                "email_confirm": True,
-                "user_metadata": {"name": data["name"]},
-                "app_metadata": {"crm_role": data["role"]},
-            },
-            timeout=15,
-        )
+        return httpx.request(method, settings.supabase_url + "/auth/v1" + path,
+                             headers={"apikey": key, "Authorization": "Bearer " + key}, timeout=15, **kwargs)
     except httpx.HTTPError:
         raise AppError("Cannot reach Supabase to create the account", 503, "AUTH_UNAVAILABLE") from None
-    if res.status_code == 422 and "exist" in res.text.lower():
+
+
+def _refused(res: httpx.Response, fallback: str) -> AppError:
+    detail = res.json().get("msg") if res.headers.get("content-type", "").startswith("application/json") else None
+    return AppError.bad_request(detail or fallback)
+
+
+def create_user(data: dict[str, Any]) -> dict[str, Any]:
+    """Invites the person by email; nobody else ever knows their password.
+
+    Supabase sends the invite (it lands on the Super Admin app's /welcome page, where they
+    choose a password). The CRM role goes in app_metadata, which only this server-side key
+    can write, so it is set before they first sign in.
+    """
+    # Supabase would quietly re-send an invite that hasn't been accepted yet; say so instead.
+    if db.query_one("SELECT 1 FROM users WHERE lower(email) = lower(%s)", (data["email"],)):
+        raise AppError.conflict("That email is already on the team. For a new link, they can use “Forgot password?” on the sign-in page")
+    res = _auth_admin("POST", "/invite",params={"redirect_to": settings.admin_app_url + "/welcome"},
+                      json={"email": data["email"], "data": {"name": data["name"]}})
+    if res.status_code == 422 and ("exist" in res.text.lower() or "registered" in res.text.lower()):
         raise AppError.conflict("An account with that email already exists")
     if res.status_code >= 400:
-        detail = res.json().get("msg") if res.headers.get("content-type", "").startswith("application/json") else None
-        raise AppError.bad_request(detail or "Supabase refused to create the account")
+        raise _refused(res, "Supabase refused to send the invite")
     user_id = res.json()["id"]
+    res = _auth_admin("PUT", "/admin/users/" + user_id, json={"app_metadata": {"crm_role": data["role"]}})
+    if res.status_code >= 400:
+        raise _refused(res, "Supabase refused to set the role")
     row = db.query_one(
         """INSERT INTO users (id, email, name, role) VALUES (%s, %s, %s, %s)
            ON CONFLICT (id) DO UPDATE SET email = EXCLUDED.email, name = EXCLUDED.name, role = EXCLUDED.role, is_active = true

@@ -5,6 +5,7 @@ import { MenuStore } from '@app/core/menu.store';
 import { money } from '@app/core/models';
 import { MenuPicker } from '@app/pages/shared/menu-picker';
 import { Ticket } from '@app/pages/shared/ticket';
+import { TPipe } from '@app/core/i18n';
 
 /**
  * Taking a table's order on a phone: the menu fills the screen, the ticket slides up from the
@@ -12,7 +13,7 @@ import { Ticket } from '@app/pages/shared/ticket';
  */
 @Component({
   selector: 'app-order-page',
-  imports: [RouterLink, MenuPicker, Ticket],
+  imports: [RouterLink, MenuPicker, Ticket, TPipe],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     @if (order(); as o) {
@@ -25,12 +26,12 @@ import { Ticket } from '@app/pages/shared/ticket';
           <button type="button" (click)="showTicket.set(!showTicket())" class="flex items-center justify-between px-3 py-2 lg:pointer-events-none">
             <span class="text-left">
               <span class="block text-sm font-semibold text-ink-900">
-                <a routerLink="/waiter" class="mr-1 text-brand-600 lg:pointer-events-auto" aria-label="Back to tables">←</a>
-                Table {{ tableName() }} @if (o.order_no) { · #{{ o.order_no }} }
+                <a routerLink="/waiter" class="mr-1 text-brand-600 lg:pointer-events-auto" [attr.aria-label]="'order.back' | t">←</a>
+                {{ 'where.table' | t: { name: tableName() } }} @if (o.order_no) { · #{{ o.order_no }} }
               </span>
-              <span class="block text-xs text-ink-500">{{ newCount() }} new · total {{ money(o.total) }}</span>
+              <span class="block text-xs text-ink-500">{{ 'order.summary' | t: { n: newCount(), total: money(o.total) } }}</span>
             </span>
-            <span class="text-xs text-ink-500 lg:hidden">{{ showTicket() ? 'Hide ▾' : 'Show order ▴' }}</span>
+            <span class="text-xs text-ink-500 lg:hidden">{{ (showTicket() ? 'order.hide' : 'order.show') | t }}</span>
           </button>
           <div class="min-h-0 flex-1 overflow-y-auto border-t border-ink-100" [class.max-lg:hidden]="!showTicket()">
             <app-ticket [orderId]="o.id" />
@@ -38,18 +39,18 @@ import { Ticket } from '@app/pages/shared/ticket';
           @if (error()) { <p class="px-3 pb-1 text-sm text-rose-600" role="alert">{{ error() }}</p> }
           <div class="grid grid-cols-2 gap-2 border-t border-ink-100 p-2">
             <button type="button" (click)="requestBill()" [disabled]="!!o.bill_requested_at || !floor.itemsOf(o.id).length" class="btn-secondary py-3">
-              {{ o.bill_requested_at ? 'Bill requested' : 'Ask for bill' }}
+              {{ (o.bill_requested_at ? 'order.billRequested' : 'order.askBill') | t }}
             </button>
             <button type="button" (click)="send()" [disabled]="!newCount() || sending()" class="btn-primary py-3">
-              {{ sending() ? 'Sending…' : 'Send to kitchen' + (newCount() ? ' (' + newCount() + ')' : '') }}
+              {{ sending() ? ('order.sending' | t) : newCount() ? ('order.sendN' | t: { n: newCount() }) : ('order.send' | t) }}
             </button>
           </div>
         </aside>
       </div>
     } @else {
       <div class="p-6 text-center">
-        <p class="text-sm text-ink-500">{{ floor.loading() ? 'Loading order…' : 'This order is closed or no longer open.' }}</p>
-        <a routerLink="/waiter" class="mt-3 inline-block text-sm font-medium text-brand-600">Back to tables</a>
+        <p class="text-sm text-ink-500">{{ (floor.loading() ? 'order.loading' : 'order.closed') | t }}</p>
+        <a routerLink="/waiter" class="mt-3 inline-block text-sm font-medium text-brand-600">{{ 'order.back' | t }}</a>
       </div>
     }
   `,

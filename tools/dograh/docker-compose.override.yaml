@@ -1,0 +1,28 @@
+# Thaliyo: keep Dograh on this computer only (merged automatically by `docker compose`).
+# - The app (3010) and API (8000) are reachable from this computer only, not the network.
+# - Postgres and Redis are not published at all (only the Dograh containers use them).
+# - Never start the "tunnel" profile: it opens a public *.trycloudflare.com URL.
+services:
+  postgres:
+    ports: !reset []
+  redis:
+    ports: !reset []
+  api:
+    ports: !override
+      - "127.0.0.1:8000:8000"
+  ui:
+    ports: !override
+      - "127.0.0.1:3010:3010"
+
+  # Dograh's API looks up a public tunnel on every health check by asking the host
+  # "cloudflared" for its URL, and waits up to 5 s when there is none. That makes the app's
+  # 3 s health check fail ("Backend health check timed out ... http://api:8000"). This
+  # stand-in answers at once with no tunnel URL, inside the private Docker network only
+  # (no published port), so the API uses localhost straight away.
+  no-tunnel:
+    image: busybox:1.36
+    command: ["sh", "-c", "mkdir -p /www && echo '# no tunnel: Thaliyo local-only install' > /www/metrics && exec httpd -f -p 2000 -h /www"]
+    restart: unless-stopped
+    networks:
+      app-network:
+        aliases: [cloudflared]

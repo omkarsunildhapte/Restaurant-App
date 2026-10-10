@@ -32,6 +32,13 @@ export const WHATSAPP_TEMPLATES: readonly WhatsAppTemplate[] = [
       'Thank you for your time today, {owner}. As discussed, {restaurant} gets a 14-day free trial — we set up the menu, printer and train your staff. Shall we start on Monday?',
   },
   {
+    key: 'welcome',
+    label: 'Welcome (after Create restaurant)',
+    body:
+      'Welcome to Thaliyo, {owner}! You will get an email from us now: open it and set your password. That is your owner login for the Business panel.\n\n' +
+      'On setup day ({date}) we add the menu, tables and staff, connect the printer and train the team. Please keep ready: menu, GSTIN, staff names with email, and the printer. Any question, reply here. — {me}, Thaliyo',
+  },
+  {
     key: 'trial-check-in',
     label: 'Trial check-in',
     body:

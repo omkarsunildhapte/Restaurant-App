@@ -121,6 +121,12 @@ export const FEATURES: readonly { key: string; label: string }[] = [
   { key: 'multi_outlet', label: 'Multiple outlets' },
 ];
 
+/** A switch on one restaurant: follow its plan, or forced on/off. */
+export type FeatureState = 'plan' | 'on' | 'off';
+
+/** The three choices of each feature switch, in display order. */
+export const FEATURE_STATES: readonly FeatureState[] = ['plan', 'on', 'off'];
+
 export function rupees(value: number): string {
   return '₹' + Math.round(value).toLocaleString('en-IN');
 }

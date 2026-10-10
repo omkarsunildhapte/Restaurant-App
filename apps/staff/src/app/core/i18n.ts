@@ -46,7 +46,8 @@ export class I18n {
 
   /** Text for a key in the current language, with `{name}` placeholders filled in. */
   public t(key: I18nKey, params?: Params): string {
-    const text = TEXT[this._lang()][key] ?? en[key];
+    // Unknown keys (e.g. a payout type added in the database later) show as themselves.
+    const text: string = TEXT[this._lang()][key] ?? en[key] ?? key;
     return params ? text.replace(/\{(\w+)\}/g, (m, name: string) => (name in params ? String(params[name]) : m)) : text;
   }
 

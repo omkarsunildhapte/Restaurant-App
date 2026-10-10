@@ -16,6 +16,11 @@ const ROLE_LABEL: Record<Role, I18nKey> = {
     <main class="mx-auto max-w-xl px-4 py-10">
       <h1 class="text-2xl font-semibold text-ink-900">{{ 'choose.title' | t }}</h1>
       <p class="mt-1 text-sm text-ink-500">{{ 'choose.hint' | t }}</p>
+      @if (session.noScreens()) {
+        <p class="mt-4 rounded-lg bg-amber-50 px-3 py-2 text-sm text-amber-900" role="alert">
+          {{ 'choose.notOnPlan' | t: { role: (roleLabel[session.role()!] | t), name: session.workspace()?.tenant_name ?? '' } }}
+        </p>
+      }
       <ul class="mt-6 space-y-3">
         @for (w of session.workspaces(); track w.tenant_id + w.role) {
           @for (o of session.outletsFor(w); track o.id) {

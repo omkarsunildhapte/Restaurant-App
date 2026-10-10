@@ -16,6 +16,8 @@ export interface Workspace {
   outlet_id: string | null;
   status: string;
   writable: boolean;
+  /** The plan's feature switches with Super Admin's overrides (tenant_features). */
+  features?: Record<string, boolean>;
 }
 
 export interface Outlet {
@@ -26,6 +28,9 @@ export interface Outlet {
   city: string | null;
   phone: string | null;
   gstin: string | null;
+  /** Google Place ID for the "review us" QR on bills (Business panel → outlet). */
+  google_place_id?: string | null;
+  review_qr_on_bill?: boolean;
 }
 
 export interface Category {

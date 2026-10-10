@@ -26,3 +26,6 @@ apps/marketing-site/dist/
 # Staff app build output
 apps/staff/dist/
 apps/staff/.angular/
+
+# Dograh voice AI (local only): generated secrets
+tools/dograh/.env

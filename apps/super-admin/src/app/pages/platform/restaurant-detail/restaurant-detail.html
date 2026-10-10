@@ -69,12 +69,12 @@
               <span class="ml-1 text-xs text-ink-400">plan: {{ planFeatures()[f.key] ? 'on' : 'off' }}</span>
             </span>
             <span class="flex rounded-lg border border-ink-200 p-0.5 dark:border-ink-800" role="radiogroup" [attr.aria-label]="f.label">
-              @for (opt of ['plan', 'on', 'off']; track opt) {
+              @for (opt of featureStates; track opt) {
                 <button
                   type="button"
                   role="radio"
                   [attr.aria-checked]="featureState(f.key) === opt"
-                  (click)="setFeature(f.key, $any(opt))"
+                  (click)="setFeature(f.key, opt)"
                   [class]="featureState(f.key) === opt ? 'rounded-md bg-ink-900 px-2.5 py-0.5 text-xs font-medium capitalize text-white dark:bg-white dark:text-ink-900' : 'rounded-md px-2.5 py-0.5 text-xs font-medium capitalize text-ink-600 dark:text-ink-300'"
                 >
                   {{ opt === 'plan' ? 'Plan default' : opt }}

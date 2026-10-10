@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, inject, output, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MenuStore } from '@app/core/menu.store';
+import { TPipe } from '@app/core/i18n';
 
 /**
  * Sold-out switch for the counter and the kitchen: tap a dish to mark it sold out (waiters can
@@ -8,18 +9,18 @@ import { MenuStore } from '@app/core/menu.store';
  */
 @Component({
   selector: 'app-availability',
-  imports: [FormsModule],
+  imports: [FormsModule, TPipe],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="fixed inset-0 z-40 grid place-items-end bg-ink-900/50 sm:place-items-center" role="dialog" aria-modal="true" aria-labelledby="avail-title">
       <div class="flex max-h-[85dvh] w-full flex-col rounded-t-2xl bg-white sm:max-w-lg sm:rounded-2xl">
         <div class="flex items-center gap-2 border-b border-ink-100 p-4">
-          <h2 id="avail-title" class="flex-1 text-lg font-semibold text-ink-900">Sold out today</h2>
-          <button type="button" (click)="close.emit()" class="btn-secondary">Done</button>
+          <h2 id="avail-title" class="flex-1 text-lg font-semibold text-ink-900">{{ 'avail.title' | t }}</h2>
+          <button type="button" (click)="close.emit()" class="btn-secondary">{{ 'common.done' | t }}</button>
         </div>
         <div class="p-3">
-          <input type="search" [ngModel]="query()" (ngModelChange)="query.set($event)" placeholder="Search dishes…" aria-label="Search dishes" class="field mt-0" />
-          @if (soldOut()) { <p class="mt-2 text-sm text-rose-700">{{ soldOut() }} dish{{ soldOut() === 1 ? '' : 'es' }} sold out</p> }
+          <input type="search" [ngModel]="query()" (ngModelChange)="query.set($event)" [placeholder]="'menu.search' | t" [attr.aria-label]="'menu.searchLabel' | t" class="field mt-0" />
+          @if (soldOut()) { <p class="mt-2 text-sm text-rose-700">{{ soldOut() === 1 ? ('avail.countOne' | t) : ('avail.count' | t: { n: soldOut() }) }}</p> }
         </div>
         <ul class="min-h-0 flex-1 divide-y divide-ink-100 overflow-y-auto px-3 pb-3">
           @for (item of list(); track item.id) {
@@ -30,7 +31,7 @@ import { MenuStore } from '@app/core/menu.store';
                 class="rounded-full px-3 py-1.5 text-xs font-semibold"
                 [class]="item.is_available ? 'bg-emerald-50 text-emerald-700' : 'bg-rose-100 text-rose-800'"
                 [attr.aria-pressed]="!item.is_available">
-                {{ item.is_available ? 'Available' : 'Sold out' }}
+                {{ (item.is_available ? 'avail.available' : 'avail.soldOut') | t }}
               </button>
             </li>
           }

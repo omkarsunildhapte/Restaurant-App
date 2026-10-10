@@ -32,7 +32,7 @@ export class TeamStore {
     });
   }
 
-  public createUser(body: { email: string; name: string; password: string; role: string }): Observable<TeamMember> {
+  public createUser(body: { email: string; name: string; role: string }): Observable<TeamMember> {
     return this.api.post<TeamMember>('/users', body).pipe(tap(() => this.loadUsers()));
   }
 

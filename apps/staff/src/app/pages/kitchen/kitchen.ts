@@ -3,6 +3,7 @@ import { FloorStore } from '@app/core/floor.store';
 import { Printer } from '@app/core/printer';
 import { Availability } from '@app/pages/shared/availability';
 import { minutesSince, type Kot, type KotStatus, type OrderItem } from '@app/core/models';
+import { I18n, TPipe, type I18nKey } from '@app/core/i18n';
 
 interface Card {
   kot: Kot;
@@ -11,10 +12,10 @@ interface Card {
   items: OrderItem[];
 }
 
-const COLUMNS: { status: KotStatus; title: string; next: KotStatus; action: string }[] = [
-  { status: 'new', title: 'New', next: 'preparing', action: 'Start' },
-  { status: 'preparing', title: 'Preparing', next: 'ready', action: 'Ready' },
-  { status: 'ready', title: 'Ready to serve', next: 'served', action: 'Served' },
+const COLUMNS: { status: KotStatus; title: I18nKey; next: KotStatus; action: I18nKey }[] = [
+  { status: 'new', title: 'kds.colNew', next: 'preparing', action: 'kds.start' },
+  { status: 'preparing', title: 'kds.colPreparing', next: 'ready', action: 'kds.ready' },
+  { status: 'ready', title: 'kds.colReady', next: 'served', action: 'kds.served' },
 ];
 
 /**
@@ -24,32 +25,32 @@ const COLUMNS: { status: KotStatus; title: string; next: KotStatus; action: stri
  */
 @Component({
   selector: 'app-kitchen',
-  imports: [Availability],
+  imports: [Availability, TPipe],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="flex h-full flex-col">
       <div class="flex items-center gap-3 border-b border-ink-200 bg-white px-3 py-2">
-        <p class="text-sm text-ink-600">{{ cards().length }} active ticket{{ cards().length === 1 ? '' : 's' }}</p>
+        <p class="text-sm text-ink-600">{{ cards().length === 1 ? ('kds.activeOne' | t) : ('kds.active' | t: { n: cards().length }) }}</p>
         @if (floor.error()) { <p class="text-sm text-rose-600">{{ floor.error() }}</p> }
-        <button type="button" (click)="soldOutOpen.set(true)" class="ml-auto rounded-lg border border-ink-200 px-3 py-1.5 text-sm font-medium text-ink-700">Sold out</button>
+        <button type="button" (click)="soldOutOpen.set(true)" class="ml-auto rounded-lg border border-ink-200 px-3 py-1.5 text-sm font-medium text-ink-700">{{ 'avail.soldOut' | t }}</button>
         <button type="button" (click)="toggleSound()" class="rounded-lg px-3 py-1.5 text-sm font-medium" [class]="sound() ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'">
-          {{ sound() ? '🔔 Sound on' : '🔕 Tap for sound' }}
+          {{ (sound() ? 'kds.soundOn' : 'kds.soundOff') | t }}
         </button>
       </div>
       <div class="grid min-h-0 flex-1 grid-cols-1 gap-3 overflow-y-auto p-3 md:grid-cols-3">
         @for (col of columns; track col.status) {
-          <section class="flex min-h-0 flex-col rounded-2xl bg-ink-100/70 p-2" [attr.aria-label]="col.title">
+          <section class="flex min-h-0 flex-col rounded-2xl bg-ink-100/70 p-2" [attr.aria-label]="col.title | t">
             <h2 class="flex items-center justify-between px-1 pb-2 text-sm font-bold uppercase tracking-wide text-ink-600">
-              {{ col.title }} <span class="rounded-full bg-white px-2 text-xs">{{ byStatus()[col.status].length }}</span>
+              {{ col.title | t }} <span class="rounded-full bg-white px-2 text-xs">{{ byStatus()[col.status].length }}</span>
             </h2>
             <div class="flex flex-col gap-2">
               @for (c of byStatus()[col.status]; track c.kot.id) {
                 <article class="rounded-xl bg-white p-3 shadow-sm ring-2" [class]="ringClass(c.kot)">
                   <header class="flex items-baseline justify-between gap-2">
                     <p class="text-lg font-bold text-ink-900">{{ c.where }}</p>
-                    <p class="text-sm font-semibold tabular-nums" [class]="ageClass(c.kot)">{{ age(c.kot) }} min</p>
+                    <p class="text-sm font-semibold tabular-nums" [class]="ageClass(c.kot)">{{ 'tables.minutes' | t: { n: age(c.kot) } }}</p>
                   </header>
-                  <p class="text-xs text-ink-500">#{{ c.orderNo ?? '—' }} · round {{ c.kot.round_no }}</p>
+                  <p class="text-xs text-ink-500">{{ 'kds.orderRound' | t: { no: c.orderNo ?? '—', n: c.kot.round_no } }}</p>
                   <ul class="mt-2 space-y-1">
                     @for (i of c.items; track i.id) {
                       <li class="text-base leading-snug text-ink-900">
@@ -60,12 +61,12 @@ const COLUMNS: { status: KotStatus; title: string; next: KotStatus; action: stri
                     }
                   </ul>
                   <div class="mt-3 flex gap-2">
-                    <button type="button" (click)="floor.moveKot(c.kot, col.next)" class="btn-primary flex-1 py-3 text-base">{{ col.action }}</button>
-                    <button type="button" (click)="print(c)" class="btn-secondary px-3 text-sm">Print</button>
+                    <button type="button" (click)="floor.moveKot(c.kot, col.next)" class="btn-primary flex-1 py-3 text-base">{{ col.action | t }}</button>
+                    <button type="button" (click)="print(c)" class="btn-secondary px-3 text-sm">{{ 'common.print' | t }}</button>
                   </div>
                 </article>
               } @empty {
-                <p class="py-8 text-center text-sm text-ink-400">Nothing here</p>
+                <p class="py-8 text-center text-sm text-ink-400">{{ 'kds.empty' | t }}</p>
               }
             </div>
           </section>
@@ -78,6 +79,7 @@ const COLUMNS: { status: KotStatus; title: string; next: KotStatus; action: stri
 export class Kitchen implements OnInit, OnDestroy {
   protected readonly floor = inject(FloorStore);
   private readonly printer = inject(Printer);
+  private readonly i18n = inject(I18n);
   protected readonly columns = COLUMNS;
 
   protected readonly sound = signal(false);
@@ -94,7 +96,8 @@ export class Kitchen implements OnInit, OnDestroy {
       .sort((a, b) => a.created_at.localeCompare(b.created_at))
       .map((kot) => {
         const order = this.floor.order(kot.order_id);
-        const where = !order ? 'Order' : order.type === 'dine_in' ? 'Table ' + (this.floor.tableName(order.table_id) ?? '?') : order.type === 'takeaway' ? 'Takeaway' : 'Delivery';
+        const t = this.i18n;
+        const where = !order ? t.t('where.order') : order.type === 'dine_in' ? t.t('where.table', { name: this.floor.tableName(order.table_id) ?? '?' }) : t.t(order.type === 'takeaway' ? 'where.takeaway' : 'where.delivery');
         return { kot, where, orderNo: order?.order_no ?? null, items: this.floor.itemsOf(kot.order_id).filter((i) => i.kot_id === kot.id && i.item_id !== null) };
       }),
   );

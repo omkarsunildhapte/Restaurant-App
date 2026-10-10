@@ -49,6 +49,7 @@ export class Leads implements OnInit {
   protected readonly stageClass = stageClass;
   protected readonly shortDate = shortDate;
 
+  protected readonly views = ['board', 'list'] as const;
   protected readonly view = signal<'board' | 'list'>(readView());
   protected readonly search = signal('');
   protected readonly areaFilter = signal('');

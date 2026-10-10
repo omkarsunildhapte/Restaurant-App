@@ -19,10 +19,10 @@ export class Team implements OnInit {
   protected readonly adding = signal(false);
   protected readonly name = signal('');
   protected readonly email = signal('');
-  protected readonly password = signal('');
   protected readonly role = signal<'admin' | 'sales'>('sales');
   protected readonly saving = signal(false);
   protected readonly error = signal<string | null>(null);
+  protected readonly invited = signal<string | null>(null);
 
   public ngOnInit(): void {
     this.team.loadUsers();
@@ -31,15 +31,17 @@ export class Team implements OnInit {
   protected save(): void {
     this.saving.set(true);
     this.error.set(null);
+    this.invited.set(null);
+    const email = this.email().trim();
     this.team
-      .createUser({ name: this.name().trim(), email: this.email().trim(), password: this.password(), role: this.role() })
+      .createUser({ name: this.name().trim(), email, role: this.role() })
       .subscribe({
         next: () => {
           this.saving.set(false);
           this.adding.set(false);
           this.name.set('');
           this.email.set('');
-          this.password.set('');
+          this.invited.set(email);
           this.role.set('sales');
         },
         error: (e: Error) => {

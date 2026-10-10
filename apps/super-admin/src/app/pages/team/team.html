@@ -1,10 +1,10 @@
 <div class="mb-6 flex flex-wrap items-end justify-between gap-4">
   <div>
     <h1 class="text-2xl font-semibold tracking-tight text-ink-900 dark:text-white">Team</h1>
-    <p class="mt-1 text-sm text-ink-500 dark:text-ink-400">Everyone who can sign in to the Sales CRM, and their results. Adding someone creates their platform login with the password you set. Super Admins are CRM admins automatically.</p>
+    <p class="mt-1 text-sm text-ink-500 dark:text-ink-400">Everyone who can sign in to the Sales CRM, and their results. Access is by invite only: the person gets an email and chooses their own password. Super Admins are CRM admins automatically.</p>
   </div>
   @if (auth.isAdmin() && !adding()) {
-    <button type="button" (click)="adding.set(true)" class="btn-primary">Add team member</button>
+    <button type="button" (click)="adding.set(true); invited.set(null)" class="btn-primary">Invite team member</button>
   }
 </div>
 
@@ -12,8 +12,12 @@
   <div class="mb-4 rounded-xl border border-rose-200 bg-rose-50 p-4 text-sm font-medium text-rose-800 dark:border-rose-500/30 dark:bg-rose-500/10 dark:text-rose-200" role="alert">{{ error() ?? team.error() }}</div>
 }
 
+@if (invited()) {
+  <div class="mb-4 rounded-xl border border-emerald-200 bg-emerald-50 p-4 text-sm font-medium text-emerald-800 dark:border-emerald-500/30 dark:bg-emerald-500/10 dark:text-emerald-200" role="status">Invite sent to {{ invited() }}. The link in the email lets them set a password and sign in.</div>
+}
+
 @if (adding()) {
-  <form (ngSubmit)="save()" class="card mb-4 grid gap-4 sm:grid-cols-4">
+  <form (ngSubmit)="save()" class="card mb-4 grid gap-4 sm:grid-cols-3">
     <div>
       <label for="t-name" class="field-label">Name</label>
       <input id="t-name" name="name" required [ngModel]="name()" (ngModelChange)="name.set($event)" class="field" />
@@ -23,19 +27,15 @@
       <input id="t-email" name="email" type="email" required autocomplete="off" [ngModel]="email()" (ngModelChange)="email.set($event)" class="field" />
     </div>
     <div>
-      <label for="t-password" class="field-label">Password</label>
-      <input id="t-password" name="password" type="password" required minlength="10" autocomplete="new-password" [ngModel]="password()" (ngModelChange)="password.set($event)" class="field" placeholder="At least 10 characters" />
-    </div>
-    <div>
       <label for="t-role" class="field-label">Role</label>
       <select id="t-role" name="role" [ngModel]="role()" (ngModelChange)="role.set($event)" class="field">
         <option value="sales">Sales: works leads</option>
         <option value="admin">Admin: everything</option>
       </select>
     </div>
-    <div class="flex justify-end gap-2 sm:col-span-4">
+    <div class="flex justify-end gap-2 sm:col-span-3">
       <button type="button" (click)="adding.set(false)" class="btn-secondary">Cancel</button>
-      <button type="submit" [disabled]="saving() || !name().trim() || !email().trim() || password().length < 10" class="btn-primary">{{ saving() ? 'Adding…' : 'Add' }}</button>
+      <button type="submit" [disabled]="saving() || !name().trim() || !email().trim()" class="btn-primary">{{ saving() ? 'Sending…' : 'Send invite' }}</button>
     </div>
   </form>
 }

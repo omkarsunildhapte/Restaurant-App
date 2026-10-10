@@ -1,4 +1,4 @@
-import { Injectable, PLATFORM_ID, computed, inject, signal } from '@angular/core';
+import { DOCUMENT, Injectable, PLATFORM_ID, computed, inject, signal } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { Router } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
@@ -28,6 +28,7 @@ export class AuthStore {
   private readonly api = inject(ApiClient);
   private readonly router = inject(Router);
   private readonly inBrowser = isPlatformBrowser(inject(PLATFORM_ID));
+  private readonly doc = inject(DOCUMENT);
 
   private readonly _session = signal<Session | null>(null);
   private readonly _user = signal<AuthUser | null>(null);
@@ -39,6 +40,8 @@ export class AuthStore {
   readonly user = this._user.asReadonly();
   readonly busy = this._busy.asReadonly();
   readonly error = this._error.asReadonly();
+  /** A Supabase session exists (e.g. from an invite link) even if the CRM user isn't loaded yet. */
+  readonly hasSession = computed(() => this._session() !== null);
   readonly isAuthenticated = computed(() => this._session() !== null && this._user() !== null);
   readonly isAdmin = computed(() => this._user()?.role === 'admin');
   readonly isSuperAdmin = computed(() => this._user()?.isSuperAdmin === true);
@@ -82,6 +85,34 @@ export class AuthStore {
     const allowed = await this.loadUser();
     this._busy.set(false);
     if (allowed) void this.router.navigateByUrl('/dashboard');
+  }
+
+  /**
+   * Invite and reset links sign the person in and land on /welcome, where they choose their
+   * own password; nobody else ever knows it.
+   */
+  public async setPassword(password: string): Promise<void> {
+    this._busy.set(true);
+    this._error.set(null);
+    const { error } = await supabase.auth.updateUser({ password });
+    if (error) {
+      this._error.set(error.message);
+      this._busy.set(false);
+      return;
+    }
+    const allowed = this._user() !== null || (await this.loadUser());
+    this._busy.set(false);
+    if (allowed) void this.router.navigateByUrl('/dashboard');
+  }
+
+  /** Emails a link to /welcome. Says the same thing whether or not the address has an account. */
+  public async sendReset(email: string): Promise<boolean> {
+    this._busy.set(true);
+    this._error.set(null);
+    const { error } = await supabase.auth.resetPasswordForEmail(email, { redirectTo: this.doc.location.origin + '/welcome' });
+    this._busy.set(false);
+    if (error) this._error.set(error.message);
+    return !error;
   }
 
   public async logout(): Promise<void> {

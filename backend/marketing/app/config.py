@@ -34,6 +34,8 @@ class Settings:
         # Server-only key for creating team accounts and setting their CRM role.
         # Never sent to a browser.
         self.supabase_service_role_key = _required("SUPABASE_SERVICE_ROLE_KEY")
+        # Where invite and password-reset emails send people (the Super Admin app's /welcome).
+        self.admin_app_url = (os.environ.get("ADMIN_APP_URL") or "http://localhost:4300").rstrip("/")
         self.cors_origins = [o.strip() for o in os.environ.get("CORS_ORIGINS", "").split(",") if o.strip()]
 
     @property

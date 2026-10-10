@@ -352,7 +352,6 @@ UPDATE_DEALER = _dealer_fields(create=False)
 CREATE_USER = {
     "email": Field(required(email(max_len=200))),
     "name": Field(required(string(1, 120, "Name is required"))),
-    "password": Field(required(string(10, 200, "Use at least 10 characters", trim=False))),
     "role": Field(enum(ROLES), default="sales"),
 }
 

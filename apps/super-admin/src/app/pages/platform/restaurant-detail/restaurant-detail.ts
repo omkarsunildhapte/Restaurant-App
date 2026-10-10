@@ -4,12 +4,14 @@ import { RouterLink } from '@angular/router';
 import { PlatformApi } from '@app/core/platform/platform.api';
 import {
   FEATURES,
+  FEATURE_STATES,
   ROLE_LABEL,
   STATUSES,
   STATUS_LABEL,
   daysLeft,
   shortDate,
   statusClass,
+  type FeatureState,
   type Features,
   type Plan,
   type TenantDetail,
@@ -59,6 +61,7 @@ export class PlatformRestaurantDetail implements OnInit {
   protected readonly inviting = signal(false);
 
   protected readonly features = FEATURES;
+  protected readonly featureStates = FEATURE_STATES;
   protected readonly statuses = STATUSES;
   protected readonly statusLabel = STATUS_LABEL;
   protected readonly statusClass = statusClass;
@@ -101,12 +104,12 @@ export class PlatformRestaurantDetail implements OnInit {
   }
 
   /** On / off / plan default for one feature switch. */
-  protected featureState(key: string): 'on' | 'off' | 'plan' {
+  protected featureState(key: string): FeatureState {
     const o = this.overrides();
     return key in o ? (o[key] ? 'on' : 'off') : 'plan';
   }
 
-  protected setFeature(key: string, state: 'on' | 'off' | 'plan'): void {
+  protected setFeature(key: string, state: FeatureState): void {
     this.overrides.update((o) => {
       const next = { ...o };
       if (state === 'plan') delete next[key];

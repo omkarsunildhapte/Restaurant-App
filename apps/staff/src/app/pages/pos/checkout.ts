@@ -7,6 +7,7 @@ import { Printer } from '@app/core/printer';
 import { Outbox } from '@app/core/outbox';
 import { percentDiscount, splitEqually } from '@app/core/billing';
 import { money, round2, type OrderItem, type PaymentMode } from '@app/core/models';
+import { I18n, TPipe, type I18nKey } from '@app/core/i18n';
 
 interface Row {
   method: PaymentMode;
@@ -14,10 +15,10 @@ interface Row {
   reference: string;
 }
 
-const METHODS: { id: PaymentMode; label: string }[] = [
-  { id: 'cash', label: 'Cash' },
-  { id: 'upi', label: 'UPI' },
-  { id: 'card', label: 'Card' },
+const METHODS: { id: PaymentMode; label: I18nKey }[] = [
+  { id: 'cash', label: 'pay.cash' },
+  { id: 'upi', label: 'pay.upi' },
+  { id: 'card', label: 'pay.card' },
 ];
 
 /**
@@ -30,44 +31,44 @@ const METHODS: { id: PaymentMode; label: string }[] = [
  */
 @Component({
   selector: 'app-checkout',
-  imports: [FormsModule, RouterLink],
+  imports: [FormsModule, RouterLink, TPipe],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     @let b = bill();
     <div class="space-y-3 p-3">
       @if (!day.current()) {
-        <p class="rounded-lg bg-amber-50 px-3 py-2 text-sm text-amber-800">Open the day before billing. <a routerLink="/day" class="font-semibold underline">Open day</a></p>
+        <p class="rounded-lg bg-amber-50 px-3 py-2 text-sm text-amber-800">{{ 'co.openFirst' | t }} <a routerLink="/day" class="font-semibold underline">{{ 'co.openDay' | t }}</a></p>
       }
       @if (notice()) { <p class="rounded-lg bg-emerald-50 px-3 py-2 text-sm text-emerald-800" role="status">{{ notice() }}</p> }
 
-      <div class="flex rounded-lg border border-ink-200 p-0.5" role="group" aria-label="What to bill">
+      <div class="flex rounded-lg border border-ink-200 p-0.5" role="group" [attr.aria-label]="'co.whatToBill' | t">
         <button type="button" (click)="setByItems(false)" class="flex-1 rounded-md px-2.5 py-1.5 text-sm" [class]="!byItems() ? 'bg-ink-900 text-white' : 'text-ink-600'">
-          {{ paidCount() ? 'Rest of the order' : 'Whole order' }}
+          {{ (paidCount() ? 'co.rest' : 'co.whole') | t }}
         </button>
-        <button type="button" (click)="setByItems(true)" [disabled]="unbilled().length < 2 && !hasMultiple()" class="flex-1 rounded-md px-2.5 py-1.5 text-sm disabled:opacity-40" [class]="byItems() ? 'bg-ink-900 text-white' : 'text-ink-600'">By items</button>
+        <button type="button" (click)="setByItems(true)" [disabled]="unbilled().length < 2 && !hasMultiple()" class="flex-1 rounded-md px-2.5 py-1.5 text-sm disabled:opacity-40" [class]="byItems() ? 'bg-ink-900 text-white' : 'text-ink-600'">{{ 'co.byItems' | t }}</button>
       </div>
 
       @if (byItems()) {
-        <ul class="divide-y divide-ink-100 rounded-lg border border-ink-200" aria-label="Items on this bill">
+        <ul class="divide-y divide-ink-100 rounded-lg border border-ink-200" [attr.aria-label]="'co.itemsOnBill' | t">
           @for (i of unbilled(); track i.id) {
             <li class="flex items-center gap-2 px-2.5 py-2">
               <input type="checkbox" [id]="'pick-' + i.id" [checked]="picked().has(i.id)" (change)="toggle(i.id)" class="size-5 accent-brand-600" />
               <label [for]="'pick-' + i.id" class="min-w-0 flex-1 text-sm text-ink-800">{{ i.quantity }} × {{ label(i) }}</label>
               @if (i.quantity > 1) {
-                <button type="button" (click)="splitOne(i)" [disabled]="busy()" class="chip text-xs" [attr.aria-label]="'Split one ' + i.name + ' onto its own line'">Split 1</button>
+                <button type="button" (click)="splitOne(i)" [disabled]="busy()" class="chip text-xs" [attr.aria-label]="'co.splitOneLabel' | t: { name: i.name }">{{ 'co.splitOne' | t }}</button>
               }
               <span class="w-16 text-right text-sm tabular-nums text-ink-700">{{ money(i.line_total) }}</span>
             </li>
           }
         </ul>
-        @if (paidCount()) { <p class="text-xs text-ink-500">{{ paidCount() }} item{{ paidCount() === 1 ? '' : 's' }} already paid on earlier bills.</p> }
+        @if (paidCount()) { <p class="text-xs text-ink-500">{{ paidCount() === 1 ? ('co.paidEarlierOne' | t) : ('co.paidEarlier' | t: { n: paidCount() }) }}</p> }
       }
       <div class="grid grid-cols-2 gap-2">
-        <input [ngModel]="custName()" (ngModelChange)="custName.set($event)" placeholder="Customer name (optional)" aria-label="Customer name" autocomplete="off" class="field mt-0 py-1.5" />
-        <input [ngModel]="custPhone()" (ngModelChange)="custPhone.set($event)" placeholder="Phone (optional)" aria-label="Customer phone" type="tel" inputmode="tel" autocomplete="off" class="field mt-0 py-1.5" />
+        <input [ngModel]="custName()" (ngModelChange)="custName.set($event)" [placeholder]="'co.custName' | t" [attr.aria-label]="'co.custNameLabel' | t" autocomplete="off" class="field mt-0 py-1.5" />
+        <input [ngModel]="custPhone()" (ngModelChange)="custPhone.set($event)" [placeholder]="'co.custPhone' | t" [attr.aria-label]="'co.custPhoneLabel' | t" type="tel" inputmode="tel" autocomplete="off" class="field mt-0 py-1.5" />
       </div>
       <div class="flex items-center gap-2">
-        <label for="disc" class="text-sm text-ink-600">Discount</label>
+        <label for="disc" class="text-sm text-ink-600">{{ 'co.discount' | t }}</label>
         <input id="disc" type="number" min="0" step="1" [ngModel]="discountValue()" (ngModelChange)="discountValue.set(+$event || 0)" class="field mt-0 w-24 py-1.5" />
         <div class="flex rounded-lg border border-ink-200 p-0.5">
           @for (u of ['₹', '%']; track u) {
@@ -77,54 +78,54 @@ const METHODS: { id: PaymentMode; label: string }[] = [
       </div>
 
       <dl class="space-y-0.5 rounded-lg bg-ink-50 p-3 text-sm">
-        <div class="flex justify-between"><dt class="text-ink-500">Subtotal</dt><dd class="tabular-nums">{{ money(b.subtotal) }}</dd></div>
-        @if (b.discount) { <div class="flex justify-between"><dt class="text-ink-500">Discount</dt><dd class="tabular-nums">−{{ money(b.discount) }}</dd></div> }
-        <div class="flex justify-between"><dt class="text-ink-500">CGST + SGST</dt><dd class="tabular-nums">{{ money(b.cgst + b.sgst) }}</dd></div>
-        @if (b.roundOff) { <div class="flex justify-between"><dt class="text-ink-500">Round-off</dt><dd class="tabular-nums">{{ b.roundOff > 0 ? '+' : '−' }}{{ money(abs(b.roundOff)) }}</dd></div> }
-        <div class="flex justify-between text-lg font-bold text-ink-900"><dt>Total</dt><dd class="tabular-nums">{{ money(b.total) }}</dd></div>
+        <div class="flex justify-between"><dt class="text-ink-500">{{ 'co.subtotal' | t }}</dt><dd class="tabular-nums">{{ money(b.subtotal) }}</dd></div>
+        @if (b.discount) { <div class="flex justify-between"><dt class="text-ink-500">{{ 'co.discount' | t }}</dt><dd class="tabular-nums">−{{ money(b.discount) }}</dd></div> }
+        <div class="flex justify-between"><dt class="text-ink-500">{{ 'co.gst' | t }}</dt><dd class="tabular-nums">{{ money(b.cgst + b.sgst) }}</dd></div>
+        @if (b.roundOff) { <div class="flex justify-between"><dt class="text-ink-500">{{ 'co.roundOff' | t }}</dt><dd class="tabular-nums">{{ b.roundOff > 0 ? '+' : '−' }}{{ money(abs(b.roundOff)) }}</dd></div> }
+        <div class="flex justify-between text-lg font-bold text-ink-900"><dt>{{ 'co.total' | t }}</dt><dd class="tabular-nums">{{ money(b.total) }}</dd></div>
       </dl>
 
       <div>
-        <p class="text-xs font-semibold uppercase text-ink-500">Payment</p>
+        <p class="text-xs font-semibold uppercase text-ink-500">{{ 'co.payment' | t }}</p>
         <div class="mt-1.5 flex flex-wrap gap-1.5">
           @for (m of methods; track m.id) {
-            <button type="button" (click)="payAll(m.id)" class="chip">All {{ m.label }}</button>
+            <button type="button" (click)="payAll(m.id)" class="chip">{{ 'co.all' | t: { method: (m.label | t) } }}</button>
           }
-          <button type="button" (click)="split(2)" class="chip">Split 2</button>
-          <button type="button" (click)="split(3)" class="chip">Split 3</button>
-          <button type="button" (click)="split(4)" class="chip">Split 4</button>
+          <button type="button" (click)="split(2)" class="chip">{{ 'co.split' | t: { n: 2 } }}</button>
+          <button type="button" (click)="split(3)" class="chip">{{ 'co.split' | t: { n: 3 } }}</button>
+          <button type="button" (click)="split(4)" class="chip">{{ 'co.split' | t: { n: 4 } }}</button>
         </div>
         @for (r of rows(); track $index) {
           <div class="mt-2 flex items-center gap-1.5">
-            <select [ngModel]="r.method" (ngModelChange)="setRow($index, { method: $event })" [attr.aria-label]="'Payment ' + ($index + 1) + ' method'" class="field mt-0 w-24 py-1.5">
-              @for (m of methods; track m.id) { <option [value]="m.id">{{ m.label }}</option> }
+            <select [ngModel]="r.method" (ngModelChange)="setRow($index, { method: $event })" [attr.aria-label]="'co.methodLabel' | t: { n: $index + 1 }" class="field mt-0 w-24 py-1.5">
+              @for (m of methods; track m.id) { <option [value]="m.id">{{ m.label | t }}</option> }
             </select>
-            <input type="number" min="0" step="0.01" [ngModel]="r.amount" (ngModelChange)="setRow($index, { amount: +$event || 0 })" [attr.aria-label]="'Payment ' + ($index + 1) + ' amount'" class="field mt-0 flex-1 py-1.5 tabular-nums" />
+            <input type="number" min="0" step="0.01" [ngModel]="r.amount" (ngModelChange)="setRow($index, { amount: +$event || 0 })" [attr.aria-label]="'co.amountLabel' | t: { n: $index + 1 }" class="field mt-0 flex-1 py-1.5 tabular-nums" />
             @if (r.method !== 'cash') {
-              <input [ngModel]="r.reference" (ngModelChange)="setRow($index, { reference: $event })" placeholder="Ref" aria-label="Reference" class="field mt-0 w-20 py-1.5" />
+              <input [ngModel]="r.reference" (ngModelChange)="setRow($index, { reference: $event })" [placeholder]="'co.ref' | t" [attr.aria-label]="'co.refLabel' | t" class="field mt-0 w-20 py-1.5" />
             }
-            <button type="button" (click)="removeRow($index)" class="px-1 text-ink-400 hover:text-rose-600" aria-label="Remove payment">✕</button>
+            <button type="button" (click)="removeRow($index)" class="px-1 text-ink-400 hover:text-rose-600" [attr.aria-label]="'co.remove' | t">✕</button>
           </div>
         }
-        <button type="button" (click)="addRow()" class="mt-2 text-sm font-medium text-brand-600">+ Add payment</button>
+        <button type="button" (click)="addRow()" class="mt-2 text-sm font-medium text-brand-600">{{ 'co.addPayment' | t }}</button>
         <p class="mt-2 text-sm" [class]="remaining() === 0 ? 'text-emerald-700' : 'text-rose-600'">
-          {{ remaining() === 0 ? 'Payments match the bill' : remaining() > 0 ? money(remaining()) + ' still to pay' : money(-remaining()) + ' more than the bill' }}
+          {{ remaining() === 0 ? ('co.match' | t) : remaining() > 0 ? ('co.toPay' | t: { amount: money(remaining()) }) : ('co.over' | t: { amount: money(-remaining()) }) }}
         </p>
       </div>
 
       @if (cashDue() > 0) {
         <div class="flex items-center gap-2 rounded-lg bg-emerald-50 p-2">
-          <label for="tendered" class="text-sm text-emerald-900">Cash given</label>
+          <label for="tendered" class="text-sm text-emerald-900">{{ 'co.cashGiven' | t }}</label>
           <input id="tendered" type="number" min="0" step="1" [ngModel]="tendered()" (ngModelChange)="tendered.set(+$event || 0)" class="field mt-0 w-24 py-1.5" />
-          <span class="ml-auto text-sm font-semibold text-emerald-900">Change {{ money(change()) }}</span>
+          <span class="ml-auto text-sm font-semibold text-emerald-900">{{ 'co.change' | t: { amount: money(change()) } }}</span>
         </div>
       }
 
       @if (error()) { <p class="text-sm text-rose-600" role="alert">{{ error() }}</p> }
       <button type="button" (click)="settle()" [disabled]="!canSettle()" class="btn-primary w-full py-3.5 text-base">
-        {{ busy() ? 'Saving…' : 'Settle & print · ' + money(b.total) }}
+        {{ busy() ? ('co.saving' | t) : ('co.settle' | t: { amount: money(b.total) }) }}
       </button>
-      @if (!outbox.online()) { <p class="text-xs text-amber-700">Offline: the bill is printed as provisional and gets its number when it syncs.</p> }
+      @if (!outbox.online()) { <p class="text-xs text-amber-700">{{ 'co.offline' | t }}</p> }
     </div>
   `,
 })
@@ -136,6 +137,7 @@ export class Checkout {
   protected readonly day = inject(DayStore);
   protected readonly outbox = inject(Outbox);
   private readonly printer = inject(Printer);
+  private readonly i18n = inject(I18n);
   protected readonly money = money;
   protected readonly methods = METHODS;
 
@@ -267,7 +269,8 @@ export class Checkout {
         this.done.emit();
       } else {
         const left = this.floor.unbilledOf(order.id).length;
-        this.notice.set(`${saved ? 'Bill ' + saved.invoice_no : 'Bill'} printed · ${money(b.total)}. ${left} item${left === 1 ? '' : 's'} left to pay.`);
+        const printed = saved ? this.i18n.t('co.printedNo', { no: saved.invoice_no, amount: money(b.total) }) : this.i18n.t('co.printed', { amount: money(b.total) });
+        this.notice.set(printed + ' ' + (left === 1 ? this.i18n.t('co.leftOne') : this.i18n.t('co.left', { n: left })));
       }
     } catch (e) {
       this.error.set((e as Error).message);

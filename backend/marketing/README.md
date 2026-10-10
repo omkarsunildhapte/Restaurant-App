@@ -28,8 +28,10 @@ cp .env.example .env                 # DATABASE_URL, SUPABASE_URL, SUPABASE_SERV
 Who gets in:
 - A platform **Super Admin** (`public.profiles.is_super_admin`) is a CRM **admin** automatically.
 - Anyone else needs `app_metadata.crm_role` = `admin` or `sales`, which only the service-role key can set.
-  Admins add people from the Team page (creates the Supabase account with a starting password),
-  or with `scripts/create_user.py email password "Name" sales`.
+  Access is **invite-only**: admins invite people from the Team page (or
+  `scripts/create_user.py email "Name" sales`). Supabase emails a link to the Super Admin app's
+  `/welcome` page (`ADMIN_APP_URL`), where the person chooses their own password; "Forgot
+  password?" on the sign-in page sends a link to the same page.
 - Public sign-up stays off (`supabase/config.toml`). Switching someone off on the Team page blocks
   them at once, even before their current token expires.
 

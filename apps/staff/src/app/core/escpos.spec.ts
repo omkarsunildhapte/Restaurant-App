@@ -90,3 +90,30 @@ describe('receipt and KOT', () => {
     expect(t).toContain('Round 2');
   });
 });
+
+describe('Google review QR on receipts', () => {
+  const base: ReceiptDoc = {
+    business: 'Brew', outletLines: [], title: 'Tax invoice', when: 'now', orderLine: 'Order #1', customer: null, customerPhone: null,
+    items: [{ label: '1 x Tea', addons: null, amount: 100 }], subtotal: 100, discount: 0, cgst: 2.5, sgst: 2.5, roundOff: 0, total: 105,
+    payments: [{ method: 'upi', amount: 105 }], openDrawer: false,
+  };
+  const url = 'https://search.google.com/local/writereview?placeid=ChIJ_test_place_1';
+  const find = (b: Uint8Array, seq: number[]) => Array.from(b).findIndex((_, i) => seq.every((x, j) => b[i + j] === x));
+
+  it('stores the link and prints it with the QR command', () => {
+    const b = receiptBytes({ ...base, reviewUrl: url }, 80);
+    const store = find(b, [0x1d, 0x28, 0x6b, (url.length + 3) & 0xff, (url.length + 3) >> 8, 0x31, 0x50, 0x30]);
+    expect(store).toBeGreaterThan(0);
+    expect(new TextDecoder().decode(b.slice(store + 8, store + 8 + url.length))).toBe(url);
+    expect(find(b, [0x1d, 0x28, 0x6b, 3, 0, 0x31, 0x51, 0x30])).toBeGreaterThan(store);
+    expect(new TextDecoder().decode(b)).toContain('Review us on Google');
+  });
+
+  it('uses a smaller QR on 58 mm paper', () => {
+    expect(find(receiptBytes({ ...base, reviewUrl: url }, 58), [0x1d, 0x28, 0x6b, 3, 0, 0x31, 0x43, 4])).toBeGreaterThan(0);
+  });
+
+  it('prints no QR without a link', () => {
+    expect(find(receiptBytes(base, 80), [0x1d, 0x28, 0x6b])).toBe(-1);
+  });
+});

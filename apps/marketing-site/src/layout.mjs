@@ -52,7 +52,7 @@ function header(site, page) {
     <div class="nav-panel" id="nav-links">
       <ul class="nav-links">
 ${NAV.map(([href, label]) => html`        <li><a href="${href}"${page.file === href ? raw(' aria-current="page"') : ""}>${label}</a></li>\n`)}      </ul>
-      <a class="nav-trial" href="signup.html">Start free trial</a>
+      <a class="nav-signin" href="${site.businessPanelUrl}">Sign in</a>
       <a class="btn btn--primary btn--sm" href="demo.html">Book a free demo</a>
     </div>
   </nav>
@@ -75,7 +75,7 @@ function footer(site) {
         <li><a href="features.html">Features</a></li>
         <li><a href="pricing.html">Pricing</a></li>
         <li><a href="demo.html">Book a demo</a></li>
-        <li><a href="signup.html">Start free trial</a></li>
+        <li><a href="${site.businessPanelUrl}">Owner sign in</a></li>
       </ul>
     </div>
     <div>
@@ -115,7 +115,7 @@ export function page(site, p) {
   return html`${head(site, p)}${header(site, p)}<main id="main">
 ${p.body}
 </main>
-${footer(site)}<script>window.SITE=${raw(JSON.stringify({ demoApiUrl: site.demoApiUrl, signupApiUrl: site.signupApiUrl, businessPanelUrl: site.businessPanelUrl, whatsapp: site.contact.whatsapp }).replace(/</g, "\\u003c"))};</script>
+${footer(site)}<script>window.SITE=${raw(JSON.stringify({ demoApiUrl: site.demoApiUrl, whatsapp: site.contact.whatsapp }).replace(/</g, "\\u003c"))};</script>
 <script src="js/main.js" defer></script>
 </body>
 </html>

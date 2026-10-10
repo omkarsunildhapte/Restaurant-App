@@ -75,6 +75,5 @@
       }
     ]
   },
-  "signupApiUrl": "http://localhost:4000/public/v1/signups",
   "businessPanelUrl": "http://localhost:4201"
 }

@@ -43,7 +43,7 @@ lead in the Sales CRM (source "website", follow-up today), which shows up in
 
 ## Before going live
 
-- Choose the product name and domain; set `brand`, `url` and `contact`.
+- Set `url` to the Cloudflare Pages address (`https://<project>.pages.dev`, later `https://thaliyo.com`) and fill in `contact`. The brand (Thaliyo) is already set.
 - Point `demoApiUrl` at the deployed marketing API.
 - Have a lawyer review the privacy, terms and refund pages, then remove the draft note in `src/pages/legal.mjs`.
 - Confirm prices (taken from `docs/ROADMAP.md` and `docs/GO-TO-MARKET.md`), and whether they include GST.

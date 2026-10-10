@@ -3,21 +3,11 @@ import { isPlatformBrowser } from '@angular/common';
 import { Router } from '@angular/router';
 import type { Session } from '@supabase/supabase-js';
 import { db, supabase } from '@app/core/supabase.client';
-import type { Outlet, Role, Workspace } from '@app/core/models';
+import type { Outlet, Workspace } from '@app/core/models';
+import { MODES, modesFor } from '@app/core/modes';
 
 const PLACE_KEY = 'rp-staff.place';
 const PLACES_CACHE = 'rp-staff.places';
-
-/** Which screens each role works in, and where it lands after sign-in. */
-export const MODES: Record<Role, readonly ('waiter' | 'kitchen' | 'pos')[]> = {
-  admin: ['pos', 'waiter', 'kitchen'],
-  owner: ['pos', 'waiter', 'kitchen'],
-  manager: ['pos', 'waiter', 'kitchen'],
-  cashier: ['pos', 'waiter'],
-  waiter: ['waiter'],
-  kitchen: ['kitchen'],
-  delivery: [],
-};
 
 /**
  * Who is signed in (Supabase Auth, one login across the platform), and where they are
@@ -48,7 +38,9 @@ export class SessionStore {
   readonly signedIn = computed(() => this._session() !== null);
   readonly ready = computed(() => this._workspace() !== null && this._outlet() !== null);
   readonly role = computed(() => this._workspace()?.role ?? null);
-  readonly modes = computed(() => (this.role() ? MODES[this.role()!] : []));
+  readonly modes = computed(() => modesFor(this._workspace()));
+  /** Signed in at an outlet, but the plan switches off every screen this role uses. */
+  readonly noScreens = computed(() => this.ready() && this.modes().length === 0);
   readonly personName = computed(() => {
     const u = this._session()?.user;
     return (u?.user_metadata?.['full_name'] as string | undefined) ?? u?.email?.split('@')[0] ?? '';
@@ -123,6 +115,7 @@ export class SessionStore {
   /** The first screen for the current role. */
   public home(): string {
     const mode = this.modes()[0];
+    if (!mode) return '/choose';
     return mode === 'kitchen' ? '/kitchen' : mode === 'waiter' ? '/waiter' : '/pos';
   }
 
@@ -143,7 +136,7 @@ export class SessionStore {
     try {
       const { data, error } = await db().rpc('my_workspaces');
       if (error) throw new Error(error.message);
-      const res = await db().from('outlets').select('id, tenant_id, name, address, city, phone, gstin').eq('is_active', true).order('name');
+      const res = await db().from('outlets').select('id, tenant_id, name, address, city, phone, gstin, google_place_id, review_qr_on_bill').eq('is_active', true).order('name');
       if (res.error) throw new Error(res.error.message);
       workspaces = ((data as Workspace[]) ?? []).filter((w) => MODES[w.role].length > 0);
       outlets = (res.data as Outlet[]) ?? [];

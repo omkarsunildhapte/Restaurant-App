@@ -14,6 +14,7 @@ export class Login {
   protected readonly email = signal('');
   protected readonly password = signal('');
   protected readonly showPassword = signal(false);
+  protected readonly resetSent = signal(false);
 
   protected submit(): void {
     const email = this.email().trim();
@@ -21,6 +22,13 @@ export class Login {
     if (!email || !password) return;
 
     this.auth.login(email, password);
+  }
+
+  /** Emails a link to choose a new password, to the address typed above. */
+  protected async forgot(): Promise<void> {
+    const email = this.email().trim();
+    if (!email) return;
+    this.resetSent.set(await this.auth.sendReset(email));
   }
 
   protected togglePassword(): void {

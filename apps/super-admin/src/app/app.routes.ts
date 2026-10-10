@@ -12,6 +12,12 @@ export const routes: Routes = [
     loadComponent: () => import('@app/pages/login/login').then((m) => m.Login),
   },
   {
+    // Invite and password-reset links land here (signed in by the link) to choose a password.
+    path: 'welcome',
+    title: t('Set your password'),
+    loadComponent: () => import('@app/pages/welcome/welcome').then((m) => m.Welcome),
+  },
+  {
     path: '',
     canMatch: [authGuard],
     loadComponent: () => import('@app/layout/shell/shell').then((m) => m.Shell),

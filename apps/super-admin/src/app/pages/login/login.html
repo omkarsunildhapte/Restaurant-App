@@ -9,8 +9,8 @@
     <div class="rounded-2xl border border-ink-200 bg-white p-6 shadow-sm dark:border-ink-800 dark:bg-ink-950">
       <h1 class="text-lg font-semibold tracking-tight text-ink-900 dark:text-white">Sign in</h1>
       <p class="mt-1 text-sm text-ink-500 dark:text-ink-400">
-        For the Thaliyo team. Sign in with your platform account; an admin adds sales team
-        members from the Team page.
+        For the Thaliyo team, by invite only. An admin invites you from the Team page; the
+        email lets you choose your password.
       </p>
 
       @if (auth.error()) {
@@ -70,6 +70,15 @@
           {{ auth.busy() ? 'Signing in…' : 'Sign in' }}
         </button>
       </form>
+
+      @if (resetSent()) {
+        <p class="mt-4 text-sm text-emerald-700 dark:text-emerald-300" role="status">If {{ email().trim() }} has an account, a link to set a new password is on its way.</p>
+      } @else {
+        <button type="button" (click)="forgot()" [disabled]="auth.busy() || !email().trim()" class="mt-4 text-sm font-medium text-brand-600 hover:text-brand-700 disabled:opacity-50 dark:text-brand-400">
+          Forgot password?
+        </button>
+        @if (!email().trim()) { <span class="ml-1 text-xs text-ink-400">Type your email first</span> }
+      }
     </div>
 
     <p class="mt-6 text-center text-xs text-ink-400 dark:text-ink-500">

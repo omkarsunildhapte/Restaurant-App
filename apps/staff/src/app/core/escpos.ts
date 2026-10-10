@@ -123,6 +123,20 @@ export class EscPos {
     return this.raw(GS, 0x56, 66, 3);
   }
 
+  /**
+   * A QR code with the printer's own QR command (GS ( k, model 2, error level M). `size` is the
+   * module size in dots (1-16). Printers without QR support skip it.
+   */
+  public qr(data: string, size: number): this {
+    const bytes = Array.from(ascii(data), (ch) => ch.charCodeAt(0));
+    const len = bytes.length + 3;
+    return this.raw(GS, 0x28, 0x6b, 4, 0, 0x31, 0x41, 0x32, 0)
+      .raw(GS, 0x28, 0x6b, 3, 0, 0x31, 0x43, Math.max(1, Math.min(16, size)))
+      .raw(GS, 0x28, 0x6b, 3, 0, 0x31, 0x45, 0x31)
+      .raw(GS, 0x28, 0x6b, len & 0xff, len >> 8, 0x31, 0x50, 0x30, ...bytes)
+      .raw(GS, 0x28, 0x6b, 3, 0, 0x31, 0x51, 0x30);
+  }
+
   /** Kicks the cash drawer on pin 2: ESC p 0 25 250 (50 ms on, 500 ms off). */
   public drawer(): this {
     return this.raw(ESC, 0x70, 0, 25, 250);
@@ -154,6 +168,8 @@ export interface ReceiptDoc {
   total: number;
   payments: { method: string; amount: number }[];
   openDrawer: boolean;
+  /** Google "write a review" link, printed as a QR under the totals (null = none). */
+  reviewUrl?: string | null;
 }
 
 export function receiptBytes(d: ReceiptDoc, paperMm: 58 | 80): Uint8Array {
@@ -176,7 +192,9 @@ export function receiptBytes(d: ReceiptDoc, paperMm: 58 | 80): Uint8Array {
   if (d.roundOff) p.pair('Round-off', (d.roundOff > 0 ? '+' : '-') + rs(Math.abs(d.roundOff)));
   p.bold(true).pair('TOTAL Rs', rs(d.total)).bold(false);
   for (const pay of d.payments) p.pair('Paid - ' + pay.method.toUpperCase(), rs(pay.amount));
-  p.align('center').line().line('Thank you! Visit again.').align('left').feed(3).cut();
+  p.align('center').line();
+  if (d.reviewUrl) p.line('Enjoyed it? Review us on Google').qr(d.reviewUrl, paperMm === 58 ? 4 : 6).line().line('Scan with your phone camera').line();
+  p.line('Thank you! Visit again.').align('left').feed(3).cut();
   if (d.openDrawer) p.drawer();
   return p.bytes();
 }

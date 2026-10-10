@@ -1,6 +1,7 @@
 import { inject } from '@angular/core';
 import { Router, type CanMatchFn } from '@angular/router';
 import { SessionStore } from '@app/core/session.store';
+import type { Mode } from '@app/core/modes';
 
 /** Signed in and working at an outlet; otherwise to login or the outlet chooser. */
 export const workingGuard: CanMatchFn = () => {
@@ -22,8 +23,8 @@ export const guestGuard: CanMatchFn = () => {
   return inject(Router).createUrlTree([s.ready() ? s.home() : '/choose']);
 };
 
-/** Only roles that work in this screen (the database enforces the same rules). */
-export const modeGuard = (mode: 'waiter' | 'kitchen' | 'pos'): CanMatchFn => () => {
+/** Only roles that work in this screen, and only when the plan includes it. */
+export const modeGuard = (mode: Mode): CanMatchFn => () => {
   const s = inject(SessionStore);
   return s.modes().includes(mode) ? true : inject(Router).createUrlTree([s.home()]);
 };

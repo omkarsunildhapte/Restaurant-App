@@ -69,7 +69,9 @@ const inr = new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR',
 })
 export class Billing implements OnInit {
   protected readonly money = (n: number | null | undefined) => inr.format(Number(n ?? 0));
-  protected readonly tab = signal<'invoices' | 'prices' | 'settings'>('invoices');
+  protected readonly tabs = ['invoices', 'prices', 'settings'] as const;
+  protected readonly tab = signal<(typeof this.tabs)[number]>('invoices');
+  protected readonly statusFilters: readonly (Status | 'all')[] = ['open', 'paid', 'void', 'all'];
   protected readonly error = signal<string | null>(null);
   protected readonly notice = signal<string | null>(null);
   protected readonly busy = signal(false);
