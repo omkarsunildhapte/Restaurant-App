@@ -40,6 +40,10 @@ export const ERROR_MESSAGES = {
   ADDRESS_LOOKUP_UNAVAILABLE: 'Address lookup not available yet',
   ADDRESS_QUERY_EMPTY: 'Enter an address to search.',
   SIGN_IN_FOR_ADDRESS: 'Sign in to look up addresses.',
+  SIGN_IN_REQUIRED: 'Sign in again to continue.',
+  NO_RESTAURANT: 'You are not a rider for any restaurant yet. Ask the restaurant to invite you with this e-mail.',
+  PROFILE_FIRST: 'Fill in your personal information first.',
+  DATA_FAILED: 'Could not reach the server. Check the internet and try again.',
 } as const;
 
 /** Builds the message shown when an environment has no Supabase url/anonKey. */

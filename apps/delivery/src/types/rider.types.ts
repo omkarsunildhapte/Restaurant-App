@@ -1,9 +1,31 @@
-/** Rider profile as the onboarding flow reads it (TODO(Phase 5): Supabase table riders). */
+import { Database } from '@appTypes/database.types';
+
+/** A `riders` row (migration 0005). */
+export type RiderRow = Database['public']['Tables']['riders']['Row'];
+
+/** Super Admin's check of the rider's documents (`rider_verification` enum). */
+export type RiderVerification = Database['public']['Enums']['rider_verification'];
+
+/** A business this person rides for: a `my_workspaces()` row with the delivery role. */
+export interface RiderWorkspace {
+  tenantId: string;
+  tenantName: string;
+  /** null = every outlet of the business. */
+  outletId: string | null;
+  writable: boolean;
+}
+
+/** Rider profile as the app reads it (the `riders` row for the current business). */
 export interface RiderProfile {
   uid: string;
-  email: string;
+  riderId: string;
+  tenantId: string;
   displayName: string;
   phoneNumber?: string;
+  verification: RiderVerification;
+  rejectionReason: string | null;
+  isActive: boolean;
+  isOnline: boolean;
 }
 
 /** Personal information form (personal-information page). */

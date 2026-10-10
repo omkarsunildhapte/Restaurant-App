@@ -100,5 +100,6 @@ e2e/                             Playwright specs + fixtures
 Tracked, accepted, and **not** a licence to write new code the same way. Log any deliberate shortcut here.
 
 - `apps/business-panel`: Prettier formats `.html`, `.css` and `.json` only (`npm run format`). It is not run on `.ts`, because it would wrap Rule 2's single-line imports; TypeScript style is checked by ESLint.
-- `apps/customer`, `apps/delivery`: data calls are stubs (`// TODO(Phase 5/8)`) until their Supabase tables are wired.
+- `apps/customer`: data calls are stubs (`// TODO(Phase 8)`) until its Supabase tables are wired.
+- `apps/delivery`: rider documents (`RiderService.saveDocuments`) are a stub until the private storage bucket (migration 0014) exists; personal information saves name, phone and licence only until the extra fields are decided.
 - `apps/delivery`: initial bundle is 830 kB (warning budget 500 kB) because supabase-js is eager through the root guard and interceptor; fix by loading AuthService/Supabase lazily (`injectAsync`).

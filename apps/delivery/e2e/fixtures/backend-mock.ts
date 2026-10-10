@@ -1,11 +1,13 @@
 import { Page } from '@playwright/test';
 import { environment } from '@environments/environment';
-import { e2eSession } from '../data/session';
+import { E2E_WORKSPACE, e2eSession } from '../data/session';
+import { SUPABASE_RPC } from '@constants/supabase.constants';
 
 /**
- * A stand-in for Supabase Auth and the backend API, so a run needs nothing but this repo.
- * Supabase tables are not called at all yet (the data services are Phase 5 stubs); any REST or
- * Realtime call is answered empty so a stray request can never reach a real database.
+ * A stand-in for Supabase Auth, the delivery data and the backend API, so a run needs nothing but
+ * this repo. The signed-in rider is a `delivery` member of one business, has no rider profile yet
+ * (onboarding) and no jobs. Any other REST or Realtime call is answered empty so a stray request
+ * can never reach a real database. Specs override a route by registering their own after this.
  */
 const SUPABASE = environment.supabase.url;
 
@@ -17,7 +19,9 @@ export async function mockBackend(page: Page): Promise<void> {
   await page.route(`${SUPABASE}/auth/v1/recover**`, (route) => route.fulfill(json({})));
   await page.route(`${SUPABASE}/auth/v1/logout**`, (route) => route.fulfill({ status: 204, body: '' }));
   await page.route(`${SUPABASE}/auth/v1/user**`, (route) => route.fulfill(json(e2eSession().user)));
-  await page.route(`${SUPABASE}/rest/v1/**`, (route) => route.fulfill(json([])));
+  await page.route(`${SUPABASE}/rest/v1/**`, (route) => route.fulfill(route.request().method() === 'GET' ? json([]) : json(null)));
+  await page.route(`${SUPABASE}/rest/v1/rpc/${SUPABASE_RPC.MY_WORKSPACES}**`, (route) => route.fulfill(json([E2E_WORKSPACE])));
+  await page.route(`${SUPABASE}/rest/v1/rpc/${SUPABASE_RPC.MY_DELIVERIES}**`, (route) => route.fulfill(json([])));
   await page.route(`${SUPABASE}/realtime/**`, (route) => route.abort());
   await page.route(`${environment.apiUrl}/**`, (route) => route.fulfill(json({})));
 }

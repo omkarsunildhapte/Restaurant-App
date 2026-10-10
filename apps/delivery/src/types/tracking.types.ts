@@ -1,12 +1,7 @@
-/** A point on the map. */
-export interface TrackPoint {
-  lat: number;
-  lng: number;
-}
+import { MapPoint, RiderOrder } from '@appTypes/order.types';
 
-/** The delivery the track-map page follows (TODO(Phase 5): delivery_jobs + rider_locations). */
-export interface ActiveDelivery {
-  customerName: string;
-  customerPhone: string;
-  deliveryAddress: string;
-}
+/** A point on the map. */
+export type TrackPoint = MapPoint;
+
+/** The delivery the track-map page follows: the rider's newest open job. */
+export type ActiveDelivery = RiderOrder;

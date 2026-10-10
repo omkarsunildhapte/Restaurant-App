@@ -35,7 +35,7 @@ export class TrackMap {
 
   /** Never throws: an errored load shows the empty state (Rule 8). */
   readonly current = computed(() => (this.delivery.hasValue() ? this.delivery.value() : null));
-  readonly initial = computed(() => this.current()?.customerName.charAt(0).toUpperCase() ?? '');
+  readonly initial = computed(() => this.current()?.customerName?.charAt(0).toUpperCase() ?? '');
 
   toggleDetails(): void {
     this.showDetails.update((shown) => !shown);

@@ -1,6 +1,7 @@
 import { APP_ROUTE_LINKS, PUBLIC_ROUTES, SIGNED_IN_ROUTES } from '@constants/routes.constants';
+import { ERROR_MESSAGES } from '@constants/messages.constants';
 import { E2E_RIDER } from '../data/session';
-import { LOGIN, SCREEN_MARKERS } from '../data/selectors';
+import { ALERT, LOGIN, SCREEN_MARKERS } from '../data/selectors';
 import { expect, test } from '../fixtures/test';
 
 test.describe('Every signed-in route', () => {
@@ -25,12 +26,12 @@ test.describe('Every signed-in route', () => {
     await expect(page).toHaveURL(new RegExp(`${APP_ROUTE_LINKS.LOGIN}$`));
   });
 
-  test('a stubbed save says "Not connected yet"', async ({ page }) => {
+  test('saving UPI before personal information asks for it first', async ({ page }) => {
     await page.goto(APP_ROUTE_LINKS.BANK_DETAILS);
     await page.locator('[data-testid="bank-upi"] input').fill('rider@okbank');
     await page.getByTestId('bank-submit').click();
 
-    await expect(page.locator('ion-toast')).toContainText('Not connected yet');
+    await expect(page.locator(ALERT.MESSAGE)).toHaveText(ERROR_MESSAGES.PROFILE_FIRST);
   });
 });
 

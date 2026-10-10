@@ -33,3 +33,6 @@ export function e2eSession() {
 
 /** The localStorage key supabase-js uses: sb-<first label of the Supabase host>-auth-token. */
 export const SUPABASE_STORAGE_KEY = `sb-${new URL(environment.supabase.url).hostname.split('.')[0]}-auth-token`;
+
+/** The business the e2e rider delivers for: a `my_workspaces()` row with the delivery role. */
+export const E2E_WORKSPACE = { tenant_id: '10000000-0000-4000-a000-000000000001', tenant_name: 'Brew & Leaf Café', tenant_slug: 'brew-leaf', role: 'delivery', outlet_id: null, status: 'active', trial_ends_at: null, plan_id: 'pro', features: {}, writable: true };
