@@ -307,6 +307,10 @@ Benchmarks: Petpooja about ₹15,000–30,000/year per outlet; custom single-res
 
 Add newest entries at the top. One entry per working session.
 
+### 2026-10-10 (Business panel: coding standard)
+- Done: `apps/business-panel` follows `.agents/rules` outside `src/app/business`: `@` aliases only, the AGENTS.md folder layout (`pages/`, `shared/`, `components/`, `services/`, `constants/`, `types/`, `utils/`), Angular 20+ file names, separate .ts/.html/.css/.spec.ts per component, Signal Forms for login and register, OnPush everywhere, lazy routes, SSR kept. ESLint (flat config, angular-eslint, template accessibility), Prettier, Vitest specs for every component/service/util, Playwright e2e with Supabase and the API stubbed (login, guard redirect, every panel screen).
+- Done: deleted the legacy `/main` screens, `src/app/service/*` stubs and the Firebase Hosting/Firestore files.
+
 ### 2026-10-10 (Phase 1: backend, Super Admin, Business panel)
 - Done: Supabase schema with tenant → outlet, 7 business roles + Super Admin, menu (categories, variants, add-ons, combos, GST rates), tables, orders, bills; isolation by RLS and composite foreign keys, 31 pgTAP tests. Node API in `backend/` restructured to the meal-sehat layout (`config/routes` by audience, router → controller → service → dao, `test/` mirrors `src/`), 50 tests passing. Super Admin Platform screens (overview, restaurants, plans) live in `apps/super-admin` on the shared Supabase login.
 - In progress: Business panel screens (dashboard, menu, tables, staff and invites, outlets, settings, setup wizard, invite welcome page) built in `apps/business-panel/src/app/business`; waiting for the Angular 22 upgrade to finish before wiring `/business` and testing in the browser.

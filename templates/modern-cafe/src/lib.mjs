@@ -63,6 +63,9 @@ export const waHref = (number, text) =>
   `https://wa.me/${String(number).replace(/\D/g, "")}${text ? "?text=" + encodeURIComponent(text) : ""}`;
 export const mapsDirHref = (query) => `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(query)}`;
 export const mapsSearchHref = (query) => `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`;
+// Google reviews for one outlet, by its Place ID (outlets.google_place_id).
+export const googleWriteReviewHref = (placeId) => `https://search.google.com/local/writereview?placeid=${encodeURIComponent(placeId)}`;
+export const googleReviewsHref = (placeId) => `https://search.google.com/local/reviews?placeid=${encodeURIComponent(placeId)}`;
 export const mapsEmbedSrc = (query) => `https://maps.google.com/maps?q=${encodeURIComponent(query)}&z=15&output=embed`;
 
 // ---- Opening hours ----

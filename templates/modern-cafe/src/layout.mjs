@@ -1,5 +1,5 @@
 /* Parts shared by every page: <head>, announcement bar, header, footer, floating buttons. */
-import { html, raw, jsonScript, safeUrl, telHref, waHref, mapsDirHref, groupHours, dayRangeLabel, fmtRange } from "./lib.mjs";
+import { html, raw, jsonScript, safeUrl, telHref, waHref, mapsDirHref, googleWriteReviewHref, groupHours, dayRangeLabel, fmtRange } from "./lib.mjs";
 import { icon } from "./icons.mjs";
 
 const NAV = [
@@ -135,6 +135,7 @@ ${groupHours(r.hours).map((g) => html`          <li>${dayRangeLabel(g.days)} · 
           <li><a href="${telHref(r.phone)}">${r.phone}</a></li>
           ${r.email ? html`<li><a href="mailto:${r.email}">${r.email}</a></li>` : ""}
           <li><a ${raw(attrs(ext(dir)))}>${r.address.line}</a></li>
+          ${r.googlePlaceId ? html`<li><a class="footer-review" ${raw(attrs(ext(googleWriteReviewHref(r.googlePlaceId))))}>${icon("star")} Review us on Google</a></li>` : ""}
         </ul>
         ${r.fssai ? html`<p class="footer-licence">FSSAI Lic. No. ${r.fssai}</p>` : ""}
       </div>

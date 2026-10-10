@@ -380,10 +380,6 @@ p { margin: 0 0 1em; }
 .stepper button:hover { border-color: var(--green-600); }
 .stepper output { min-width: 90px; text-align: center; font-weight: 700; font-size: 1.1rem; }
 .notice { background: #fff4e5; border: 1px solid #f3d9b1; color: #7a4b12; border-radius: 12px; padding: 12px 14px; margin-top: 12px; font-size: 0.95rem; }
-.book-summary {
-  background: var(--green-100); color: var(--green-700); border-radius: 14px; padding: 14px 16px;
-  font-weight: 700; margin: 6px 0 16px;
-}
 .book-side .contact-card + .contact-card { margin-top: 20px; }
 .book-side ul { padding-left: 18px; margin: 0; color: var(--muted); }
 .book-side li { margin-bottom: 6px; }
@@ -831,3 +827,14 @@ button[disabled] { opacity: 0.55; cursor: not-allowed; transform: none; }
 .powered-by b { color: #fff; letter-spacing: 0.02em; }
 /* Footer links are cream; keep the light button's dark text readable. */
 .site-footer .btn--light, .site-footer .btn--light:hover { color: var(--brown-900); }
+
+/* ---------- Google review (contact page box, footer link) ---------- */
+.review-box { display: flex; gap: 20px; align-items: center; justify-content: space-between; margin-top: 18px; padding: 18px; border-radius: 14px; background: var(--green-100); }
+.review-box h3 { margin: 0 0 4px; }
+.review-box p { margin: 0 0 12px; color: var(--muted); font-size: 0.95rem; }
+.review-qr { margin: 0; text-align: center; flex: none; }
+.review-qr .qr { display: block; border-radius: 8px; }
+.review-qr figcaption { font-size: 0.78rem; color: var(--muted); margin-top: 4px; }
+@media (max-width: 860px) { .review-qr { display: none; } }
+.footer-review { display: inline-flex; align-items: center; gap: 6px; }
+.footer-review svg, .review-box .btn svg { width: 16px; height: 16px; }

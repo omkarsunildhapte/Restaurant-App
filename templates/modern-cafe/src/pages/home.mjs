@@ -1,6 +1,6 @@
 /* Home page. Sections come from home.sections in restaurant.json, in that order;
    leave a key out to hide that section. */
-import { html, raw, jsonScript, safeUrl, telHref, waHref, mapsDirHref, mapsSearchHref, money, hoursSpan, openEveryDay, openingHoursSpec } from "../lib.mjs";
+import { html, raw, jsonScript, safeUrl, telHref, waHref, mapsDirHref, mapsSearchHref, googleWriteReviewHref, googleReviewsHref, money, hoursSpan, openEveryDay, openingHoursSpec } from "../lib.mjs";
 import { icon, SPRIG } from "../icons.mjs";
 import { attrs, ext } from "../layout.mjs";
 import { img, foodCard, ctaBand, valueCards, statusPill } from "../parts.mjs";
@@ -117,7 +117,8 @@ ${valueCards(v.items)}    </div>
 
   reviews(site, rv) {
     if (!rv.items?.length && !rv.googleQuery) return "";
-    const google = mapsSearchHref(rv.googleQuery || `${site.restaurant.name} ${site.restaurant.address.line}`);
+    const placeId = site.restaurant.googlePlaceId;
+    const google = placeId ? googleReviewsHref(placeId) : mapsSearchHref(rv.googleQuery || `${site.restaurant.name} ${site.restaurant.address.line}`);
     return html`${rv.sample ? raw("<!-- SAMPLE REVIEWS: replace with real guest reviews (with permission) before launch. -->\n") : ""}<section class="section section--cream"${rv.sample ? raw(' data-demo="reviews"') : ""}>
   <div class="container">
     <div class="center reveal">
@@ -140,7 +141,7 @@ ${rv.items.map(
       <p>Been in? We'd love to hear how it was.</p>
       <div class="actions">
         <a class="btn btn--primary" ${raw(attrs(ext(google)))}>Read reviews on Google</a>
-        <a class="btn btn--ghost" ${raw(attrs(ext(rv.leaveReviewUrl || google)))}>Leave a review</a>
+        ${placeId ? html`<a class="btn btn--ghost" ${raw(attrs(ext(googleWriteReviewHref(placeId))))}>${icon("star")} Leave a review</a>` : ""}
       </div>
     </div>
   </div>

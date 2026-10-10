@@ -69,6 +69,9 @@ for (const [d, h] of Object.entries(r.hours || {})) {
   need(h === null || (Array.isArray(h) && h.length === 2 && h.every((t) => /^([01]\d|2[0-3]):[0-5]\d$/.test(t)) && h[0] < h[1]), `restaurant.hours.${d}: use ["HH:MM", "HH:MM"] (opening before closing) or null`);
 }
 r.shortName ||= r.name;
+// Google Place ID of this site's outlet (outlets.google_place_id, 10-300 chars as in migration 0016).
+// Optional: review buttons hide without it.
+need(r.googlePlaceId == null || /^[A-Za-z0-9_-]{10,300}$/.test(r.googlePlaceId), "restaurant.googlePlaceId: looks wrong. Copy the Place ID from Google (it starts with \"ChIJ\" for most places)");
 r.mapsQuery ||= r.address?.line;
 site.slug ||= String(r.name || "site").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
 site.seo = { lang: "en-IN", ...site.seo };

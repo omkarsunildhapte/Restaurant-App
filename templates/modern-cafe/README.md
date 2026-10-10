@@ -35,6 +35,7 @@ modern-cafe/
 | Key | What it controls |
 |---|---|
 | `restaurant` | Name, phone, WhatsApp, email, FSSAI licence no., address, map, opening hours, social links, currency |
+| `restaurant.googlePlaceId` | Google Place ID of this site's outlet (`outlets.google_place_id`, 10-300 characters; the QR is left out above ~160). Adds "Review us on Google" in the footer, on the home reviews section and on the contact page (with a scan-to-review QR for desktop visitors, drawn by `src/qr.mjs`, no dependencies). Leave it out and all review buttons hide. One site = one outlet; a chain builds one site per outlet |
 | `theme` | Colours, fonts and logo in the shared format of [../THEME.md](../THEME.md); the customer app uses the same theme. `primary`, `dark` and `background` are usually enough |
 | `home.sections` | Which home sections show, in which order: `hero, info, categories, ribbon, welcome, popular, values, reviews, gallery, faq, events, cta` |
 | `menu.categories[].items[]` | `id`, `name`, `description`, `price` (number, in rupees), `diet` (`veg` / `egg` / `nonveg`), `tags` (`vegan`, `jain`, `gf`), `popular`, `image` |
